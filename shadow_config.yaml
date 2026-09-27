@@ -1,0 +1,27 @@
+# Shadow trader / backtester configuration.
+# Strategy parameters mirror config.yaml (see comments there).
+database: data/kalshi_recorder.db
+fills_log: shadow_fills.jsonl
+
+# Fill simulation: 'queue' (fills at our price once the displayed queue ahead
+# is consumed) or 'strict' (only trades printing THROUGH our price fill us —
+# maximum pessimism; use this to stress-test any positive result).
+fill_mode: queue
+
+# Which recorded markets to run (prefix match on series, or explicit tickers):
+markets:
+  tickers: []
+  series_tickers: [KXHIGH]     # all recorded weather markets
+
+# Strategy parameters:
+gamma: 1.0
+default_k: 40.0
+base_order_size: 5
+max_position: 20
+min_spread: 0.02
+premium_scale: 0.02
+min_time_to_resolution_h: 0.05
+max_horizon_h: 24.0
+gamma_mode: constant
+calibration_constant: 0.04
+sigma_floor: 0.01

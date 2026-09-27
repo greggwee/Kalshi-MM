@@ -4,4 +4,13 @@
 
 __pycache__/
 
-.pem
+*.pem
+
+data/
+*.db
+*.db-shm
+*.db-wal
+
+shadow_fills.jsonl
+*_perf.jsonl
+.claude/settings.local.json

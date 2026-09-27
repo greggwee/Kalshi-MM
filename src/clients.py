@@ -41,9 +41,13 @@ class KalshiBaseClient:
         if self.environment == Environment.DEMO:
             self.HTTP_BASE_URL = "https://demo-api.kalshi.co/trade-api/v2"
             self.WS_BASE_URL = "wss://demo-api.kalshi.co"
+            # V2 order endpoints live on a different host (legacy POST /portfolio/orders
+            # returns 410 Gone since May 2026)
+            self.V2_BASE_URL = "https://external-api.demo.kalshi.co/trade-api/v2"
         elif self.environment == Environment.PROD:
             self.HTTP_BASE_URL = "https://api.elections.kalshi.com"
             self.WS_BASE_URL = "wss://api.elections.kalshi.com"
+            self.V2_BASE_URL = "https://external-api.kalshi.com/trade-api/v2"
         else:
             raise ValueError("Invalid environment")
 
@@ -429,6 +433,80 @@ class KalshiHttpClient(KalshiBaseClient):
         body = {'ids': order_ids}
         return self.delete(f"{self.portfolio_url}/orders/batched", params=body) # Need to check if Kalshi API accepts DELETE with JSON body or if we need to use POST to a cancel endpoint or if we need to pass as query params
     
+    # ------------------------------------------------------------------
+    # V2 order API (the only supported way to create/amend/cancel orders
+    # since the legacy /portfolio/orders endpoints were retired in May 2026).
+    #
+    # Semantics: single yes-axis book. side="bid" rests a buy of YES exposure;
+    # side="ask" rests a sell of YES exposure (equivalently a NO bid at 1-price)
+    # and requires NO inventory. Prices are dollar strings, counts are
+    # fixed-point contract strings.
+    # ------------------------------------------------------------------
+
+    def _v2_request(self, method: str, path: str, body: Optional[dict] = None,
+                    params: Optional[Dict[str, Any]] = None) -> Any:
+        """Signed request against the V2 order host (same signature scheme)."""
+        self.rate_limit()
+        response = requests.request(
+            method,
+            self.V2_BASE_URL + path,
+            json=body,
+            params=params,
+            headers=self.request_headers(method, path),
+        )
+        self.raise_if_bad_response(response)
+        return response.json()
+
+    def create_order_v2(
+        self,
+        ticker: str,
+        side: str,                    # "bid" | "ask" (yes-axis price for both)
+        count: float,
+        price: float,                 # dollars, e.g. 0.56
+        client_order_id: Optional[str] = None,
+        time_in_force: str = "good_till_canceled",
+        post_only: bool = True,       # maker-only: reject instead of crossing
+        expiration_ts: Optional[int] = None,
+        self_trade_prevention_type: str = "maker",
+        reduce_only: bool = False,
+    ) -> Dict[str, Any]:
+        body: Dict[str, Any] = {
+            "ticker": ticker,
+            "side": side,
+            "count": f"{count:.2f}",
+            "price": f"{price:.4f}",
+            "time_in_force": time_in_force,
+            "post_only": post_only,
+            "self_trade_prevention_type": self_trade_prevention_type,
+        }
+        if client_order_id is not None:
+            body["client_order_id"] = client_order_id
+        if expiration_ts is not None:
+            body["expiration_time"] = expiration_ts
+        if reduce_only:
+            body["reduce_only"] = True
+        return self._v2_request("POST", "/portfolio/events/orders", body=body)
+
+    def amend_order_v2(self, order_id: str, ticker: str, side: str, count: float,
+                       price: float, client_order_id: Optional[str] = None,
+                       updated_client_order_id: Optional[str] = None) -> Dict[str, Any]:
+        """count = already-filled + desired remaining. Price changes forfeit
+        queue priority; size decreases preserve it."""
+        body: Dict[str, Any] = {
+            "ticker": ticker,
+            "side": side,
+            "count": f"{count:.2f}",
+            "price": f"{price:.4f}",
+        }
+        if client_order_id is not None:
+            body["client_order_id"] = client_order_id
+        if updated_client_order_id is not None:
+            body["updated_client_order_id"] = updated_client_order_id
+        return self._v2_request("POST", f"/portfolio/events/orders/{order_id}/amend", body=body)
+
+    def cancel_order_v2(self, order_id: str) -> Dict[str, Any]:
+        return self._v2_request("DELETE", f"/portfolio/events/orders/{order_id}")
+
     def decrease_order(self, order_id: str, reduce_by: int) -> Dict[str, Any]:
         """Decreases the size of an existing order.
         

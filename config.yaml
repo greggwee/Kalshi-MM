@@ -1,15 +1,34 @@
-COLLEGEFOOTBALL-19JAN26-T4:
+# Strategy configurations. Each top-level key is one strategy/market.
+#
+# Model parameters (Avellaneda-Stoikov, adapted for binaries):
+#   gamma        risk aversion. Higher = wider spreads, faster inventory shedding.
+#   default_k    fill-intensity decay per DOLLAR of distance from mid; used until
+#                the bot estimates k from the live order book. Sensible values
+#                ~20-60 (NOT the paper's 1.5, which is in stock-price units).
+#   base_order_size / max_position   contracts. A fill can never push |position|
+#                past max_position.
+#   premium_scale   resolution risk premium weight (spread widens near settlement).
+#   min_time_to_resolution_h   pull all quotes when closer than this to close.
+#   gamma_mode   constant (default, per A-S) or quadratic (rises with inventory).
+#   calibration_constant / sigma_floor   volatility estimator, dollars/sqrt(hour).
+#   fair_value_adjustment   directional signal in dollars, shifts the mid before
+#                the reservation price (Phase 3 hook; leave 0 for pure MM).
+#   max_runtime  optional: stop after N seconds (useful for testing).
+#
+# sigma, T, k, inventory_skew_factor, position_limit_buffer, trade_side are gone:
+# sigma/k are estimated from data, T comes from the market's close_time, and the
+# bot always quotes both sides on the yes-price axis.
+
+COLLEGEFOOTBALL-ORE:
   api:
-    market_ticker: KXNCAAF-26-ORE
-    trade_side: "yes"
+    market_ticker: KXNCAAF-26-ORE   # NOTE: KXNCAAF charges maker fees in prod
   market_maker:
-    max_position: 5
-    order_expiration: 28800 # 8 hours
-    gamma: 0.1
-    k: 1.5
-    sigma: 0.001
-    T: 28800 # 8 hours
-    min_spread: 0.0
-    position_limit_buffer: 0.1
-    inventory_skew_factor: 0.001
-  dt: 2.0
+    gamma: 1.0
+    default_k: 40.0
+    base_order_size: 2
+    max_position: 10
+    order_expiration: 300
+    min_spread: 0.02
+    premium_scale: 0.02
+    min_time_to_resolution_h: 0.05
+  dt: 3.0

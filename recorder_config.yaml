@@ -1,0 +1,38 @@
+# Kalshi market data recorder configuration
+#
+# mode:
+#   rest - poll public REST endpoints (orderbook snapshots + trade tape).
+#          Works against prod TODAY with no API keys. Snapshot cadence =
+#          one full polling cycle (~2 requests per market), good enough for
+#          illiquid markets; the trade tape misses nothing regardless of
+#          cadence (incremental min_ts polling).
+#   ws   - full L2 event stream via WebSocket (orderbook_delta/trade/ticker).
+#          Requires API keys for the environment (PROD_KEYID/PROD_KEYFILE or
+#          DEMO_KEYID/DEMO_KEYFILE in .env). Switch to this once you have
+#          prod keys - demo keys only work on demo, which has no real flow.
+mode: rest
+environment: prod            # record real flow; demo has no organic activity
+database: data/kalshi_recorder.db
+
+poll_interval: 5.0           # rest mode: minimum seconds per full polling cycle
+snapshot_interval: 60        # ws mode: seconds between periodic full-book rows
+
+markets:
+  tickers: []
+  # Series expanded to all open markets at startup (listed in priority order;
+  # max_markets caps the total).
+  #
+  # Weather: fee_type=quadratic (NO maker fees) -> primary MM candidates.
+  # KXFED / KXCPIYOY: quadratic_with_maker_fees -> recorded only as a
+  # comparison baseline for adverse-selection research around data releases.
+  series_tickers:
+    - KXHIGHNY
+    - KXHIGHCHI
+    - KXHIGHAUS
+    - KXHIGHDEN
+    - KXHIGHMIA
+    - KXHIGHLAX
+    - KXHIGHPHIL
+    - KXFED
+    - KXCPIYOY
+  max_markets: 80

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 from typing import Dict
 from src.clients import KalshiHttpClient, Environment
-from mm import AvellanedaMarketMaker
+from helper import AvellanedaMarketMaker
 from cryptography.hazmat.primitives import serialization
 
 def load_private_key(KEYFILE: str):
@@ -33,21 +33,37 @@ def load_config(config_file):
     with open(config_file, 'r') as f:
         return yaml.safe_load(f)
 
+DEPRECATED_KEYS = ("sigma", "T", "inventory_skew_factor", "position_limit_buffer", "k")
+
+
 def create_market_maker(mm_config, api_config, client, logger):
+    for key in DEPRECATED_KEYS:
+        if key in mm_config:
+            logger.warning(f"config key '{key}' is no longer used "
+                           f"(sigma/k are estimated from data, T comes from the "
+                           f"market's close_time); ignoring")
+    if 'trade_side' in api_config:
+        logger.warning("config key 'trade_side' is no longer used: the bot quotes "
+                       "both sides on the yes-price axis via V2 bid/ask orders")
     return AvellanedaMarketMaker(
         logger=logger,
         client=client,
         market_ticker=api_config['market_ticker'],
-        gamma=mm_config.get('gamma', 0.1),
-        k=mm_config.get('k', 1.5),
-        sigma=mm_config.get('sigma', 0.5),
-        T=mm_config.get('T', 3600),
-        max_position=mm_config.get('max_position', 100),
+        gamma=mm_config.get('gamma', 1.0),
+        default_k=mm_config.get('default_k', 40.0),
+        base_order_size=mm_config.get('base_order_size', 5),
+        max_position=mm_config.get('max_position', 20),
         order_expiration=mm_config.get('order_expiration', 300),
-        min_spread=mm_config.get('min_spread', 0.01),
-        position_limit_buffer=mm_config.get('position_limit_buffer', 0.1),
-        inventory_skew_factor=mm_config.get('inventory_skew_factor', 0.01),
-        trade_side=api_config.get('trade_side', 'yes')
+        min_spread=mm_config.get('min_spread', 0.02),
+        premium_scale=mm_config.get('premium_scale', 0.02),
+        min_time_to_resolution_h=mm_config.get('min_time_to_resolution_h', 0.05),
+        min_quote_mid=mm_config.get('min_quote_mid', 0.05),
+        max_quote_mid=mm_config.get('max_quote_mid', 0.95),
+        gamma_mode=mm_config.get('gamma_mode', 'constant'),
+        calibration_constant=mm_config.get('calibration_constant', 0.04),
+        sigma_floor=mm_config.get('sigma_floor', 0.01),
+        fair_value_adjustment=mm_config.get('fair_value_adjustment', 0.0),
+        max_runtime=mm_config.get('max_runtime'),
     )
 
 def run_strategy(config_name: str, config: Dict, http_client: KalshiHttpClient):
