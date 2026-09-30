@@ -273,6 +273,7 @@ class AvellanedaMarketMaker:
         self.perf = PerformanceTracker(logger, log_path=perf_log_path or None)
         self.close_time: Optional[datetime] = None
         self._last_fill_ts: int = int(time.time())
+        self._seen_fill_ids: set = set()
 
     # ------------------------------------------------------------------
     # market state
@@ -489,13 +490,21 @@ class AvellanedaMarketMaker:
         except Exception as e:
             self.logger.warning(f"fills poll failed: {e}")
             return
+        # The cursor stays ON the newest fill's second (min_ts is inclusive), so
+        # a later fill in that same second is still returned; ids dedupe the
+        # fills the overlap re-delivers.
         for fill in fills:
+            fill_id = fill.get("fill_id") or fill.get("trade_id") or json.dumps(
+                fill, sort_keys=True)
+            if fill_id in self._seen_fill_ids:
+                continue
+            self._seen_fill_ids.add(fill_id)
             self.perf.on_fill(fill, current_mid)
             created = fill.get("created_time")
             if created:
                 ts = int(datetime.fromisoformat(
                     created.replace("Z", "+00:00")).timestamp())
-                self._last_fill_ts = max(self._last_fill_ts, ts + 1)
+                self._last_fill_ts = max(self._last_fill_ts, ts)
 
     # ------------------------------------------------------------------
     # main loop

@@ -262,6 +262,37 @@ class TestOrderBook(unittest.TestCase):
         self.assertEqual(profile[-1][1], 35.0)  # total contracts
 
 
+class TestPollFills(unittest.TestCase):
+    """Fills are fetched with an inclusive min_ts cursor; none may be skipped
+    or double-counted."""
+
+    class FakeClient:
+        def __init__(self):
+            self.fills = []
+
+        def get_fills(self, ticker=None, min_ts=None, **kwargs):
+            return {"fills": [f for f in self.fills if datetime.fromisoformat(
+                f["created_time"].replace("Z", "+00:00")).timestamp() >= min_ts]}
+
+    def fill(self, fill_id, action, ts):
+        created = datetime.fromtimestamp(ts, timezone.utc).isoformat()
+        return {"fill_id": fill_id, "action": action, "side": "yes", "count": 1,
+                "yes_price_dollars": "0.50",
+                "created_time": created.replace("+00:00", "Z")}
+
+    def test_same_second_fill_after_poll_is_seen_once(self):
+        client = self.FakeClient()
+        mm = make_mm(client=client)
+        ts = mm._last_fill_ts + 5
+        client.fills.append(self.fill("a", "buy", ts))
+        mm.poll_fills(0.5)
+        client.fills.append(self.fill("b", "sell", ts))  # same second, arrives later
+        mm.poll_fills(0.5)
+        mm.poll_fills(0.5)  # overlap re-delivers both; neither may count twice
+        self.assertEqual(mm.perf.fill_count, 2)
+        self.assertEqual(mm.perf.position, 0)
+
+
 class TestTickHelpers(unittest.TestCase):
     def test_floor_and_ceil(self):
         self.assertAlmostEqual(floor_to_tick(0.567), 0.56)
