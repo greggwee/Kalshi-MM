@@ -208,6 +208,13 @@ python demo.py run --duration 3600           # live demo orders -> runs/<id>/rep
 python demo.py report runs/<id>              # rebuild a report from its journal
 ```
 
+**Running locally** (keys in a `.env` at the repo root, run from the repo root):
+
+```
+DEMO_KEYID=<your API key id>
+DEMO_KEYFILE=./your-key.pem
+```
+
 **Credentials** (environment or `.env`): `DEMO_KEYID` plus either
 `DEMO_PRIVATE_KEY` (the PEM text; `\n`-escaped or base64 is fine for
 single-line secrets) or `DEMO_KEYFILE` (path). RSA and Ed25519 keys work.

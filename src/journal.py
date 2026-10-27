@@ -23,7 +23,7 @@ class Journal:
             dirname = os.path.dirname(path)
             if dirname:
                 os.makedirs(dirname, exist_ok=True)
-            self._fh = open(path, "a", buffering=1)  # line-buffered: survives crashes
+            self._fh = open(path, "a", buffering=1, encoding="utf-8")  # line-buffered: survives crashes
 
     def write(self, event_type: str, **fields) -> dict:
         event = {"type": event_type, "ts": fields.pop("ts", None) or time.time(), **fields}
@@ -40,7 +40,7 @@ class Journal:
 
 
 def read_journal(path: str) -> Iterator[dict]:
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:

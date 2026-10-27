@@ -39,14 +39,14 @@ RUNS_DIR = "runs"
 
 
 def load_config(path: str) -> dict:
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
 
 def setup_logging(log_path: str = None) -> logging.Logger:
     handlers = [logging.StreamHandler()]
     if log_path:
-        handlers.append(logging.FileHandler(log_path))
+        handlers.append(logging.FileHandler(log_path, encoding="utf-8"))
     logging.basicConfig(level=logging.INFO, handlers=handlers, force=True,
                         format="%(asctime)s %(levelname)s %(message)s")
     return logging.getLogger("demo")
@@ -222,7 +222,7 @@ def _order_test(gw, ticker, step):
 def _save_preflight(results):
     os.makedirs(RUNS_DIR, exist_ok=True)
     path = os.path.join(RUNS_DIR, f"preflight_{datetime.now():%Y%m%d-%H%M%S}.json")
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, default=str)
     failed = [r["step"] for r in results if r["ok"] is False]
     skipped = [r["step"] for r in results if r["ok"] is None]
@@ -247,7 +247,7 @@ def cmd_select(args, config):
     print(format_selection(selection))
     os.makedirs(RUNS_DIR, exist_ok=True)
     path = args.out or os.path.join(RUNS_DIR, f"selection_{datetime.now():%Y%m%d-%H%M%S}.json")
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(selection, f, indent=2, default=str)
     print(f"\nsaved {path}  (pass to `run --selection {path}` to trade exactly these)")
     return 0
@@ -265,7 +265,7 @@ def cmd_run(args, config):
 
     try:
         if args.selection:
-            with open(args.selection) as f:
+            with open(args.selection, encoding="utf-8") as f:
                 selection = json.load(f)
         else:
             selection = select_markets(base_gw, config.get("selection"), logger)
@@ -275,9 +275,9 @@ def cmd_run(args, config):
     if not specs:
         sys.exit("no markets selected; loosen the selection criteria")
     logger.info("selected markets:\n" + format_selection(selection))
-    with open(os.path.join(run_dir, "selection.json"), "w") as f:
+    with open(os.path.join(run_dir, "selection.json"), "w", encoding="utf-8") as f:
         json.dump(selection, f, indent=2, default=str)
-    with open(os.path.join(run_dir, "config.yaml"), "w") as f:
+    with open(os.path.join(run_dir, "config.yaml"), "w", encoding="utf-8") as f:
         yaml.safe_dump(config, f, sort_keys=False)
 
     journal = Journal(os.path.join(run_dir, "events.jsonl"))
@@ -307,7 +307,7 @@ def cmd_run(args, config):
 
 def cmd_report(args, config):
     write_report(args.run_dir)
-    with open(os.path.join(args.run_dir, "report.md")) as f:
+    with open(os.path.join(args.run_dir, "report.md"), encoding="utf-8") as f:
         print(f.read())
     return 0
 
@@ -332,6 +332,9 @@ def main(argv=None):
     p = sub.add_parser("report")
     p.add_argument("run_dir")
     args = parser.parse_args(argv)
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles: never crash on a title
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="replace")
     config = load_config(args.config) if os.path.exists(args.config) else {}
     return {"preflight": cmd_preflight, "select": cmd_select, "run": cmd_run,
             "report": cmd_report}[args.cmd](args, config)

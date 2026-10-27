@@ -672,8 +672,8 @@ def render_markdown(r: dict) -> str:
 
 def write_report(run_dir: str) -> dict:
     report = build_report(run_dir)
-    with open(os.path.join(run_dir, "report.json"), "w") as f:
+    with open(os.path.join(run_dir, "report.json"), "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, default=str)
-    with open(os.path.join(run_dir, "report.md"), "w") as f:
+    with open(os.path.join(run_dir, "report.md"), "w", encoding="utf-8") as f:
         f.write(render_markdown(report))
     return report
