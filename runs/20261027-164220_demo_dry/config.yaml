@@ -1,0 +1,66 @@
+environment: demo
+duration_s: 3600
+selection:
+  liquid_count: 3
+  illiquid_count: 3
+  tickers:
+    liquid: []
+    illiquid: []
+  min_hours_to_close: 6
+  max_hours_to_close: 336
+  exclude_multivariate: true
+  one_per_event: true
+  min_mid: 0.1
+  max_mid: 0.9
+  liquid_max_spread: 0.05
+  illiquid_min_spread: 0.04
+  illiquid_max_volume_24h: 50
+  illiquid_max_spread: 0.25
+  book_check_top_n: 40
+  depth_band: 0.05
+strategy:
+  gamma: 1.0
+  default_k: 40.0
+  base_order_size: 2
+  max_position: 10
+  min_spread: 0.02
+  premium_scale: 0.02
+  min_time_to_resolution_h: 0.05
+  min_quote_mid: 0.05
+  max_quote_mid: 0.95
+  max_horizon_h: 24.0
+  gamma_mode: constant
+  calibration_constant: 0.04
+  sigma_floor: 0.01
+  vol_window: 120
+  k_refresh_every: 10
+strategy_overrides:
+  liquid: {}
+  illiquid: {}
+execution:
+  order_expiration_s: 300
+  expiry_refresh_frac: 0.33
+  replenish_threshold: 0.5
+  cross_policy: clamp
+  aggressive_reprice: replace
+  cancel_order_on_pause: true
+  post_only: true
+  flatten_on_exit: false
+risk:
+  max_session_loss: 25.0
+  max_market_loss: 10.0
+  max_gross_position: 40
+  max_consecutive_errors: 8
+  min_balance: 0.0
+  max_rejects_per_min: 12
+session:
+  cycle_s: 2.0
+  meta_refresh_s: 30
+  balance_refresh_s: 60
+  trades_poll_s: 10
+  api_stats_every_s: 60
+  summary_every_cycles: 30
+  markout_horizons:
+  - 10
+  - 60
+  - 300
