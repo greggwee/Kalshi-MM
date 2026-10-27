@@ -195,6 +195,55 @@ This will:
 tail -f STRATEGY_NAME.log
 ```
 
+## Demo Trading Harness
+
+`demo.py` runs the strategy live on the Kalshi **demo** exchange across several
+markets at once, journals every decision, and writes a diagnostic report.
+
+```bash
+python demo.py preflight --order-test        # reachability, auth, clock, rate tier, order path
+python demo.py select                        # pick liquid + illiquid markets
+python demo.py run --dry-run --duration 600  # live books, simulated orders
+python demo.py run --duration 3600           # live demo orders -> runs/<id>/report.md
+python demo.py report runs/<id>              # rebuild a report from its journal
+```
+
+**Running locally** (keys in a `.env` at the repo root, run from the repo root):
+
+```
+DEMO_KEYID=<your API key id>
+DEMO_KEYFILE=./your-key.pem
+```
+
+**Credentials** (environment or `.env`): `DEMO_KEYID` plus either
+`DEMO_PRIVATE_KEY` (the PEM text; `\n`-escaped or base64 is fine for
+single-line secrets) or `DEMO_KEYFILE` (path). RSA and Ed25519 keys work.
+**Network**: the harness talks only to `external-api.demo.kalshi.co`.
+Production needs `--env prod --allow-prod`.
+
+The test plan lives in `session_config.yaml` (selection criteria, strategy
+parameters, execution policy, risk limits). Architecture:
+
+| Module | Role |
+|---|---|
+| `src/credentials.py` | load key id + private key, build the client |
+| `src/clients.py` | signed REST client: V2 `/portfolio/events/orders`, token-bucket pacing per Kalshi read/write budgets, 429/5xx retry (never blind-retries a create), error bodies, request stats |
+| `src/gateway.py` | normalizes `_fp`/`_dollars` fields and V2 `book_side` direction; `DryRunGateway` simulates writes |
+| `src/selector.py` | scores open markets on volume / OI / spread / depth, confirms against live books, picks N liquid + N illiquid (one per event) |
+| `src/session.py` | one loop for all markets: batched reads (books, orders, positions, fills), own orders netted out of the mid, `AvellanedaMarketMaker` math for quotes, post-only cross policy |
+| `src/execution.py` | one order per side; amend instead of cancel/replace, queue-preserving size-down and expiry refresh, journaled latency and rejects |
+| `src/risk.py` | per-market loss halt, gross position cap, session loss / error / balance kill switches |
+| `src/journal.py` | append-only JSONL of every cycle, decision, order write, fill, public trade |
+| `src/diagnostics.py` | rebuilds the report from the journal: quoting time, touch %, spread decomposition (inventory / liquidity / premium, vol scaling), fills, edge, markouts and adverse selection, market share, inventory, rejects, API health, rule-based findings, liquid vs illiquid comparison |
+
+Safety: every quote is post-only with a 5-minute expiration (refreshed by a
+queue-preserving amend), `cancel_order_on_pause` is set, and shutdown (normal,
+Ctrl-C, SIGTERM, kill switch or crash) cancels all of the session's orders and
+verifies none remain.
+
+Tests: `python -m unittest discover -s tests` (the session engine is
+exercised end to end against an in-memory exchange in `tests/fake_exchange.py`).
+
 ## Example Output
 
 ```

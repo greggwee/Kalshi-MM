@@ -30,6 +30,34 @@ from src.orderbook import OrderBook
 TICK = 0.01
 
 
+def book_side_of(record: dict) -> str:
+    """'bid' (long YES exposure) or 'ask' (short YES exposure) for an order or
+    fill. Prefers the canonical V2 fields (book_side / outcome_side); the
+    legacy (action, side) pair is deprecated and may be absent."""
+    side = record.get("book_side")
+    if side in ("bid", "ask"):
+        return side
+    outcome = record.get("outcome_side")
+    if outcome in ("yes", "no"):
+        return "bid" if outcome == "yes" else "ask"
+    return "bid" if (record.get("action"), record.get("side")) in (
+        ("buy", "yes"), ("sell", "no")) else "ask"
+
+
+def taker_outcome_of(trade: dict):
+    """'yes' if the taker bought YES (lifted asks), 'no' if the taker sold YES
+    (hit bids), None if unknown. Public trades now carry taker_outcome_side /
+    taker_book_side; taker_side is deprecated."""
+    side = trade.get("taker_outcome_side")
+    if side in ("yes", "no"):
+        return side
+    book = trade.get("taker_book_side")
+    if book in ("bid", "ask"):
+        return "yes" if book == "bid" else "no"
+    side = trade.get("taker_side")
+    return side if side in ("yes", "no") else None
+
+
 def floor_to_tick(price: float, tick: float = TICK) -> float:
     return math.floor(price / tick + 1e-9) * tick
 
@@ -130,8 +158,7 @@ class PerformanceTracker:
         """Returns (signed_qty, yes_price, ts_seconds). buy-yes/sell-no are long
         (+), sell-yes/buy-no are short (-)."""
         count = float(fill.get("count_fp", fill.get("count", 0)))
-        long_side = (fill.get("action"), fill.get("side")) in (("buy", "yes"), ("sell", "no"))
-        signed_qty = count if long_side else -count
+        signed_qty = count if book_side_of(fill) == "bid" else -count
         if fill.get("yes_price_dollars") is not None:
             price = float(fill["yes_price_dollars"])
         elif fill.get("yes_price") is not None:
@@ -413,9 +440,8 @@ class AvellanedaMarketMaker:
 
     @staticmethod
     def _order_book_side(order: dict) -> str:
-        """Map legacy (action, side) to yes-axis book side."""
-        return "bid" if (order.get("action"), order.get("side")) in (
-            ("buy", "yes"), ("sell", "no")) else "ask"
+        """Yes-axis book side of an order (V2 book_side, else legacy fields)."""
+        return book_side_of(order)
 
     @staticmethod
     def _order_yes_price(order: dict) -> float:

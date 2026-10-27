@@ -1,22 +1,112 @@
 import requests
 import base64
+import os
+import threading
 import time
-from typing import Any, Dict, Optional
-from datetime import datetime, timedelta
+from collections import defaultdict, deque
+from typing import Any, Callable, Dict, List, Optional
+from datetime import datetime
 from enum import Enum
 import json
 
 from requests.exceptions import HTTPError
 
 from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
 from cryptography.exceptions import InvalidSignature
 
-import websockets
+from src.ratelimit import RateLimiter, endpoint_bucket
+
+try:
+    import websockets
+except ImportError:  # only KalshiWebSocketClient needs it
+    websockets = None
 
 class Environment(Enum):
     DEMO = "demo"
     PROD = "prod"
+
+
+class KalshiAPIError(HTTPError):
+    """Non-2xx response. Carries Kalshi's error code/message so callers can
+    tell a post-only cross from an auth failure."""
+
+    def __init__(self, status: int, method: str, path: str, code: Optional[str] = None,
+                 message: Optional[str] = None, body: Any = None,
+                 response: Optional[requests.Response] = None):
+        self.status = status
+        self.method = method
+        self.path = path
+        self.code = code
+        self.message = message
+        self.body = body
+        super().__init__(f"{status} {method} {path}: {code or ''} {message or ''}".strip(),
+                         response=response)
+
+    @classmethod
+    def from_response(cls, response: requests.Response, method: str, path: str):
+        code = message = None
+        try:
+            body = response.json()
+        except ValueError:
+            body = response.text[:500]
+        if isinstance(body, dict):
+            err = body.get("error", body)
+            if isinstance(err, dict):
+                code, message = err.get("code"), err.get("message") or err.get("details")
+            else:
+                message = str(err)
+        return cls(response.status_code, method, path, code, message, body, response)
+
+
+_STATIC_PATH_SEGMENTS = {
+    "trade-api", "v2", "portfolio", "events", "orders", "batched", "amend", "decrease",
+    "markets", "orderbook", "orderbooks", "trades", "positions", "fills", "balance",
+    "exchange", "status", "schedule", "series", "account", "limits", "endpoint_costs",
+    "settlements", "queue_positions", "queue_position", "candlesticks",
+}
+
+
+def path_template(path: str) -> str:
+    """'/markets/KXFOO-1/orderbook' -> '/markets/{x}/orderbook' for stats keys."""
+    parts = path.split("?")[0].split("/")
+    return "/".join(p if (not p or p in _STATIC_PATH_SEGMENTS) else "{x}" for p in parts)
+
+
+class RequestStats:
+    """Per-endpoint request counts, error counts and latency samples."""
+
+    def __init__(self, max_samples: int = 5000):
+        self._lock = threading.Lock()
+        self.counts: Dict[str, int] = defaultdict(int)
+        self.errors: Dict[str, Dict[str, int]] = defaultdict(lambda: defaultdict(int))
+        self.latency_ms: Dict[str, deque] = defaultdict(lambda: deque(maxlen=max_samples))
+        self.throttle_wait_s = 0.0
+        self.retries = 0
+
+    def record(self, key: str, status: Optional[int], latency_ms: float, waited_s: float):
+        with self._lock:
+            self.counts[key] += 1
+            self.latency_ms[key].append(latency_ms)
+            self.throttle_wait_s += waited_s
+            if status is None or status >= 300:
+                self.errors[key][str(status or "conn")] += 1
+
+    def snapshot(self) -> dict:
+        def pct(samples, q):
+            s = sorted(samples)
+            return round(s[min(len(s) - 1, int(q * len(s)))], 1) if s else None
+        with self._lock:
+            endpoints = {}
+            for key, n in self.counts.items():
+                lat = self.latency_ms[key]
+                endpoints[key] = {"count": n, "errors": dict(self.errors.get(key, {})),
+                                  "p50_ms": pct(lat, 0.5), "p95_ms": pct(lat, 0.95),
+                                  "max_ms": round(max(lat), 1) if lat else None}
+            return {"endpoints": endpoints, "throttle_wait_s": round(self.throttle_wait_s, 2),
+                    "retries": self.retries,
+                    "total_requests": sum(self.counts.values()),
+                    "total_errors": sum(sum(e.values()) for e in self.errors.values())}
 
 class KalshiBaseClient:
     """Base client class for interacting with the Kalshi API."""
@@ -38,21 +128,31 @@ class KalshiBaseClient:
         self.environment = environment
         self.last_api_call = datetime.now()
 
+        # Dedicated external Trade API hosts (docs, 2026). They serve the whole
+        # REST surface including the V2 /portfolio/events/orders endpoints (the
+        # legacy /portfolio/orders mutations were retired in June 2026), so one
+        # host covers everything. KALSHI_API_BASE / KALSHI_WS_BASE override.
         if self.environment == Environment.DEMO:
-            self.HTTP_BASE_URL = "https://demo-api.kalshi.co/trade-api/v2"
-            self.WS_BASE_URL = "wss://demo-api.kalshi.co"
-            # V2 order endpoints live on a different host (legacy POST /portfolio/orders
-            # returns 410 Gone since May 2026)
-            self.V2_BASE_URL = "https://external-api.demo.kalshi.co/trade-api/v2"
+            self.HTTP_BASE_URL = "https://external-api.demo.kalshi.co/trade-api/v2"
+            self.WS_BASE_URL = "wss://external-api-ws.demo.kalshi.co"
         elif self.environment == Environment.PROD:
-            self.HTTP_BASE_URL = "https://api.elections.kalshi.com"
-            self.WS_BASE_URL = "wss://api.elections.kalshi.com"
-            self.V2_BASE_URL = "https://external-api.kalshi.com/trade-api/v2"
+            self.HTTP_BASE_URL = "https://external-api.kalshi.com/trade-api/v2"
+            self.WS_BASE_URL = "wss://external-api-ws.kalshi.com"
         else:
             raise ValueError("Invalid environment")
+        self.HTTP_BASE_URL = os.getenv("KALSHI_API_BASE", self.HTTP_BASE_URL).rstrip("/")
+        self.WS_BASE_URL = os.getenv("KALSHI_WS_BASE", self.WS_BASE_URL).rstrip("/")
+        self.V2_BASE_URL = self.HTTP_BASE_URL
+
+    @property
+    def authenticated(self) -> bool:
+        return self.private_key is not None
 
     def request_headers(self, method: str, path: str) -> Dict[str, Any]:
-        """Generates the required authentication headers for API requests."""
+        """Generates the required authentication headers for API requests.
+        Without a key (public market-data mode) requests go out unsigned."""
+        if self.private_key is None:
+            return {"Content-Type": "application/json"}
         current_time_milliseconds = int(time.time() * 1000)
         timestamp_str = str(current_time_milliseconds)
 
@@ -75,8 +175,11 @@ class KalshiBaseClient:
         return headers
 
     def sign_pss_text(self, text: str) -> str:
-        """Signs the text using RSA-PSS and returns the base64 encoded signature."""
+        """Signs the text using RSA-PSS (or Ed25519 for Ed25519 keys) and
+        returns the base64 encoded signature."""
         message = text.encode('utf-8')
+        if isinstance(self.private_key, ed25519.Ed25519PrivateKey):
+            return base64.b64encode(self.private_key.sign(message)).decode('utf-8')
         try:
             signature = self.private_key.sign(
                 message,
@@ -97,6 +200,9 @@ class KalshiHttpClient(KalshiBaseClient):
         key_id: str,
         private_key: rsa.RSAPrivateKey,
         environment: Environment = Environment.DEMO,
+        timeout: tuple = (5.0, 15.0),
+        max_retries: int = 4,
+        limiter: Optional[RateLimiter] = None,
     ):
         super().__init__(key_id, private_key, environment)
         self.host = self.HTTP_BASE_URL
@@ -105,54 +211,98 @@ class KalshiHttpClient(KalshiBaseClient):
         self.portfolio_url = "/portfolio"
         self.events_url = "/events"
         self.series_url = "/series"
-
-    def rate_limit(self) -> None:
-        """Built-in rate limiter to prevent exceeding API rate limits."""
-        THRESHOLD_IN_MILLISECONDS = 100
-        now = datetime.now()
-        threshold_in_microseconds = 1000 * THRESHOLD_IN_MILLISECONDS
-        threshold_in_seconds = THRESHOLD_IN_MILLISECONDS / 1000
-        if now - self.last_api_call < timedelta(microseconds=threshold_in_microseconds):
-            time.sleep(threshold_in_seconds)
-        self.last_api_call = datetime.now()
+        self.timeout = timeout
+        self.max_retries = max_retries
+        self.limiter = limiter or RateLimiter()
+        self.stats = RequestStats()
+        self.session = requests.Session()
+        self.on_error: Optional[Callable[[dict], None]] = None  # e.g. a session journal
+        self.last_server_date: Optional[str] = None
 
     def raise_if_bad_response(self, response: requests.Response) -> None:
         """Raises an HTTPError if the response status code indicates an error."""
-        if response.status_code not in range(200, 299):
+        if not 200 <= response.status_code < 300:
             response.raise_for_status()
+
+    def _request(self, method: str, path: str, params: Optional[Dict[str, Any]] = None,
+                 body: Optional[dict] = None, n_items: int = 1,
+                 idempotent: Optional[bool] = None) -> Any:
+        """Signed, paced request with retries. 429s are always retried (the
+        request was not processed); 5xx/connection errors only for idempotent
+        requests, so a timed-out order create is never blindly re-sent (the
+        caller re-syncs from GET /portfolio/orders instead)."""
+        if idempotent is None:
+            idempotent = method in ("GET", "DELETE")
+        bucket, cost = endpoint_bucket(method, path, n_items)
+        key = f"{method} {path_template(path)}"
+        attempt = 0
+        while True:
+            waited = self.limiter.acquire(bucket, cost)
+            t0 = time.perf_counter()
+            try:
+                response = self.session.request(
+                    method, self.host + path, params=params, json=body,
+                    headers=self.request_headers(method, path), timeout=self.timeout)
+            except (requests.ConnectionError, requests.Timeout) as e:
+                self.stats.record(key, None, (time.perf_counter() - t0) * 1000, waited)
+                if idempotent and attempt < self.max_retries:
+                    attempt += 1
+                    self.stats.retries += 1
+                    time.sleep(min(0.25 * 2 ** attempt, 4.0))
+                    continue
+                self._report_error({"endpoint": key, "status": None, "error": repr(e)})
+                raise
+            latency_ms = (time.perf_counter() - t0) * 1000
+            self.stats.record(key, response.status_code, latency_ms, waited)
+            self.last_server_date = response.headers.get("Date", self.last_server_date)
+            status = response.status_code
+            retryable = status == 429 or (status >= 500 and idempotent)
+            if retryable and attempt < self.max_retries:
+                attempt += 1
+                self.stats.retries += 1
+                time.sleep(min(0.25 * 2 ** attempt, 4.0))
+                continue
+            if not 200 <= status < 300:
+                err = KalshiAPIError.from_response(response, method, path)
+                self._report_error({"endpoint": key, "status": status, "code": err.code,
+                                    "message": err.message})
+                raise err
+            if status == 204 or not response.content:
+                return {}
+            return response.json()
+
+    def _report_error(self, info: dict):
+        if self.on_error is not None:
+            try:
+                self.on_error(info)
+            except Exception:
+                pass
 
     def post(self, path: str, body: dict) -> Any:
         """Performs an authenticated POST request to the Kalshi API."""
-        self.rate_limit()
-        response = requests.post(
-            self.host + path,
-            json=body,
-            headers=self.request_headers("POST", path)
-        )
-        self.raise_if_bad_response(response)
-        return response.json()
+        return self._request("POST", path, body=body)
 
-    def get(self, path: str, params: Dict[str, Any] = {}) -> Any:
+    def get(self, path: str, params: Optional[Dict[str, Any]] = None) -> Any:
         """Performs an authenticated GET request to the Kalshi API."""
-        self.rate_limit()
-        response = requests.get(
-            self.host + path,
-            headers=self.request_headers("GET", path),
-            params=params
-        )
-        self.raise_if_bad_response(response)
-        return response.json()
+        return self._request("GET", path, params=params or {})
 
-    def delete(self, path: str, params: Dict[str, Any] = {}) -> Any:
+    def delete(self, path: str, params: Optional[Dict[str, Any]] = None) -> Any:
         """Performs an authenticated DELETE request to the Kalshi API."""
-        self.rate_limit()
-        response = requests.delete(
-            self.host + path,
-            headers=self.request_headers("DELETE", path),
-            params=params
-        )
-        self.raise_if_bad_response(response)
-        return response.json()
+        return self._request("DELETE", path, params=params or {})
+
+    def paginate(self, path: str, key: str, params: Optional[Dict[str, Any]] = None,
+                 max_pages: int = 50) -> List[dict]:
+        """Follow `cursor` until exhausted; returns the concatenated `key` lists."""
+        params = dict(params or {})
+        out: List[dict] = []
+        for _ in range(max_pages):
+            data = self.get(path, params=params)
+            out.extend(data.get(key) or [])
+            cursor = data.get("cursor")
+            if not cursor:
+                break
+            params["cursor"] = cursor
+        return out
 
     def query_generation(self, params: dict) -> str:
         """
@@ -444,18 +594,39 @@ class KalshiHttpClient(KalshiBaseClient):
     # ------------------------------------------------------------------
 
     def _v2_request(self, method: str, path: str, body: Optional[dict] = None,
-                    params: Optional[Dict[str, Any]] = None) -> Any:
-        """Signed request against the V2 order host (same signature scheme)."""
-        self.rate_limit()
-        response = requests.request(
-            method,
-            self.V2_BASE_URL + path,
-            json=body,
-            params=params,
-            headers=self.request_headers(method, path),
-        )
-        self.raise_if_bad_response(response)
-        return response.json()
+                    params: Optional[Dict[str, Any]] = None, n_items: int = 1,
+                    idempotent: Optional[bool] = None) -> Any:
+        """Signed request against the V2 order endpoints (same host and
+        signature scheme as everything else)."""
+        return self._request(method, path, params=params, body=body, n_items=n_items,
+                             idempotent=idempotent)
+
+    @staticmethod
+    def v2_order_body(ticker: str, side: str, count: float, price: float,
+                      client_order_id: Optional[str] = None,
+                      time_in_force: str = "good_till_canceled", post_only: bool = True,
+                      expiration_ts: Optional[int] = None,
+                      self_trade_prevention_type: str = "maker",
+                      reduce_only: bool = False,
+                      cancel_order_on_pause: bool = False) -> Dict[str, Any]:
+        body: Dict[str, Any] = {
+            "ticker": ticker,
+            "side": side,
+            "count": f"{count:.2f}",
+            "price": f"{price:.4f}",
+            "time_in_force": time_in_force,
+            "post_only": post_only,
+            "self_trade_prevention_type": self_trade_prevention_type,
+        }
+        if client_order_id is not None:
+            body["client_order_id"] = client_order_id
+        if expiration_ts is not None:
+            body["expiration_time"] = int(expiration_ts)
+        if reduce_only:
+            body["reduce_only"] = True
+        if cancel_order_on_pause:
+            body["cancel_order_on_pause"] = True
+        return body
 
     def create_order_v2(
         self,
@@ -469,29 +640,22 @@ class KalshiHttpClient(KalshiBaseClient):
         expiration_ts: Optional[int] = None,
         self_trade_prevention_type: str = "maker",
         reduce_only: bool = False,
+        cancel_order_on_pause: bool = False,
     ) -> Dict[str, Any]:
-        body: Dict[str, Any] = {
-            "ticker": ticker,
-            "side": side,
-            "count": f"{count:.2f}",
-            "price": f"{price:.4f}",
-            "time_in_force": time_in_force,
-            "post_only": post_only,
-            "self_trade_prevention_type": self_trade_prevention_type,
-        }
-        if client_order_id is not None:
-            body["client_order_id"] = client_order_id
-        if expiration_ts is not None:
-            body["expiration_time"] = expiration_ts
-        if reduce_only:
-            body["reduce_only"] = True
+        """Response: order_id, client_order_id, fill_count, remaining_count,
+        average_fill_price (if filled), ts_ms."""
+        body = self.v2_order_body(ticker, side, count, price, client_order_id,
+                                  time_in_force, post_only, expiration_ts,
+                                  self_trade_prevention_type, reduce_only,
+                                  cancel_order_on_pause)
         return self._v2_request("POST", "/portfolio/events/orders", body=body)
 
     def amend_order_v2(self, order_id: str, ticker: str, side: str, count: float,
                        price: float, client_order_id: Optional[str] = None,
-                       updated_client_order_id: Optional[str] = None) -> Dict[str, Any]:
+                       updated_client_order_id: Optional[str] = None,
+                       expiration_ts: Optional[int] = None) -> Dict[str, Any]:
         """count = already-filled + desired remaining. Price changes forfeit
-        queue priority; size decreases preserve it."""
+        queue priority; size decreases and expiry-only amends preserve it."""
         body: Dict[str, Any] = {
             "ticker": ticker,
             "side": side,
@@ -502,10 +666,99 @@ class KalshiHttpClient(KalshiBaseClient):
             body["client_order_id"] = client_order_id
         if updated_client_order_id is not None:
             body["updated_client_order_id"] = updated_client_order_id
-        return self._v2_request("POST", f"/portfolio/events/orders/{order_id}/amend", body=body)
+        if expiration_ts is not None:
+            body["expiration_time"] = int(expiration_ts)
+        # absolute price/count: re-sending after a timeout is harmless
+        return self._v2_request("POST", f"/portfolio/events/orders/{order_id}/amend",
+                                body=body, idempotent=True)
 
-    def cancel_order_v2(self, order_id: str) -> Dict[str, Any]:
-        return self._v2_request("DELETE", f"/portfolio/events/orders/{order_id}")
+    def cancel_order_v2(self, order_id: str, market_ticker: Optional[str] = None
+                        ) -> Dict[str, Any]:
+        """market_ticker lets the exchange auto-route to the right shard."""
+        params = {"market_ticker": market_ticker} if market_ticker else None
+        return self._v2_request("DELETE", f"/portfolio/events/orders/{order_id}",
+                                params=params)
+
+    def decrease_order_v2(self, order_id: str, reduce_to: Optional[float] = None,
+                          reduce_by: Optional[float] = None,
+                          market_ticker: Optional[str] = None) -> Dict[str, Any]:
+        if (reduce_to is None) == (reduce_by is None):
+            raise ValueError("exactly one of reduce_to / reduce_by")
+        body: Dict[str, Any] = {}
+        if reduce_to is not None:
+            body["reduce_to"] = f"{reduce_to:.2f}"
+        else:
+            body["reduce_by"] = f"{reduce_by:.2f}"
+        if market_ticker:
+            body["market_ticker"] = market_ticker
+        return self._v2_request("POST", f"/portfolio/events/orders/{order_id}/decrease",
+                                body=body, idempotent=reduce_to is not None)
+
+    def batch_create_orders_v2(self, orders: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """orders: bodies from v2_order_body(). Per-order errors come back in
+        each entry's `error` field rather than failing the whole request."""
+        return self._v2_request("POST", "/portfolio/events/orders/batched",
+                                body={"orders": orders}, n_items=len(orders))
+
+    def batch_cancel_orders_v2(self, orders: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """orders: [{"order_id": ..., "market_ticker": ...}, ...]"""
+        return self._v2_request("DELETE", "/portfolio/events/orders/batched",
+                                body={"orders": orders}, n_items=len(orders))
+
+    def cancel_all_orders_v2(self) -> Dict[str, Any]:
+        """Cancels EVERY resting order on the account (all markets)."""
+        return self._v2_request("DELETE", "/portfolio/events/orders")
+
+    # ------------------------------------------------------------------
+    # batched / paginated reads used by the live session engine
+    # ------------------------------------------------------------------
+
+    def get_orderbooks(self, tickers: List[str]) -> List[Dict[str, Any]]:
+        """Up to 100 books per request -> [{"ticker", "orderbook_fp"}, ...]."""
+        out: List[Dict[str, Any]] = []
+        for i in range(0, len(tickers), 100):
+            chunk = tickers[i:i + 100]
+            out.extend(self.get(f"{self.markets_url}/orderbooks",
+                                params={"tickers": chunk}).get("orderbooks", []))
+        return out
+
+    def get_all_orders(self, tickers: Optional[List[str]] = None,
+                       status: Optional[str] = None, limit: int = 1000) -> List[dict]:
+        params: Dict[str, Any] = {"limit": limit}
+        if status:
+            params["status"] = status
+        if not tickers:
+            return self.paginate(f"{self.portfolio_url}/orders", "orders", params)
+        out: List[dict] = []
+        for i in range(0, len(tickers), 100):
+            params["ticker"] = ",".join(tickers[i:i + 100])
+            out.extend(self.paginate(f"{self.portfolio_url}/orders", "orders", dict(params)))
+        return out
+
+    def get_all_positions(self, count_filter: Optional[str] = "position",
+                          settlement_status: Optional[str] = None) -> List[dict]:
+        params: Dict[str, Any] = {"limit": 1000}
+        if count_filter:
+            params["count_filter"] = count_filter
+        if settlement_status:
+            params["settlement_status"] = settlement_status
+        return self.paginate(f"{self.portfolio_url}/positions", "market_positions", params)
+
+    def get_all_fills(self, min_ts: Optional[int] = None, ticker: Optional[str] = None,
+                      limit: int = 1000) -> List[dict]:
+        params: Dict[str, Any] = {"limit": limit}
+        if min_ts is not None:
+            params["min_ts"] = int(min_ts)
+        if ticker:
+            params["ticker"] = ticker
+        return self.paginate(f"{self.portfolio_url}/fills", "fills", params)
+
+    def get_account_limits(self) -> Dict[str, Any]:
+        """usage_tier plus read/write {refill_rate, bucket_capacity}."""
+        return self.get("/account/limits")
+
+    def get_endpoint_costs(self) -> Dict[str, Any]:
+        return self.get("/account/endpoint_costs")
 
     def decrease_order(self, order_id: str, reduce_by: int) -> Dict[str, Any]:
         """Decreases the size of an existing order.

@@ -24,6 +24,7 @@ from typing import Dict, List, Optional
 import requests
 import websockets
 
+from helper import taker_outcome_of
 from src.clients import KalshiWebSocketClient, Environment
 from src.orderbook import OrderBook
 from src.storage import RecorderDB
@@ -65,7 +66,7 @@ def _trade_fields(t: dict) -> dict:
         "yes_price": price("yes"),
         "no_price": price("no"),
         "count": None if count is None else float(count),
-        "taker_side": t.get("taker_side"),
+        "taker_side": taker_outcome_of(t),
         "is_block": bool(t.get("is_block_trade", False)),
     }
 

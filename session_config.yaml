@@ -1,0 +1,77 @@
+# Demo test plan for the Avellaneda-Stoikov market maker (python demo.py ...).
+#
+#   1. python demo.py preflight --order-test   connectivity, auth, order path
+#   2. python demo.py select                   review the liquid/illiquid picks
+#   3. python demo.py run --dry-run --duration 600    quotes vs live books, no orders
+#   4. python demo.py run --duration 3600      live demo orders + diagnostic report
+#
+environment: demo            # prod additionally needs --env prod --allow-prod
+duration_s: 3600
+
+selection:
+  liquid_count: 3
+  illiquid_count: 3
+  tickers: {liquid: [], illiquid: []}   # set to trade specific markets instead
+  min_hours_to_close: 6        # avoid resolution-day jumps during the test
+  max_hours_to_close: 336
+  exclude_multivariate: true
+  one_per_event: true          # no two strikes of the same event
+  min_mid: 0.10                # tails: one tick IS the spread there
+  max_mid: 0.90
+  liquid_max_spread: 0.05
+  illiquid_min_spread: 0.04
+  illiquid_max_volume_24h: 50
+  book_check_top_n: 40
+  depth_band: 0.05
+
+# Strategy parameters (helper.AvellanedaMarketMaker). Mirrors config.yaml.
+strategy:
+  gamma: 1.0
+  default_k: 40.0
+  base_order_size: 2
+  max_position: 10
+  min_spread: 0.02
+  premium_scale: 0.02
+  min_time_to_resolution_h: 0.05
+  min_quote_mid: 0.05
+  max_quote_mid: 0.95
+  max_horizon_h: 24.0
+  gamma_mode: constant
+  calibration_constant: 0.04
+  sigma_floor: 0.01
+  vol_window: 120
+  k_refresh_every: 10
+
+# Per-class overrides (empty = identical strategy on both, the cleanest test).
+strategy_overrides:
+  liquid: {}
+  illiquid: {}
+
+execution:
+  order_expiration_s: 300      # dead-man's switch if the process dies
+  expiry_refresh_frac: 0.33    # extend (queue-preserving amend) at 1/3 life left
+  replenish_threshold: 0.5     # top a partially filled quote back up below 50%
+  cross_policy: clamp          # clamp: post one tick inside; skip: drop the side
+  aggressive_reprice: replace  # replace: cancel + post-only create when moving toward
+                               # the market (an amend that crosses could FILL as taker);
+                               # amend: one write, maker-only not guaranteed
+  cancel_order_on_pause: true
+  post_only: true
+  flatten_on_exit: false       # true = IOC out of inventory at shutdown (pays spread)
+
+risk:
+  max_session_loss: 25.0       # $ mark-to-market incl. fees -> kill switch
+  max_market_loss: 10.0        # $ per market -> halt that market
+  max_gross_position: 40       # contracts, sum |q| across markets
+  max_consecutive_errors: 8
+  min_balance: 0.0
+  max_rejects_per_min: 12
+
+session:
+  cycle_s: 2.0
+  meta_refresh_s: 30
+  balance_refresh_s: 60
+  trades_poll_s: 10
+  api_stats_every_s: 60
+  summary_every_cycles: 30
+  markout_horizons: [10, 60, 300]

@@ -14,3 +14,5 @@ data/
 shadow_fills.jsonl
 *_perf.jsonl
 .claude/settings.local.json
+
+runs/

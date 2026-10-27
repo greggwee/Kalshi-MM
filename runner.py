@@ -3,31 +3,16 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 import yaml
 from dotenv import load_dotenv
-import os
 from typing import Dict
 from src.clients import KalshiHttpClient, Environment
+from src.credentials import make_client
 from helper import AvellanedaMarketMaker
-from cryptography.hazmat.primitives import serialization
 
-def load_private_key(KEYFILE: str):
-    with open(KEYFILE, "rb") as key_file:
-        return serialization.load_pem_private_key(
-            key_file.read(),
-            password=None  # Provide the password if your key is encrypted
-        )
-    
-# Create shared HTTP client (in main block, before thread pool)
+# Create shared HTTP client (in main block, before thread pool). Credentials:
+# DEMO_KEYID + DEMO_PRIVATE_KEY (PEM text) or DEMO_KEYFILE, see src/credentials.py
 load_dotenv()
 env = Environment.DEMO # toggle environment here
-KEYID = os.getenv('DEMO_KEYID') if env == Environment.DEMO else os.getenv('PROD_KEYID')
-KEYFILE = os.getenv('DEMO_KEYFILE') if env == Environment.DEMO else os.getenv('PROD_KEYFILE')
-private_key = load_private_key(KEYFILE)
-
-shared_http_client = KalshiHttpClient(
-    key_id=KEYID,
-    private_key=private_key,
-    environment=env
-)
+shared_http_client = make_client(env)
 
 def load_config(config_file):
     with open(config_file, 'r') as f:
