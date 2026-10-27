@@ -23,7 +23,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, Iterable, List, Optional
 
-from helper import book_side_of
+from helper import book_side_of, taker_outcome_of
 
 TRADABLE_STATUSES = {"active", "open"}
 
@@ -151,7 +151,7 @@ def trade_view(t: dict) -> dict:
         "ticker": t.get("ticker") or t.get("market_ticker"),
         "price": _dollars(t, "yes_price"),
         "qty": fnum(t.get("count_fp", t.get("count"))),
-        "taker_side": t.get("taker_side"),
+        "taker_side": taker_outcome_of(t),
         "ts": ts if ts is not None else time.time(),
     }
 
@@ -279,6 +279,12 @@ class DryRunGateway:
 
     def __getattr__(self, name):  # pass every read straight through
         return getattr(self.inner, name)
+
+    def balance(self) -> dict:
+        # keyless dry runs use the public endpoints only; balance is private
+        if not getattr(getattr(self.inner, "client", None), "authenticated", True):
+            return {"balance": None, "portfolio_value": None}
+        return self.inner.balance()
 
     def resting_orders(self, tickers: List[str]) -> Dict[str, List[dict]]:
         out: Dict[str, List[dict]] = {t: [] for t in tickers}

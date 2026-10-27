@@ -94,3 +94,11 @@ def make_client(environment: Environment, env: Optional[Mapping[str, str]] = Non
     key_id, private_key = load_credentials(environment, env)
     return KalshiHttpClient(key_id=key_id, private_key=private_key,
                             environment=environment, **client_kwargs)
+
+
+def make_public_client(environment: Environment, **client_kwargs) -> KalshiHttpClient:
+    """Unsigned client for the public market-data endpoints (markets, order
+    books, trades, series, exchange status). Enough for market selection and
+    a dry run against live books; placing orders needs credentials."""
+    return KalshiHttpClient(key_id=None, private_key=None, environment=environment,
+                            **client_kwargs)

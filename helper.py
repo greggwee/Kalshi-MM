@@ -44,6 +44,20 @@ def book_side_of(record: dict) -> str:
         ("buy", "yes"), ("sell", "no")) else "ask"
 
 
+def taker_outcome_of(trade: dict):
+    """'yes' if the taker bought YES (lifted asks), 'no' if the taker sold YES
+    (hit bids), None if unknown. Public trades now carry taker_outcome_side /
+    taker_book_side; taker_side is deprecated."""
+    side = trade.get("taker_outcome_side")
+    if side in ("yes", "no"):
+        return side
+    book = trade.get("taker_book_side")
+    if book in ("bid", "ask"):
+        return "yes" if book == "bid" else "no"
+    side = trade.get("taker_side")
+    return side if side in ("yes", "no") else None
+
+
 def floor_to_tick(price: float, tick: float = TICK) -> float:
     return math.floor(price / tick + 1e-9) * tick
 

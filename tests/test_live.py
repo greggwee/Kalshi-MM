@@ -21,10 +21,12 @@ from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
 
 from helper import PerformanceTracker, book_side_of
 from src.clients import Environment, KalshiAPIError, KalshiHttpClient, path_template
-from src.credentials import CredentialsError, load_credentials, mask_key_id
+from src.credentials import CredentialsError, load_credentials, make_public_client, \
+    mask_key_id
 from src.diagnostics import build_report, render_markdown, write_report
 from src.execution import OrderManager, classify_error
-from src.gateway import DryRunGateway, fill_view, market_view, order_view, position_view
+from src.gateway import (DryRunGateway, ExchangeGateway, fill_view, market_view, order_view,
+                         position_view, trade_view)
 from src.journal import Journal, read_journal
 from src.ratelimit import RateLimiter, TokenBucket, endpoint_bucket
 from src.risk import RiskManager
@@ -136,6 +138,18 @@ class TestCredentials(unittest.TestCase):
         h = c.request_headers("POST", "/portfolio/events/orders?x=1")
         msg = (h["KALSHI-ACCESS-TIMESTAMP"] + "POST/trade-api/v2/portfolio/events/orders").encode()
         key.public_key().verify(base64.b64decode(h["KALSHI-ACCESS-SIGNATURE"]), msg)
+
+    def test_public_client_sends_unsigned_requests(self):
+        c = make_public_client(Environment.DEMO)
+        self.assertFalse(c.authenticated)
+        h = c.request_headers("GET", "/markets")
+        self.assertFalse(any(k.startswith("KALSHI-ACCESS") for k in h))
+        # a keyless dry run never calls the private balance endpoint
+        stub = StubSession([])
+        c.session = stub
+        self.assertEqual(DryRunGateway(ExchangeGateway(c)).balance(),
+                         {"balance": None, "portfolio_value": None})
+        self.assertEqual(stub.calls, [])
 
     def test_demo_and_prod_hosts(self):
         self.assertEqual(KalshiHttpClient("k", _RSA, Environment.DEMO).host,
@@ -282,6 +296,17 @@ class TestNormalization(unittest.TestCase):
         self.assertEqual(book_side_of({"book_side": "bid", "action": "sell", "side": "yes"}), "bid")
         self.assertEqual(book_side_of({"outcome_side": "yes"}), "bid")
         self.assertEqual(book_side_of({"action": "sell", "side": "no"}), "bid")
+
+    def test_trade_taker_direction_prefers_canonical_fields(self):
+        base = {"trade_id": "t", "ticker": "T", "count_fp": "3.00",
+                "yes_price_dollars": "0.4400", "created_time": "2026-10-27T15:00:00Z"}
+        self.assertEqual(trade_view({**base, "taker_outcome_side": "no",
+                                     "taker_side": "yes"})["taker_side"], "no")
+        self.assertEqual(trade_view({**base, "taker_book_side": "bid"})["taker_side"], "yes")
+        self.assertEqual(trade_view({**base, "taker_side": "no"})["taker_side"], "no")
+        self.assertIsNone(trade_view(base)["taker_side"])
+        from src.recorder import _trade_fields  # research recorder shares the parsing
+        self.assertEqual(_trade_fields({**base, "taker_book_side": "ask"})["taker_side"], "no")
 
     def test_position_and_market_views(self):
         p = position_view({"ticker": "T", "position_fp": "-3.00", "realized_pnl_dollars": "1.25",

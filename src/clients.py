@@ -144,8 +144,15 @@ class KalshiBaseClient:
         self.WS_BASE_URL = os.getenv("KALSHI_WS_BASE", self.WS_BASE_URL).rstrip("/")
         self.V2_BASE_URL = self.HTTP_BASE_URL
 
+    @property
+    def authenticated(self) -> bool:
+        return self.private_key is not None
+
     def request_headers(self, method: str, path: str) -> Dict[str, Any]:
-        """Generates the required authentication headers for API requests."""
+        """Generates the required authentication headers for API requests.
+        Without a key (public market-data mode) requests go out unsigned."""
+        if self.private_key is None:
+            return {"Content-Type": "application/json"}
         current_time_milliseconds = int(time.time() * 1000)
         timestamp_str = str(current_time_milliseconds)
 

@@ -26,8 +26,8 @@ import requests
 import yaml
 
 from src.clients import Environment
-from src.credentials import CredentialsError, load_credentials, make_client, mask_key_id, \
-    parse_environment
+from src.credentials import CredentialsError, load_credentials, make_client, \
+    make_public_client, mask_key_id, parse_environment
 from src.diagnostics import write_report
 from src.gateway import DryRunGateway, ExchangeGateway
 from src.journal import Journal
@@ -59,11 +59,16 @@ def resolve_env(args, config) -> Environment:
     return env
 
 
-def build_client(env: Environment, logger: logging.Logger):
+def build_client(env: Environment, logger: logging.Logger, require_auth: bool = True):
+    """Signed client from credentials; without credentials, an unsigned
+    public-data client when the command does not need to trade."""
     try:
         client = make_client(env)
     except CredentialsError as e:
-        sys.exit(f"credentials: {e}")
+        if require_auth:
+            sys.exit(f"credentials: {e}\n  (`select` and `run --dry-run` work without keys)")
+        logger.warning(f"no credentials ({e}); using public market data only")
+        return make_public_client(env)
     calibrate_rate_limits(client, logger)
     return client
 
@@ -116,13 +121,20 @@ def cmd_preflight(args, config):
         print(f"[{'PASS' if ok else 'FAIL'}] {name:28s} {ms:7.0f} ms  {detail}")
         return ok, detail
 
+    def skip(name, why):
+        results.append({"step": name, "ok": None, "ms": 0.0, "detail": why})
+        print(f"[SKIP] {name:28s} {'':7s}    {why}")
+
     try:
         key_id, key = load_credentials(env)
         print(f"[PASS] credentials                  key {mask_key_id(key_id)} "
               f"({type(key).__name__}), environment {env.value}")
+        client = make_client(env)
     except CredentialsError as e:
-        sys.exit(f"[FAIL] credentials: {e}")
-    client = make_client(env)
+        results.append({"step": "credentials", "ok": False, "ms": 0.0, "detail": str(e)})
+        print(f"[FAIL] credentials                  {e}\n"
+              f"       continuing with public market-data checks only")
+        client = make_public_client(env)
     gw = ExchangeGateway(client)
     print(f"       host {client.host}")
 
@@ -139,9 +151,11 @@ def cmd_preflight(args, config):
             raise RuntimeError(f"local clock off by {delta:+.1f}s (signatures may be rejected)")
         return f"{delta:+.2f}s"
     step("clock skew vs server", skew)
-    step("auth: balance", lambda: gw.balance())
-    step("rate limit tier", lambda: {k: v for k, v in calibrate_rate_limits(client, logger)
-                                     .items() if k != "grants"})
+    private = ["auth: balance", "rate limit tier", "resting orders", "positions"]
+    if client.authenticated:
+        step("auth: balance", lambda: gw.balance())
+        step("rate limit tier", lambda: {k: v for k, v in calibrate_rate_limits(client, logger)
+                                         .items() if k != "grants"})
     sample = {}
 
     def markets():
@@ -156,6 +170,10 @@ def cmd_preflight(args, config):
         step("orderbooks (batched)", lambda: {t: len(b.get("yes_dollars") or []) +
                                               len(b.get("no_dollars") or [])
                                               for t, b in gw.orderbooks([sample["ticker"]]).items()})
+    if not client.authenticated:
+        for name in private + (["order test"] if args.order_test else []):
+            skip(name, "needs DEMO_KEYID + DEMO_PRIVATE_KEY")
+        return _save_preflight(results)
     step("resting orders", lambda: f"{len(client.get_all_orders(status='resting'))} resting")
     step("positions", lambda: f"{len(client.get_all_positions(count_filter='position'))} open")
 
@@ -206,9 +224,11 @@ def _save_preflight(results):
     path = os.path.join(RUNS_DIR, f"preflight_{datetime.now():%Y%m%d-%H%M%S}.json")
     with open(path, "w") as f:
         json.dump(results, f, indent=2, default=str)
-    failed = [r["step"] for r in results if not r["ok"]]
-    print(f"\npreflight {'FAILED: ' + ', '.join(failed) if failed else 'passed'} "
-          f"(saved {path})")
+    failed = [r["step"] for r in results if r["ok"] is False]
+    skipped = [r["step"] for r in results if r["ok"] is None]
+    status = ("FAILED: " + ", ".join(failed) if failed else
+              "passed (public checks only; trading not verified)" if skipped else "passed")
+    print(f"\npreflight {status} (saved {path})")
     return 1 if failed else 0
 
 
@@ -219,7 +239,7 @@ def _save_preflight(results):
 def cmd_select(args, config):
     logger = setup_logging()
     env = resolve_env(args, config)
-    gw = ExchangeGateway(build_client(env, logger))
+    gw = ExchangeGateway(build_client(env, logger, require_auth=False))
     try:
         selection = select_markets(gw, config.get("selection"), logger)
     except (requests.ConnectionError, requests.Timeout) as e:
@@ -240,7 +260,7 @@ def cmd_run(args, config):
     run_dir = os.path.join(RUNS_DIR, f"{stamp}_{env.value}{'_dry' if args.dry_run else ''}")
     os.makedirs(run_dir, exist_ok=True)
     logger = setup_logging(os.path.join(run_dir, "session.log"))
-    client = build_client(env, logger)
+    client = build_client(env, logger, require_auth=not args.dry_run)
     base_gw = ExchangeGateway(client)
 
     try:
