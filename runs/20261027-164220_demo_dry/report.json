@@ -1,0 +1,1207 @@
+{
+  "run_dir": "runs\\20261027-164220_demo_dry",
+  "session": {
+    "start_ts": 1793119341.1570983,
+    "end_ts": 1793119943.749806,
+    "duration_s": 602.8,
+    "cycles": 300,
+    "end_reason": "duration_reached",
+    "dry_run": true,
+    "environment": "demo",
+    "kill_reason": null,
+    "halted": {},
+    "orders_left_resting": 0,
+    "orders_left_verified": true,
+    "start_balance": {
+      "balance": 2453.24,
+      "portfolio_value": 0.0
+    },
+    "end_balance": {
+      "balance": 2453.24,
+      "portfolio_value": 0.0
+    },
+    "cycle_ms_p50": 115.6,
+    "cycle_ms_p95": 952.1,
+    "cycle_overrun_pct": 0.0,
+    "cycle_errors": 0,
+    "api_errors": {},
+    "position_mismatches": 0,
+    "risk_events": [],
+    "api": {
+      "endpoints": {
+        "GET /account/limits": {
+          "count": 1,
+          "errors": {},
+          "p50_ms": 597.9,
+          "p95_ms": 597.9,
+          "max_ms": 597.9
+        },
+        "GET /exchange/status": {
+          "count": 20,
+          "errors": {},
+          "p50_ms": 102.0,
+          "p95_ms": 176.4,
+          "max_ms": 176.4
+        },
+        "GET /portfolio/balance": {
+          "count": 11,
+          "errors": {},
+          "p50_ms": 105.4,
+          "p95_ms": 321.4,
+          "max_ms": 321.4
+        },
+        "GET /markets": {
+          "count": 20,
+          "errors": {},
+          "p50_ms": 104.1,
+          "p95_ms": 144.3,
+          "max_ms": 144.3
+        },
+        "GET /markets/orderbooks": {
+          "count": 301,
+          "errors": {},
+          "p50_ms": 108.1,
+          "p95_ms": 176.8,
+          "max_ms": 643.5
+        },
+        "GET /markets/trades": {
+          "count": 360,
+          "errors": {},
+          "p50_ms": 105.7,
+          "p95_ms": 154.1,
+          "max_ms": 440.7
+        }
+      },
+      "throttle_wait_s": 0.0,
+      "retries": 0,
+      "total_requests": 713,
+      "total_errors": 0
+    },
+    "strategy": {
+      "gamma": 1.0,
+      "default_k": 40.0,
+      "base_order_size": 2,
+      "max_position": 10,
+      "min_spread": 0.02,
+      "premium_scale": 0.02,
+      "min_time_to_resolution_h": 0.05,
+      "min_quote_mid": 0.05,
+      "max_quote_mid": 0.95,
+      "max_horizon_h": 24.0,
+      "gamma_mode": "constant",
+      "calibration_constant": 0.04,
+      "sigma_floor": 0.01,
+      "vol_window": 120,
+      "fair_value_adjustment": 0.0,
+      "k_refresh_every": 10
+    },
+    "strategy_overrides": {
+      "liquid": {},
+      "illiquid": {}
+    },
+    "execution": {
+      "order_expiration_s": 300,
+      "expiry_refresh_frac": 0.33,
+      "replenish_threshold": 0.5,
+      "cross_policy": "clamp",
+      "aggressive_reprice": "replace",
+      "cancel_order_on_pause": true,
+      "post_only": true,
+      "flatten_on_exit": false,
+      "listing_grace_s": 5.0
+    },
+    "risk_limits": {
+      "max_session_loss": 25.0,
+      "max_market_loss": 10.0,
+      "max_gross_position": 40,
+      "max_consecutive_errors": 8,
+      "min_balance": 0.0,
+      "max_rejects_per_min": 12,
+      "stale_book_s": 15.0
+    }
+  },
+  "horizons": [
+    10,
+    60,
+    300
+  ],
+  "markets": [
+    {
+      "ticker": "KXNFLGAME-26NOV01TENCIN-TEN",
+      "liquidity_class": "liquid",
+      "title": "Tennessee wins",
+      "selection": {
+        "ticker": "KXNFLGAME-26NOV01TENCIN-TEN",
+        "event_ticker": "KXNFLGAME-26NOV01TENCIN",
+        "series_ticker": "KXNFLGAME",
+        "title": "Tennessee wins",
+        "status": "active",
+        "close_ts": 1793728800.0,
+        "hours_to_close": 169.3,
+        "yes_bid": 0.17,
+        "yes_ask": 0.18,
+        "two_sided": true,
+        "spread": 0.01,
+        "mid": 0.175,
+        "mid_source": "book",
+        "volume_24h": 495.46,
+        "volume": 24803.15,
+        "open_interest": 23905.15,
+        "top_size": 1699.69,
+        "max_tick": 0.01,
+        "mve": false,
+        "tradable": true,
+        "score": 19.03,
+        "book_checked": true,
+        "book_levels": 6,
+        "depth_band_contracts": 5562.9800000000005,
+        "liquidity_class": "liquid",
+        "fee_type": "quadratic",
+        "fee_multiplier": 1
+      },
+      "ticks": 300,
+      "observed_s": 600.3,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "stand_down_pct": {},
+      "market": {
+        "two_sided_book_pct": 100.0,
+        "avg_spread_c": 1.0,
+        "avg_top_bid_depth": 980.4,
+        "avg_top_ask_depth": 719.3,
+        "mid_first": 0.175,
+        "mid_last": 0.175,
+        "mid_min": 0.175,
+        "mid_max": 0.175,
+        "mid_changes": 0,
+        "mid_source_last_price_pct": 0.0,
+        "realized_vol_per_sqrt_h": 0.0,
+        "public_trades": 0,
+        "public_contracts": 0
+      },
+      "quotes": {
+        "avg_quoted_spread_c": 3.06,
+        "avg_model_spread_c": 2.86,
+        "bid_at_touch_pct": 0.0,
+        "bid_inside_pct": 0.0,
+        "bid_ticks_behind_when_behind": 1.03,
+        "ask_at_touch_pct": 0.0,
+        "ask_inside_pct": 0.0,
+        "ask_ticks_behind_when_behind": 1.03,
+        "cross_clamped_pct": 0.0,
+        "risk_gated_pct": 0.0
+      },
+      "model": {
+        "sigma": 0.00828,
+        "sigma_raw": 0.0109,
+        "vol_scale": 0.76,
+        "sigma_from_data_pct": 97.0,
+        "k": 75.21,
+        "gamma": 1.0,
+        "spread_inv_c": 0.201,
+        "spread_liq_c": 2.642,
+        "spread_prem_c": 0.022,
+        "inv_share_pct": 7.0,
+        "liq_share_pct": 92.2,
+        "prem_share_pct": 0.8,
+        "min_spread_binding_pct": 0.0,
+        "avg_reservation_skew_c": 0,
+        "corr_skew_vs_q": null
+      },
+      "inventory": {
+        "start": 0.0,
+        "final": 0.0,
+        "max_abs": 0.0,
+        "avg": 0.0,
+        "avg_abs": 0.0,
+        "at_limit_pct": 0.0
+      },
+      "orders": {
+        "counts": {
+          "create": 4,
+          "cancel": 4,
+          "amend": 4
+        },
+        "rejects": {},
+        "reject_examples": [],
+        "amend_reasons": {
+          "refresh_expiry": 4
+        },
+        "latency_ms": {
+          "create": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "cancel": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "amend": {
+            "p50": 0.0,
+            "p95": 0.0
+          }
+        },
+        "writes_per_hour": 72.0
+      },
+      "fills": {
+        "count": 0,
+        "contracts": 0,
+        "bought": 0,
+        "sold": 0,
+        "round_trip_contracts": 0,
+        "maker_pct": null,
+        "fees": 0,
+        "edge_c": null,
+        "fills_per_quoting_hour": 0.0,
+        "contracts_per_quoting_hour": 0.0,
+        "market_share_pct": null,
+        "markout_10s_c": null,
+        "adverse_10s_c": null,
+        "markout_10s_n": 0,
+        "markout_60s_c": null,
+        "adverse_60s_c": null,
+        "markout_60s_n": 0,
+        "markout_300s_c": null,
+        "adverse_300s_c": null,
+        "markout_300s_n": 0
+      },
+      "tape": {
+        "prints_through_our_quote": 0,
+        "prints_at_our_level": 0
+      },
+      "pnl": {
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_pnl": 0.0,
+        "fees": 0.0,
+        "net_pnl": 0.0,
+        "final_mark": 0.175,
+        "exchange_position": null,
+        "exchange_realized_pnl": null,
+        "exchange_fees_paid": null,
+        "halted": null
+      }
+    },
+    {
+      "ticker": "KXNFLGAME-26NOV02CHISEA-SEA",
+      "liquidity_class": "liquid",
+      "title": "Seattle wins",
+      "selection": {
+        "ticker": "KXNFLGAME-26NOV02CHISEA-SEA",
+        "event_ticker": "KXNFLGAME-26NOV02CHISEA",
+        "series_ticker": "KXNFLGAME",
+        "title": "Seattle wins",
+        "status": "active",
+        "close_ts": 1793841300.0,
+        "hours_to_close": 200.55,
+        "yes_bid": 0.59,
+        "yes_ask": 0.61,
+        "two_sided": true,
+        "spread": 0.02,
+        "mid": 0.6,
+        "mid_source": "book",
+        "volume_24h": 861.31,
+        "volume": 7683.73,
+        "open_interest": 6521.33,
+        "top_size": 555.7,
+        "max_tick": 0.01,
+        "mve": false,
+        "tradable": true,
+        "score": 17.426,
+        "book_checked": true,
+        "book_levels": 5,
+        "depth_band_contracts": 1376.41,
+        "liquidity_class": "liquid",
+        "fee_type": "quadratic",
+        "fee_multiplier": 1
+      },
+      "ticks": 300,
+      "observed_s": 600.3,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "stand_down_pct": {},
+      "market": {
+        "two_sided_book_pct": 100.0,
+        "avg_spread_c": 2.0,
+        "avg_top_bid_depth": 283.5,
+        "avg_top_ask_depth": 272.2,
+        "mid_first": 0.6,
+        "mid_last": 0.6,
+        "mid_min": 0.6,
+        "mid_max": 0.6,
+        "mid_changes": 0,
+        "mid_source_last_price_pct": 0.0,
+        "realized_vol_per_sqrt_h": 0.0,
+        "public_trades": 0,
+        "public_contracts": 0
+      },
+      "quotes": {
+        "avg_quoted_spread_c": 4.12,
+        "avg_model_spread_c": 3.33,
+        "bid_at_touch_pct": 0.0,
+        "bid_inside_pct": 0.0,
+        "bid_ticks_behind_when_behind": 1.06,
+        "ask_at_touch_pct": 0.0,
+        "ask_inside_pct": 0.0,
+        "ask_ticks_behind_when_behind": 1.06,
+        "cross_clamped_pct": 0.0,
+        "risk_gated_pct": 0.0
+      },
+      "model": {
+        "sigma": 0.01068,
+        "sigma_raw": 0.0109,
+        "vol_scale": 0.98,
+        "sigma_from_data_pct": 97.0,
+        "k": 67.03,
+        "gamma": 1.0,
+        "spread_inv_c": 0.334,
+        "spread_liq_c": 2.962,
+        "spread_prem_c": 0.034,
+        "inv_share_pct": 10.0,
+        "liq_share_pct": 88.9,
+        "prem_share_pct": 1.0,
+        "min_spread_binding_pct": 0.0,
+        "avg_reservation_skew_c": 0,
+        "corr_skew_vs_q": null
+      },
+      "inventory": {
+        "start": 0.0,
+        "final": 0.0,
+        "max_abs": 0.0,
+        "avg": 0.0,
+        "avg_abs": 0.0,
+        "at_limit_pct": 0.0
+      },
+      "orders": {
+        "counts": {
+          "create": 4,
+          "cancel": 4,
+          "amend": 4
+        },
+        "rejects": {},
+        "reject_examples": [],
+        "amend_reasons": {
+          "refresh_expiry": 4
+        },
+        "latency_ms": {
+          "create": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "cancel": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "amend": {
+            "p50": 0.0,
+            "p95": 0.0
+          }
+        },
+        "writes_per_hour": 72.0
+      },
+      "fills": {
+        "count": 0,
+        "contracts": 0,
+        "bought": 0,
+        "sold": 0,
+        "round_trip_contracts": 0,
+        "maker_pct": null,
+        "fees": 0,
+        "edge_c": null,
+        "fills_per_quoting_hour": 0.0,
+        "contracts_per_quoting_hour": 0.0,
+        "market_share_pct": null,
+        "markout_10s_c": null,
+        "adverse_10s_c": null,
+        "markout_10s_n": 0,
+        "markout_60s_c": null,
+        "adverse_60s_c": null,
+        "markout_60s_n": 0,
+        "markout_300s_c": null,
+        "adverse_300s_c": null,
+        "markout_300s_n": 0
+      },
+      "tape": {
+        "prints_through_our_quote": 0,
+        "prints_at_our_level": 0
+      },
+      "pnl": {
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_pnl": 0.0,
+        "fees": 0.0,
+        "net_pnl": 0.0,
+        "final_mark": 0.6,
+        "exchange_position": null,
+        "exchange_realized_pnl": null,
+        "exchange_fees_paid": null,
+        "halted": null
+      }
+    },
+    {
+      "ticker": "KXPAYROLLS-26OCT-T70000",
+      "liquidity_class": "liquid",
+      "title": "Will above 70000 jobs be added in October 2026?",
+      "selection": {
+        "ticker": "KXPAYROLLS-26OCT-T70000",
+        "event_ticker": "KXPAYROLLS-26OCT",
+        "series_ticker": "KXPAYROLLS",
+        "title": "Will above 70000 jobs be added in October 2026?",
+        "status": "active",
+        "close_ts": 1793971740.0,
+        "hours_to_close": 236.79,
+        "yes_bid": 0.51,
+        "yes_ask": 0.52,
+        "two_sided": true,
+        "spread": 0.01,
+        "mid": 0.515,
+        "mid_source": "book",
+        "volume_24h": 75.39,
+        "volume": 321275.44,
+        "open_interest": 257308.9,
+        "top_size": 646.3,
+        "max_tick": 0.01,
+        "mve": false,
+        "tradable": true,
+        "score": 17.337,
+        "book_checked": true,
+        "book_levels": 11,
+        "depth_band_contracts": 1942.86,
+        "liquidity_class": "liquid",
+        "fee_type": "quadratic",
+        "fee_multiplier": 1
+      },
+      "ticks": 300,
+      "observed_s": 600.3,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "stand_down_pct": {},
+      "market": {
+        "two_sided_book_pct": 100.0,
+        "avg_spread_c": 1.0,
+        "avg_top_bid_depth": 326.8,
+        "avg_top_ask_depth": 319.5,
+        "mid_first": 0.515,
+        "mid_last": 0.515,
+        "mid_min": 0.515,
+        "mid_max": 0.515,
+        "mid_changes": 0,
+        "mid_source_last_price_pct": 0.0,
+        "realized_vol_per_sqrt_h": 0.0,
+        "public_trades": 0,
+        "public_contracts": 0
+      },
+      "quotes": {
+        "avg_quoted_spread_c": 37.12,
+        "avg_model_spread_c": 36.84,
+        "bid_at_touch_pct": 0.0,
+        "bid_inside_pct": 0.0,
+        "bid_ticks_behind_when_behind": 18.06,
+        "ask_at_touch_pct": 0.0,
+        "ask_inside_pct": 0.0,
+        "ask_ticks_behind_when_behind": 18.06,
+        "cross_clamped_pct": 0.0,
+        "risk_gated_pct": 0.0
+      },
+      "model": {
+        "sigma": 0.01089,
+        "sigma_raw": 0.0109,
+        "vol_scale": 1.0,
+        "sigma_from_data_pct": 97.0,
+        "k": 5.0,
+        "gamma": 1.0,
+        "spread_inv_c": 0.348,
+        "spread_liq_c": 36.464,
+        "spread_prem_c": 0.033,
+        "inv_share_pct": 0.9,
+        "liq_share_pct": 99.0,
+        "prem_share_pct": 0.1,
+        "min_spread_binding_pct": 0.0,
+        "avg_reservation_skew_c": 0,
+        "corr_skew_vs_q": null
+      },
+      "inventory": {
+        "start": 0.0,
+        "final": 0.0,
+        "max_abs": 0.0,
+        "avg": 0.0,
+        "avg_abs": 0.0,
+        "at_limit_pct": 0.0
+      },
+      "orders": {
+        "counts": {
+          "create": 4,
+          "cancel": 4,
+          "amend": 4
+        },
+        "rejects": {},
+        "reject_examples": [],
+        "amend_reasons": {
+          "refresh_expiry": 4
+        },
+        "latency_ms": {
+          "create": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "cancel": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "amend": {
+            "p50": 0.0,
+            "p95": 0.0
+          }
+        },
+        "writes_per_hour": 72.0
+      },
+      "fills": {
+        "count": 0,
+        "contracts": 0,
+        "bought": 0,
+        "sold": 0,
+        "round_trip_contracts": 0,
+        "maker_pct": null,
+        "fees": 0,
+        "edge_c": null,
+        "fills_per_quoting_hour": 0.0,
+        "contracts_per_quoting_hour": 0.0,
+        "market_share_pct": null,
+        "markout_10s_c": null,
+        "adverse_10s_c": null,
+        "markout_10s_n": 0,
+        "markout_60s_c": null,
+        "adverse_60s_c": null,
+        "markout_60s_n": 0,
+        "markout_300s_c": null,
+        "adverse_300s_c": null,
+        "markout_300s_n": 0
+      },
+      "tape": {
+        "prints_through_our_quote": 0,
+        "prints_at_our_level": 0
+      },
+      "pnl": {
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_pnl": 0.0,
+        "fees": 0.0,
+        "net_pnl": 0.0,
+        "final_mark": 0.515,
+        "exchange_position": null,
+        "exchange_realized_pnl": null,
+        "exchange_fees_paid": null,
+        "halted": null
+      }
+    },
+    {
+      "ticker": "KXTRUMPMENTIONB-26OCT27-ILHA",
+      "liquidity_class": "illiquid",
+      "title": "What will Donald Trump say during midterm rally in Waco, Texas originally scheduled for October 27, 2026?",
+      "selection": {
+        "ticker": "KXTRUMPMENTIONB-26OCT27-ILHA",
+        "event_ticker": "KXTRUMPMENTIONB-26OCT27",
+        "series_ticker": "KXTRUMPMENTIONB",
+        "title": "What will Donald Trump say during midterm rally in Waco, Texas originally scheduled for October 27, 2026?",
+        "status": "active",
+        "close_ts": 1794322800.0,
+        "hours_to_close": 334.3,
+        "yes_bid": 0.8,
+        "yes_ask": 0.93,
+        "two_sided": true,
+        "spread": 0.13,
+        "mid": 0.865,
+        "mid_source": "book",
+        "volume_24h": 18.0,
+        "volume": 18.0,
+        "open_interest": 11.0,
+        "top_size": 47.0,
+        "max_tick": 0.01,
+        "mve": false,
+        "tradable": true,
+        "score": 2.872,
+        "book_checked": true,
+        "book_levels": 2,
+        "depth_band_contracts": 0,
+        "liquidity_class": "illiquid",
+        "fee_type": "quadratic",
+        "fee_multiplier": 1
+      },
+      "ticks": 300,
+      "observed_s": 600.3,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "stand_down_pct": {},
+      "market": {
+        "two_sided_book_pct": 99.7,
+        "avg_spread_c": 9.27,
+        "avg_top_bid_depth": 21.8,
+        "avg_top_ask_depth": 25.0,
+        "mid_first": 0.86,
+        "mid_last": 0.875,
+        "mid_min": 0.82,
+        "mid_max": 0.875,
+        "mid_changes": 17,
+        "mid_source_last_price_pct": 0.3,
+        "realized_vol_per_sqrt_h": 0.1704,
+        "public_trades": 0,
+        "public_contracts": 0
+      },
+      "quotes": {
+        "avg_quoted_spread_c": 41.22,
+        "avg_model_spread_c": 70.0,
+        "bid_at_touch_pct": 9.3,
+        "bid_inside_pct": 9.3,
+        "bid_ticks_behind_when_behind": 29.65,
+        "ask_at_touch_pct": 9.7,
+        "ask_inside_pct": 9.7,
+        "ask_ticks_behind_when_behind": 5.87,
+        "cross_clamped_pct": 0.0,
+        "risk_gated_pct": 0.0
+      },
+      "model": {
+        "sigma": 0.12005,
+        "sigma_raw": 0.17133,
+        "vol_scale": 0.689,
+        "sigma_from_data_pct": 97.0,
+        "k": 33.63,
+        "gamma": 1.0,
+        "spread_inv_c": 60.249,
+        "spread_liq_c": 9.741,
+        "spread_prem_c": 0.013,
+        "inv_share_pct": 86.1,
+        "liq_share_pct": 13.9,
+        "prem_share_pct": 0.0,
+        "min_spread_binding_pct": 0.0,
+        "avg_reservation_skew_c": 0,
+        "corr_skew_vs_q": null
+      },
+      "inventory": {
+        "start": 0.0,
+        "final": 0.0,
+        "max_abs": 0.0,
+        "avg": 0.0,
+        "avg_abs": 0.0,
+        "at_limit_pct": 0.0
+      },
+      "orders": {
+        "counts": {
+          "create": 67,
+          "cancel": 67,
+          "amend": 21
+        },
+        "rejects": {},
+        "reject_examples": [],
+        "amend_reasons": {
+          "reprice": 20,
+          "refresh_expiry": 1
+        },
+        "latency_ms": {
+          "create": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "cancel": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "amend": {
+            "p50": 0.0,
+            "p95": 0.0
+          }
+        },
+        "writes_per_hour": 929.6
+      },
+      "fills": {
+        "count": 0,
+        "contracts": 0,
+        "bought": 0,
+        "sold": 0,
+        "round_trip_contracts": 0,
+        "maker_pct": null,
+        "fees": 0,
+        "edge_c": null,
+        "fills_per_quoting_hour": 0.0,
+        "contracts_per_quoting_hour": 0.0,
+        "market_share_pct": null,
+        "markout_10s_c": null,
+        "adverse_10s_c": null,
+        "markout_10s_n": 0,
+        "markout_60s_c": null,
+        "adverse_60s_c": null,
+        "markout_60s_n": 0,
+        "markout_300s_c": null,
+        "adverse_300s_c": null,
+        "markout_300s_n": 0
+      },
+      "tape": {
+        "prints_through_our_quote": 0,
+        "prints_at_our_level": 0
+      },
+      "pnl": {
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_pnl": 0.0,
+        "fees": 0.0,
+        "net_pnl": 0.0,
+        "final_mark": 0.875,
+        "exchange_position": null,
+        "exchange_realized_pnl": null,
+        "exchange_fees_paid": null,
+        "halted": null
+      }
+    },
+    {
+      "ticker": "KXCPI-26OCT-T0.2",
+      "liquidity_class": "illiquid",
+      "title": "Will CPI rise more than 0.2% in October 2026?",
+      "selection": {
+        "ticker": "KXCPI-26OCT-T0.2",
+        "event_ticker": "KXCPI-26OCT",
+        "series_ticker": "KXCPI",
+        "title": "Will CPI rise more than 0.2% in October 2026?",
+        "status": "active",
+        "close_ts": 1794317100.0,
+        "hours_to_close": 332.72,
+        "yes_bid": 0.55,
+        "yes_ask": 0.66,
+        "two_sided": true,
+        "spread": 0.11,
+        "mid": 0.605,
+        "mid_source": "book",
+        "volume_24h": 5.0,
+        "volume": 83036.49,
+        "open_interest": 52974.04,
+        "top_size": 6.0,
+        "max_tick": 0.01,
+        "mve": false,
+        "tradable": true,
+        "score": 5.454,
+        "book_checked": true,
+        "book_levels": 2,
+        "depth_band_contracts": 0,
+        "liquidity_class": "illiquid",
+        "fee_type": "quadratic",
+        "fee_multiplier": 1
+      },
+      "ticks": 300,
+      "observed_s": 600.3,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "stand_down_pct": {},
+      "market": {
+        "two_sided_book_pct": 100.0,
+        "avg_spread_c": 11.0,
+        "avg_top_bid_depth": 5.0,
+        "avg_top_ask_depth": 1.0,
+        "mid_first": 0.605,
+        "mid_last": 0.605,
+        "mid_min": 0.605,
+        "mid_max": 0.605,
+        "mid_changes": 0,
+        "mid_source_last_price_pct": 0.0,
+        "realized_vol_per_sqrt_h": 0.0,
+        "public_trades": 0,
+        "public_contracts": 0
+      },
+      "quotes": {
+        "avg_quoted_spread_c": 7.06,
+        "avg_model_spread_c": 5.3,
+        "bid_at_touch_pct": 100.0,
+        "bid_inside_pct": 100.0,
+        "bid_ticks_behind_when_behind": null,
+        "ask_at_touch_pct": 100.0,
+        "ask_inside_pct": 100.0,
+        "ask_ticks_behind_when_behind": null,
+        "cross_clamped_pct": 0.0,
+        "risk_gated_pct": 0.0
+      },
+      "model": {
+        "sigma": 0.01066,
+        "sigma_raw": 0.0109,
+        "vol_scale": 0.978,
+        "sigma_from_data_pct": 97.0,
+        "k": 40.0,
+        "gamma": 1.0,
+        "spread_inv_c": 0.333,
+        "spread_liq_c": 4.938,
+        "spread_prem_c": 0.026,
+        "inv_share_pct": 6.3,
+        "liq_share_pct": 93.2,
+        "prem_share_pct": 0.5,
+        "min_spread_binding_pct": 0.0,
+        "avg_reservation_skew_c": 0,
+        "corr_skew_vs_q": null
+      },
+      "inventory": {
+        "start": 0.0,
+        "final": 0.0,
+        "max_abs": 0.0,
+        "avg": 0.0,
+        "avg_abs": 0.0,
+        "at_limit_pct": 0.0
+      },
+      "orders": {
+        "counts": {
+          "create": 4,
+          "cancel": 4,
+          "amend": 4
+        },
+        "rejects": {},
+        "reject_examples": [],
+        "amend_reasons": {
+          "refresh_expiry": 4
+        },
+        "latency_ms": {
+          "create": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "cancel": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "amend": {
+            "p50": 0.0,
+            "p95": 0.0
+          }
+        },
+        "writes_per_hour": 72.0
+      },
+      "fills": {
+        "count": 0,
+        "contracts": 0,
+        "bought": 0,
+        "sold": 0,
+        "round_trip_contracts": 0,
+        "maker_pct": null,
+        "fees": 0,
+        "edge_c": null,
+        "fills_per_quoting_hour": 0.0,
+        "contracts_per_quoting_hour": 0.0,
+        "market_share_pct": null,
+        "markout_10s_c": null,
+        "adverse_10s_c": null,
+        "markout_10s_n": 0,
+        "markout_60s_c": null,
+        "adverse_60s_c": null,
+        "markout_60s_n": 0,
+        "markout_300s_c": null,
+        "adverse_300s_c": null,
+        "markout_300s_n": 0
+      },
+      "tape": {
+        "prints_through_our_quote": 0,
+        "prints_at_our_level": 0
+      },
+      "pnl": {
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_pnl": 0.0,
+        "fees": 0.0,
+        "net_pnl": 0.0,
+        "final_mark": 0.605,
+        "exchange_position": null,
+        "exchange_realized_pnl": null,
+        "exchange_fees_paid": null,
+        "halted": null
+      }
+    },
+    {
+      "ticker": "KXNFLSPREAD-26NOV01MINDET-MIN8",
+      "liquidity_class": "illiquid",
+      "title": "Minnesota wins by over 7.5 points?",
+      "selection": {
+        "ticker": "KXNFLSPREAD-26NOV01MINDET-MIN8",
+        "event_ticker": "KXNFLSPREAD-26NOV01MINDET",
+        "series_ticker": "KXNFLSPREAD",
+        "title": "Minnesota wins by over 7.5 points?",
+        "status": "active",
+        "close_ts": 1793728800.0,
+        "hours_to_close": 169.3,
+        "yes_bid": 0.07,
+        "yes_ask": 0.24,
+        "two_sided": true,
+        "spread": 0.17,
+        "mid": 0.155,
+        "mid_source": "book",
+        "volume_24h": 50.0,
+        "volume": 50.0,
+        "open_interest": 50.0,
+        "top_size": 3075.39,
+        "max_tick": 0.01,
+        "mve": false,
+        "tradable": true,
+        "score": 5.663,
+        "book_checked": true,
+        "book_levels": 7,
+        "depth_band_contracts": 0,
+        "liquidity_class": "illiquid",
+        "fee_type": "quadratic",
+        "fee_multiplier": 1
+      },
+      "ticks": 300,
+      "observed_s": 600.3,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "stand_down_pct": {},
+      "market": {
+        "two_sided_book_pct": 100.0,
+        "avg_spread_c": 17.0,
+        "avg_top_bid_depth": 2380.9,
+        "avg_top_ask_depth": 694.4,
+        "mid_first": 0.155,
+        "mid_last": 0.155,
+        "mid_min": 0.155,
+        "mid_max": 0.155,
+        "mid_changes": 0,
+        "mid_source_last_price_pct": 0.0,
+        "realized_vol_per_sqrt_h": 0.0,
+        "public_trades": 0,
+        "public_contracts": 0
+      },
+      "quotes": {
+        "avg_quoted_spread_c": 7.06,
+        "avg_model_spread_c": 6.67,
+        "bid_at_touch_pct": 100.0,
+        "bid_inside_pct": 100.0,
+        "bid_ticks_behind_when_behind": null,
+        "ask_at_touch_pct": 100.0,
+        "ask_inside_pct": 100.0,
+        "ask_ticks_behind_when_behind": null,
+        "cross_clamped_pct": 0.0,
+        "risk_gated_pct": 0.0
+      },
+      "model": {
+        "sigma": 0.00789,
+        "sigma_raw": 0.0109,
+        "vol_scale": 0.724,
+        "sigma_from_data_pct": 97.0,
+        "k": 30.42,
+        "gamma": 1.0,
+        "spread_inv_c": 0.182,
+        "spread_liq_c": 6.469,
+        "spread_prem_c": 0.02,
+        "inv_share_pct": 2.7,
+        "liq_share_pct": 97.0,
+        "prem_share_pct": 0.3,
+        "min_spread_binding_pct": 0.0,
+        "avg_reservation_skew_c": 0,
+        "corr_skew_vs_q": null
+      },
+      "inventory": {
+        "start": 0.0,
+        "final": 0.0,
+        "max_abs": 0.0,
+        "avg": 0.0,
+        "avg_abs": 0.0,
+        "at_limit_pct": 0.0
+      },
+      "orders": {
+        "counts": {
+          "create": 4,
+          "cancel": 4,
+          "amend": 4
+        },
+        "rejects": {},
+        "reject_examples": [],
+        "amend_reasons": {
+          "refresh_expiry": 4
+        },
+        "latency_ms": {
+          "create": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "cancel": {
+            "p50": 0.0,
+            "p95": 0.0
+          },
+          "amend": {
+            "p50": 0.0,
+            "p95": 0.0
+          }
+        },
+        "writes_per_hour": 72.0
+      },
+      "fills": {
+        "count": 0,
+        "contracts": 0,
+        "bought": 0,
+        "sold": 0,
+        "round_trip_contracts": 0,
+        "maker_pct": null,
+        "fees": 0,
+        "edge_c": null,
+        "fills_per_quoting_hour": 0.0,
+        "contracts_per_quoting_hour": 0.0,
+        "market_share_pct": null,
+        "markout_10s_c": null,
+        "adverse_10s_c": null,
+        "markout_10s_n": 0,
+        "markout_60s_c": null,
+        "adverse_60s_c": null,
+        "markout_60s_n": 0,
+        "markout_300s_c": null,
+        "adverse_300s_c": null,
+        "markout_300s_n": 0
+      },
+      "tape": {
+        "prints_through_our_quote": 0,
+        "prints_at_our_level": 0
+      },
+      "pnl": {
+        "realized_pnl": 0.0,
+        "unrealized_pnl": 0.0,
+        "total_pnl": 0.0,
+        "fees": 0.0,
+        "net_pnl": 0.0,
+        "final_mark": 0.155,
+        "exchange_position": null,
+        "exchange_realized_pnl": null,
+        "exchange_fees_paid": null,
+        "halted": null
+      }
+    }
+  ],
+  "classes": {
+    "illiquid": {
+      "markets": 3,
+      "fills": 0,
+      "contracts": 0,
+      "net_pnl": 0,
+      "fees": 0,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "market_spread_c": 12.42,
+      "quoted_spread_c": 18.45,
+      "bid_at_touch_pct": 69.8,
+      "ask_at_touch_pct": 69.9,
+      "public_contracts": 0,
+      "edge_c": null,
+      "writes": 179,
+      "rejects": 0,
+      "max_abs_inventory": 0.0,
+      "vol_scale": 0.797,
+      "min_spread_binding_pct": 0.0,
+      "markout_10s_c": null,
+      "adverse_10s_c": null,
+      "markout_60s_c": null,
+      "adverse_60s_c": null,
+      "markout_300s_c": null,
+      "adverse_300s_c": null,
+      "market_share_pct": null
+    },
+    "liquid": {
+      "markets": 3,
+      "fills": 0,
+      "contracts": 0,
+      "net_pnl": 0,
+      "fees": 0,
+      "quoting_pct": 100.0,
+      "two_sided_pct": 100.0,
+      "market_spread_c": 1.33,
+      "quoted_spread_c": 14.77,
+      "bid_at_touch_pct": 0.0,
+      "ask_at_touch_pct": 0.0,
+      "public_contracts": 0,
+      "edge_c": null,
+      "writes": 36,
+      "rejects": 0,
+      "max_abs_inventory": 0.0,
+      "vol_scale": 0.913,
+      "min_spread_binding_pct": 0.0,
+      "markout_10s_c": null,
+      "adverse_10s_c": null,
+      "markout_60s_c": null,
+      "adverse_60s_c": null,
+      "markout_300s_c": null,
+      "adverse_300s_c": null,
+      "market_share_pct": null
+    }
+  },
+  "total": {
+    "markets": 6,
+    "fills": 0,
+    "contracts": 0,
+    "net_pnl": 0,
+    "fees": 0,
+    "quoting_pct": 100.0,
+    "two_sided_pct": 100.0,
+    "market_spread_c": 6.88,
+    "quoted_spread_c": 16.61,
+    "bid_at_touch_pct": 34.9,
+    "ask_at_touch_pct": 34.9,
+    "public_contracts": 0,
+    "edge_c": null,
+    "writes": 215,
+    "rejects": 0,
+    "max_abs_inventory": 0.0,
+    "vol_scale": 0.855,
+    "min_spread_binding_pct": 0.0,
+    "markout_10s_c": null,
+    "adverse_10s_c": null,
+    "markout_60s_c": null,
+    "adverse_60s_c": null,
+    "markout_300s_c": null,
+    "adverse_300s_c": null,
+    "market_share_pct": null
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "area": "KXNFLGAME-26NOV01TENCIN-TEN",
+      "text": "[liquid] no fills. quotes rarely at touch (bid 0.0%, ask 0.0%); no public prints in the market during the session"
+    },
+    {
+      "severity": "medium",
+      "area": "KXNFLGAME-26NOV01TENCIN-TEN",
+      "text": "[liquid] quoted 3.06c vs market 1.0c: the A-S width is not competitive here (k=75.21, gamma=1.0)."
+    },
+    {
+      "severity": "medium",
+      "area": "KXNFLGAME-26NOV02CHISEA-SEA",
+      "text": "[liquid] no fills. quotes rarely at touch (bid 0.0%, ask 0.0%); no public prints in the market during the session"
+    },
+    {
+      "severity": "medium",
+      "area": "KXNFLGAME-26NOV02CHISEA-SEA",
+      "text": "[liquid] quoted 4.12c vs market 2.0c: the A-S width is not competitive here (k=67.03, gamma=1.0)."
+    },
+    {
+      "severity": "medium",
+      "area": "KXPAYROLLS-26OCT-T70000",
+      "text": "[liquid] no fills. quotes rarely at touch (bid 0.0%, ask 0.0%); no public prints in the market during the session"
+    },
+    {
+      "severity": "medium",
+      "area": "KXPAYROLLS-26OCT-T70000",
+      "text": "[liquid] quoted 37.12c vs market 1.0c: the A-S width is not competitive here (k=5.0, gamma=1.0)."
+    },
+    {
+      "severity": "medium",
+      "area": "KXTRUMPMENTIONB-26OCT27-ILHA",
+      "text": "[illiquid] no fills. quotes rarely at touch (bid 9.3%, ask 9.7%); no public prints in the market during the session"
+    },
+    {
+      "severity": "medium",
+      "area": "KXTRUMPMENTIONB-26OCT27-ILHA",
+      "text": "[illiquid] quoted 41.22c vs market 9.27c: the A-S width is not competitive here (k=33.63, gamma=1.0)."
+    },
+    {
+      "severity": "medium",
+      "area": "KXCPI-26OCT-T0.2",
+      "text": "[illiquid] no fills. no public prints in the market during the session"
+    },
+    {
+      "severity": "medium",
+      "area": "KXNFLSPREAD-26NOV01MINDET-MIN8",
+      "text": "[illiquid] no fills. no public prints in the market during the session"
+    },
+    {
+      "severity": "info",
+      "area": "session",
+      "text": "DRY RUN: no orders reached the exchange; fills and P&L are zero by construction. Quote placement metrics are still valid."
+    }
+  ]
+}

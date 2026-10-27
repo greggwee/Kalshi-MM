@@ -1,0 +1,2 @@
+q=0 ticks: reservation == mid: True
+what-if q in +-5,+-10 over recorded states: 42528 checks, 0 violations (reservation below mid when long, above when short, bid < ask)

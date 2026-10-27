@@ -1,0 +1,29 @@
+scenario     market                             class    spread c p50 bid@/in touch ask@/in touch skew c/ct p50     p95
+as_run       KXNFLGAME-26NOV01TENCIN-TEN        liquid            3.0            0%            0%         0.139    0.14
+as_run       KXNFLGAME-26NOV02CHISEA-SEA        liquid            4.0            0%            0%         0.230    0.23
+as_run       KXPAYROLLS-26OCT-T70000            liquid           37.0            0%            0%         0.240    0.24
+as_run       KXTRUMPMENTIONB-26OCT27-ILHA       illiquid         13.0           32%           32%         1.481  132.36
+as_run       KXCPI-26OCT-T0.2                   illiquid         11.0           34%           34%         3.433   27.71
+as_run       KXNFLSPREAD-26NOV01MINDET-MIN8     illiquid          7.0           56%           56%         0.126    0.13
+
+k_floor_40   KXNFLGAME-26NOV01TENCIN-TEN        liquid            3.0            0%            0%         0.139    0.14
+k_floor_40   KXNFLGAME-26NOV02CHISEA-SEA        liquid            4.0            0%            0%         0.230    0.23
+k_floor_40   KXPAYROLLS-26OCT-T70000            liquid            7.0            0%            0%         0.240    0.24
+k_floor_40   KXTRUMPMENTIONB-26OCT27-ILHA       illiquid          7.0           42%           42%         1.481  132.36
+k_floor_40   KXCPI-26OCT-T0.2                   illiquid          8.0           48%           48%         3.433   27.71
+k_floor_40   KXNFLSPREAD-26NOV01MINDET-MIN8     illiquid          7.0           56%           56%         0.126    0.13
+
+h4_cc02      KXNFLGAME-26NOV01TENCIN-TEN        liquid            3.0            0%            0%         0.023    0.02
+h4_cc02      KXNFLGAME-26NOV02CHISEA-SEA        liquid            4.0            0%            0%         0.038    0.04
+h4_cc02      KXPAYROLLS-26OCT-T70000            liquid           37.0            0%            0%         0.040    0.04
+h4_cc02      KXTRUMPMENTIONB-26OCT27-ILHA       illiquid          7.0           42%           42%         0.247   22.06
+h4_cc02      KXCPI-26OCT-T0.2                   illiquid          7.0           65%           65%         0.572    4.62
+h4_cc02      KXNFLSPREAD-26NOV01MINDET-MIN8     illiquid          7.0           56%           56%         0.021    0.02
+
+proposal     KXNFLGAME-26NOV01TENCIN-TEN        liquid            3.0            0%            0%         0.023    0.02
+proposal     KXNFLGAME-26NOV02CHISEA-SEA        liquid            2.0          100%          100%         0.038    0.04
+proposal     KXPAYROLLS-26OCT-T70000            liquid            3.0            0%            0%         0.040    0.04
+proposal     KXTRUMPMENTIONB-26OCT27-ILHA       illiquid          7.0           63%           63%         0.532    2.74
+proposal     KXCPI-26OCT-T0.2                   illiquid          6.0           94%           93%         0.285    0.89
+proposal     KXNFLSPREAD-26NOV01MINDET-MIN8     illiquid          5.0           56%           56%         0.021    0.02
+

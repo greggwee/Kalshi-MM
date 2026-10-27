@@ -1,0 +1,100 @@
+run runs/20261027-164220_demo_dry: dry_run=True cycles=300 ticks=1800 orders=215 fills=0 trades=0 markouts=0
+end: reason=duration_reached left_resting=0 verified=True total={'realized_pnl': 0.0, 'unrealized_pnl': 0.0, 'fees': 0.0, 'net_pnl': 0.0, 'fills': 0}
+shutdown checks: [(0, True, 0)]
+event types: {'session_start': 1, 'market_meta': 6, 'order': 215, 'tick': 1800, 'cycle': 300, 'api_stats': 9, 'shutdown_check': 1, 'session_end': 1, 'fill': 0, 'trade': 0, 'markout': 0}
+cycle ms p50=115.6 p95=952.1 max=1812.0 overrun(>2000)=0/300
+errors: []
+risk events: []
+position_mismatch: 0
+
+== per market
+
+KXNFLGAME-26NOV01TENCIN-TEN [liquid] ticks=300 quoting=300 standdown={}
+  invariants violated: {'bid>=ask': 0, 'bid>=best_ask': 0, 'ask<=best_bid': 0, 'res_sign': 0, 'q!=0': 0}
+  mid 0.175..0.175 changes=0
+  sigma cold=0.0304 (n=9) data p50=0.0076 p95=0.0076 max=0.0076
+  k p50=75.2 min=75.2 max=75.2  vol_scale=0.76
+  spread       c: p50=2.8 p95=2.8 mean=2.86
+  spread_inv   c: p50=0.14 p95=0.14 mean=0.2
+  spread_liq   c: p50=2.64 p95=2.64 mean=2.64
+  spread_prem  c: p50=0.02 p95=0.02 mean=0.02
+  dominant term (% of quoting ticks): spread_liq=100%
+  skew per contract (c) at live sigma: p50=0.139 p95=0.139 | without vol scaling p50=0.24 | x5 contracts p50=0.69
+  quoted spread c mean=3.06 vs market mean=1.0
+  bid: inside=0% at=0% behind=100% (ticks behind p50=1) | ask: inside=0% at=0% behind=100% (p50=1)
+  orders: {('create', True): 4, ('cancel', True): 4, ('amend', True): 4} why={'reprice_toward': 2, 'refresh_expiry': 4, 'shutdown': 2}
+
+KXNFLGAME-26NOV02CHISEA-SEA [liquid] ticks=300 quoting=300 standdown={}
+  invariants violated: {'bid>=ask': 0, 'bid>=best_ask': 0, 'ask<=best_bid': 0, 'res_sign': 0, 'q!=0': 0}
+  mid 0.6..0.6 changes=0
+  sigma cold=0.0392 (n=9) data p50=0.0098 p95=0.0098 max=0.0098
+  k p50=67.0 min=67.0 max=67.0  vol_scale=0.98
+  spread       c: p50=3.23 p95=3.23 mean=3.33
+  spread_inv   c: p50=0.23 p95=0.23 mean=0.33
+  spread_liq   c: p50=2.96 p95=2.96 mean=2.96
+  spread_prem  c: p50=0.03 p95=0.03 mean=0.03
+  dominant term (% of quoting ticks): spread_inv=3%, spread_liq=97%
+  skew per contract (c) at live sigma: p50=0.23 p95=0.23 | without vol scaling p50=0.24 | x5 contracts p50=1.15
+  quoted spread c mean=4.12 vs market mean=2.0
+  bid: inside=0% at=0% behind=100% (ticks behind p50=1) | ask: inside=0% at=0% behind=100% (p50=1)
+  orders: {('create', True): 4, ('cancel', True): 4, ('amend', True): 4} why={'reprice_toward': 2, 'refresh_expiry': 4, 'shutdown': 2}
+
+KXPAYROLLS-26OCT-T70000 [liquid] ticks=300 quoting=300 standdown={}
+  invariants violated: {'bid>=ask': 0, 'bid>=best_ask': 0, 'ask<=best_bid': 0, 'res_sign': 0, 'q!=0': 0}
+  mid 0.515..0.515 changes=0
+  sigma cold=0.04 (n=9) data p50=0.01 p95=0.01 max=0.01
+  k p50=5.0 min=5.0 max=5.0  vol_scale=1.0
+  spread       c: p50=36.74 p95=36.74 mean=36.84
+  spread_inv   c: p50=0.24 p95=0.24 mean=0.35
+  spread_liq   c: p50=36.46 p95=36.46 mean=36.46
+  spread_prem  c: p50=0.03 p95=0.03 mean=0.03
+  dominant term (% of quoting ticks): spread_liq=100%
+  skew per contract (c) at live sigma: p50=0.24 p95=0.24 | without vol scaling p50=0.24 | x5 contracts p50=1.2
+  quoted spread c mean=37.12 vs market mean=1.0
+  bid: inside=0% at=0% behind=100% (ticks behind p50=18) | ask: inside=0% at=0% behind=100% (p50=18)
+  orders: {('create', True): 4, ('cancel', True): 4, ('amend', True): 4} why={'reprice_toward': 2, 'refresh_expiry': 4, 'shutdown': 2}
+
+KXTRUMPMENTIONB-26OCT27-ILHA [illiquid] ticks=300 quoting=300 standdown={}
+  invariants violated: {'bid>=ask': 0, 'bid>=best_ask': 0, 'ask<=best_bid': 0, 'res_sign': 0, 'q!=0': 0}
+  mid 0.82..0.875 changes=17
+  sigma cold=0.0274 (n=9) data p50=0.0483 p95=0.3198 max=0.3746
+  k p50=40.0 min=5.0 max=41.4  vol_scale=0.689
+  spread       c: p50=40.79 p95=241.25 mean=70.0
+  spread_inv   c: p50=4.32 p95=236.3 mean=60.25
+  spread_liq   c: p50=4.94 p95=36.46 mean=9.74
+  spread_prem  c: p50=0.01 p95=0.01 mean=0.01
+  dominant term (% of quoting ticks): spread_liq=51%, spread_inv=49%
+  skew per contract (c) at live sigma: p50=4.319 p95=236.3 | without vol scaling p50=9.872 | x5 contracts p50=21.59
+  quoted spread c mean=41.03 vs market mean=9.27
+  bid: inside=9% at=0% behind=91% (ticks behind p50=17) | ask: inside=9% at=0% behind=90% (p50=8)
+  orders: {('create', True): 67, ('cancel', True): 67, ('amend', True): 21} why={'reprice_toward': 65, 'reprice': 20, 'refresh_expiry': 1, 'shutdown': 2}
+
+KXCPI-26OCT-T0.2 [illiquid] ticks=300 quoting=300 standdown={}
+  invariants violated: {'bid>=ask': 0, 'bid>=best_ask': 0, 'ask<=best_bid': 0, 'res_sign': 0, 'q!=0': 0}
+  mid 0.605..0.605 changes=0
+  sigma cold=0.0391 (n=9) data p50=0.0098 p95=0.0098 max=0.0098
+  k p50=40.0 min=40.0 max=40.0  vol_scale=0.978
+  spread       c: p50=5.19 p95=5.19 mean=5.3
+  spread_inv   c: p50=0.23 p95=0.23 mean=0.33
+  spread_liq   c: p50=4.94 p95=4.94 mean=4.94
+  spread_prem  c: p50=0.03 p95=0.03 mean=0.03
+  dominant term (% of quoting ticks): spread_liq=100%
+  skew per contract (c) at live sigma: p50=0.229 p95=0.229 | without vol scaling p50=0.24 | x5 contracts p50=1.15
+  quoted spread c mean=7.06 vs market mean=11.0
+  bid: inside=100% at=0% behind=0% (ticks behind p50=None) | ask: inside=100% at=0% behind=0% (p50=None)
+  orders: {('create', True): 4, ('cancel', True): 4, ('amend', True): 4} why={'reprice_toward': 2, 'refresh_expiry': 4, 'shutdown': 2}
+
+KXNFLSPREAD-26NOV01MINDET-MIN8 [illiquid] ticks=300 quoting=300 standdown={}
+  invariants violated: {'bid>=ask': 0, 'bid>=best_ask': 0, 'ask<=best_bid': 0, 'res_sign': 0, 'q!=0': 0}
+  mid 0.155..0.155 changes=0
+  sigma cold=0.029 (n=9) data p50=0.0072 p95=0.0072 max=0.0072
+  k p50=30.4 min=30.4 max=30.4  vol_scale=0.724
+  spread       c: p50=6.62 p95=6.62 mean=6.67
+  spread_inv   c: p50=0.13 p95=0.13 mean=0.18
+  spread_liq   c: p50=6.47 p95=6.47 mean=6.47
+  spread_prem  c: p50=0.02 p95=0.02 mean=0.02
+  dominant term (% of quoting ticks): spread_liq=100%
+  skew per contract (c) at live sigma: p50=0.126 p95=0.126 | without vol scaling p50=0.24 | x5 contracts p50=0.63
+  quoted spread c mean=7.06 vs market mean=17.0
+  bid: inside=100% at=0% behind=0% (ticks behind p50=None) | ask: inside=100% at=0% behind=0% (p50=None)
+  orders: {('create', True): 4, ('cancel', True): 4, ('amend', True): 4} why={'reprice_toward': 2, 'refresh_expiry': 4, 'shutdown': 2}
