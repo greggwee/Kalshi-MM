@@ -21,6 +21,7 @@ selection:
   liquid_max_spread: 0.05
   illiquid_min_spread: 0.04
   illiquid_max_volume_24h: 50
+  illiquid_max_spread: 0.25    # wider = no price to make a market around (1c bid / 97c ask)
   book_check_top_n: 40
   depth_band: 0.05
 

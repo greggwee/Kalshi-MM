@@ -5,13 +5,15 @@
 2. Filter to markets the strategy can actually quote: tradable, a usable mid
    inside [min_mid, max_mid], a tick no coarser than one cent.
 3. Score liquidity from the market listing (24h volume, open interest, top
-   of book size, spread), then confirm the best and worst candidates against
-   their real order books (batched: 100 books per request) and add depth
-   within +-depth_band of mid to the score.
+   of book size, spread), then confirm the most liquid candidates and every
+   possible illiquid pick against their real order books (batched: 100
+   books per request) and add depth within +-depth_band of mid to the score.
 4. Liquid = highest scores with spread <= liquid_max_spread.
-   Illiquid = lowest scores with a two-sided book (a mid must exist, or the
-   strategy just stands down) and either a wide spread or thin 24h volume,
-   preferring markets with SOME history over dead ones.
+   Illiquid = a two-sided book (a mid must exist, or the strategy just
+   stands down) with either a wide spread or thin 24h volume, but a spread
+   no wider than illiquid_max_spread: a 1c bid under a 97c ask has no price
+   to make a market around. Preference: traded in the last 24h, then any
+   history, then the thinnest.
    At most one market per event, so the test isn't six correlated strikes.
 
 Liquidity is relative to what the environment has: demo flow is far thinner
@@ -39,6 +41,7 @@ DEFAULT_SELECTION = {
     "liquid_max_spread": 0.05,
     "illiquid_min_spread": 0.04,
     "illiquid_max_volume_24h": 50,
+    "illiquid_max_spread": 0.25,
     "book_check_top_n": 40,
     "depth_band": 0.05,
 }
@@ -180,13 +183,14 @@ def select_markets(gw, cfg: Optional[dict] = None, logger: Optional[logging.Logg
     logger.info(f"scanned {len(listed)} open markets, {len(eligible)} quotable "
                 f"(rejected: {result['rejected']})")
 
-    # confirm against live books: the most liquid by listing, and the least
-    # liquid of those whose listing claims a two-sided market
+    # confirm against live books: the most liquid by listing, and every
+    # two-sided market narrow enough to be an illiquid pick (the bottom of
+    # the ranking alone is all dead books)
     eligible.sort(key=lambda c: -c["score"])
-    n = cfg["book_check_top_n"]
-    top = eligible[:n]
-    bottom = [c for c in reversed(eligible) if c["two_sided"]][:n]
-    to_check = {c["ticker"]: c for c in top + bottom}
+    top = eligible[:cfg["book_check_top_n"]]
+    thin = [c for c in eligible if c["two_sided"]
+            and c["spread"] <= cfg["illiquid_max_spread"] + 1e-9]
+    to_check = {c["ticker"]: c for c in top + thin}
     if to_check:
         books = gw.orderbooks(list(to_check))
         for t, c in to_check.items():
@@ -206,9 +210,11 @@ def select_markets(gw, cfg: Optional[dict] = None, logger: Optional[logging.Logg
             liquid.append(c)
     chosen = {c["ticker"] for c in liquid}
     illiquid_pool = [c for c in checked if c["two_sided"] and c["ticker"] not in chosen
+                     and c["spread"] <= cfg["illiquid_max_spread"] + 1e-9
                      and (c["spread"] >= cfg["illiquid_min_spread"] - 1e-9
                           or c["volume_24h"] <= cfg["illiquid_max_volume_24h"])]
-    illiquid_pool.sort(key=lambda c: (-(c["volume"] > 0 or c["open_interest"] > 0),
+    illiquid_pool.sort(key=lambda c: (-(c["volume_24h"] > 0),
+                                      -(c["volume"] > 0 or c["open_interest"] > 0),
                                       c["score"]))
     illiquid = _pick(illiquid_pool, cfg["illiquid_count"], used, cfg["one_per_event"])
     for c in liquid:

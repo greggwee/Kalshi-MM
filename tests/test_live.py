@@ -390,6 +390,19 @@ class TestSelector(unittest.TestCase):
         self.assertEqual({s["liquidity_class"] for s in specs}, {"liquid", "illiquid"})
         self.assertEqual(sel["liquid"][0]["fee_type"], "quadratic")
 
+    def test_illiquid_skips_void_books_and_finds_thin_live_ones(self):
+        # a 1c bid under a 97c ask: in the mid band, but there is no price there
+        self.ex.add_market("VOID", {0.02: 5}, {0.03: 5}, event="E7")
+        self.ex.add_market("THIN", {0.40: 4}, {0.48: 3}, event="E8", volume_24h=3,
+                           open_interest=40)
+        sel = select_markets(self.ex, {"liquid_count": 1, "illiquid_count": 9,
+                                       "min_hours_to_close": 1, "book_check_top_n": 1},
+                             logger, now=self.clock())
+        picks = [c["ticker"] for c in sel["illiquid"]]
+        self.assertNotIn("VOID", picks)
+        self.assertEqual(sorted(picks[:2]), ["ILQ2", "THIN"])   # traded in the last 24h
+        self.assertEqual(picks[2:], ["ILQ1"])                   # history only
+
     def test_manual_override(self):
         sel = select_markets(self.ex, {"tickers": {"liquid": ["LIQ2"], "illiquid": ["ILQ1"]}},
                              logger, now=self.clock())
