@@ -25,6 +25,13 @@ At most one resting order per (market, side). Each cycle, per side:
 Every write is journaled with its latency and, on failure, the exchange's
 error code/message, so rejects (post-only crosses, balance, rate limits) are
 visible in the diagnostics report.
+
+GET /portfolio/orders lags our own writes by ~0.5-1s (measured on demo): a
+listing taken just after a write can miss a new order, still show a
+cancelled one, or show an amended one at its old price. Acting on such a
+listing re-creates orders that already rest (duplicates every cycle), so
+each write is remembered for listing_grace_s and overlaid on the listing
+(view) until the listing confirms it.
 """
 import logging
 import time
@@ -59,7 +66,7 @@ class OrderManager:
                  order_expiration_s: int = 300, expiry_refresh_frac: float = 0.33,
                  replenish_threshold: float = 0.5, cancel_order_on_pause: bool = True,
                  post_only: bool = True, on_reject: Optional[Callable] = None,
-                 aggressive_reprice: str = "replace",
+                 aggressive_reprice: str = "replace", listing_grace_s: float = 5.0,
                  clock: Callable[[], float] = time.time):
         if aggressive_reprice not in ("replace", "amend"):
             raise ValueError("aggressive_reprice must be 'replace' or 'amend'")
@@ -73,12 +80,86 @@ class OrderManager:
         self.cancel_order_on_pause = cancel_order_on_pause
         self.post_only = post_only
         self.on_reject = on_reject
+        self.listing_grace_s = listing_grace_s
         self.clock = clock
         self.counts: Dict[str, Dict[str, int]] = defaultdict(lambda: defaultdict(int))
         # our best knowledge of what rests on the exchange: synced from each
         # successful read, then updated by every successful write, so a later
         # read outage or shutdown can still pull orders created this cycle
         self.live: Dict[str, Dict[str, dict]] = defaultdict(dict)
+        # writes the listing may not reflect yet (see module docstring)
+        self._created: Dict[str, Dict[str, dict]] = defaultdict(dict)  # ticker -> id -> rec
+        self._amended: Dict[str, dict] = {}                            # id -> rec
+        self._cancelled: Dict[str, float] = {}                         # id -> ts
+
+    def view(self, ticker: str, listed: List[dict]) -> List[dict]:
+        """Best estimate of what rests in `ticker`: the listing with our
+        unconfirmed writes overlaid. Entries filled in from memory carry
+        unconfirmed=True and never count as confirmation, so view() of its
+        own output is the same view."""
+        self._expire_writes()
+        created = self._created.get(ticker, {})
+        out: Dict[str, dict] = {}
+        for o in listed:
+            oid = o["order_id"]
+            if oid in self._cancelled:
+                continue
+            o = dict(o)
+            if not o.get("unconfirmed"):
+                created.pop(oid, None)  # the listing has caught up with the create
+            a = self._amended.get(oid)
+            if a is not None:
+                if not o.get("unconfirmed") and self._amend_listed(o, a):
+                    del self._amended[oid]
+                else:
+                    later_fills = max(0.0, o["filled"] - a["filled"])
+                    o.update(price=a["price"], remaining=max(0.0, a["remaining"] - later_fills),
+                             expiration_ts=a["expiration_ts"] or o.get("expiration_ts"),
+                             unconfirmed=True)
+            out[oid] = o
+        for oid, rec in created.items():
+            if oid not in out:
+                out[oid] = dict(rec["order"], unconfirmed=True)
+        return list(out.values())
+
+    def on_fill(self, fill: dict):
+        """A fill on an order the listing has not confirmed yet shrinks our
+        remembered copy, so an order that fills before it is ever listed is
+        not kept as a phantom for the rest of the grace window."""
+        oid, qty = fill.get("order_id"), fill.get("qty") or 0.0
+        rec = self._created.get(fill.get("ticker"), {}).get(oid)
+        if rec is not None:
+            rec["order"]["remaining"] -= qty
+            rec["order"]["filled"] += qty
+            if rec["order"]["remaining"] <= 1e-9:
+                del self._created[fill["ticker"]][oid]
+        a = self._amended.get(oid)
+        if a is not None:
+            a["remaining"] = max(0.0, a["remaining"] - qty)
+            a["filled"] += qty
+
+    @staticmethod
+    def _amend_listed(o: dict, a: dict) -> bool:
+        exp = a["expiration_ts"]
+        return (abs(o["price"] - a["price"]) < TICK / 2
+                and abs(o["remaining"] + o["filled"] - a["count"]) < 1e-6
+                and (exp is None or abs((o.get("expiration_ts") or 0) - exp) < 1.5))
+
+    def _expire_writes(self):
+        cutoff = self.clock() - self.listing_grace_s
+        for recs in self._created.values():
+            for oid in [i for i, r in recs.items() if r["ts"] < cutoff]:
+                del recs[oid]
+        self._amended = {i: a for i, a in self._amended.items() if a["ts"] >= cutoff}
+        self._cancelled = {i: ts for i, ts in self._cancelled.items() if ts >= cutoff}
+
+    def _gone(self, ticker: str, order_id: str):
+        """Cancelled, or reported not found: stop tracking it and hide it
+        from listings that have not caught up."""
+        self.live[ticker].pop(order_id, None)
+        self._created.get(ticker, {}).pop(order_id, None)
+        self._amended.pop(order_id, None)
+        self._cancelled[order_id] = self.clock()
 
     def sync(self, ticker: str, orders: List[dict]):
         self.live[ticker] = {o["order_id"]: dict(o) for o in orders}
@@ -89,6 +170,7 @@ class OrderManager:
     # ------------------------------------------------------------------
 
     def reconcile(self, ticker: str, desired: Dict[str, Desired], orders: List[dict]):
+        orders = self.view(ticker, orders)
         self.sync(ticker, orders)
         by_side: Dict[str, List[dict]] = {"bid": [], "ask": []}
         for o in orders:
@@ -171,10 +253,14 @@ class OrderManager:
                 expiration_ts=expiration, post_only=self.post_only,
                 cancel_order_on_pause=self.cancel_order_on_pause)
             if resp.get("order_id"):
-                self.live[ticker][resp["order_id"]] = {
+                order = {
                     "order_id": resp["order_id"], "ticker": ticker, "side": side,
                     "price": price, "remaining": resp.get("remaining_count", size),
                     "filled": resp.get("fill_count") or 0.0, "expiration_ts": expiration}
+                self.live[ticker][resp["order_id"]] = order
+                if order["remaining"] > 1e-9 and self.listing_grace_s > 0:
+                    self._created[ticker][resp["order_id"]] = {"order": dict(order),
+                                                               "ts": self.clock()}
             self._log("create", ticker, side, price=price, size=size, ok=True, t0=t0,
                       order_id=resp.get("order_id"),
                       immediate_fill=resp.get("fill_count") or 0.0)
@@ -191,10 +277,19 @@ class OrderManager:
             live = self.live[ticker].get(order["order_id"])
             if live is not None:
                 live.update(price=price, remaining=size, expiration_ts=expiration)
+            rec = self._created.get(ticker, {}).get(order["order_id"])
+            if rec is not None:  # amended before the listing showed the create
+                rec["order"].update(price=price, remaining=size, expiration_ts=expiration)
+            if self.listing_grace_s > 0:
+                self._amended[order["order_id"]] = {
+                    "price": price, "count": total, "remaining": size,
+                    "filled": order["filled"], "expiration_ts": expiration, "ts": self.clock()}
             self._log("amend", ticker, order["side"], price=price, size=size, ok=True,
                       t0=t0, order_id=order["order_id"], why=why,
                       prev_price=order["price"], prev_remaining=order["remaining"])
         except Exception as e:
+            if classify_error(e) == "not_found":  # filled or expired since the listing
+                self._gone(ticker, order["order_id"])
             self._fail("amend", ticker, order["side"], e, t0, price=price, size=size,
                        order_id=order["order_id"], why=why)
 
@@ -202,14 +297,14 @@ class OrderManager:
         t0 = time.perf_counter()
         try:
             self.gw.cancel_order(order["order_id"], ticker)
-            self.live[ticker].pop(order["order_id"], None)
+            self._gone(ticker, order["order_id"])
             self._log("cancel", ticker, order["side"], price=order["price"],
                       size=order["remaining"], ok=True, t0=t0,
                       order_id=order["order_id"], why=why)
             return True
         except Exception as e:
             if classify_error(e) == "not_found":  # already filled / expired / cancelled
-                self.live[ticker].pop(order["order_id"], None)
+                self._gone(ticker, order["order_id"])
             self._fail("cancel", ticker, order["side"], e, t0, price=order["price"],
                        size=order["remaining"], order_id=order["order_id"], why=why)
             return False
@@ -234,6 +329,7 @@ class OrderManager:
                            error_code=getattr(exc, "code", None),
                            error=str(exc)[:300], **fields)
         self.logger.warning(f"{ticker} {action} {side} failed ({reason}): {exc}")
-        # a cancel of an order that already filled/expired is not a strategy reject
-        if self.on_reject is not None and not (action == "cancel" and reason == "not_found"):
+        # a cancel/amend of an order that already filled/expired is not a strategy reject
+        if self.on_reject is not None and not (action in ("cancel", "amend")
+                                               and reason == "not_found"):
             self.on_reject(ticker)

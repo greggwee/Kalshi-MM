@@ -205,18 +205,50 @@ def _order_test(gw, ticker, step):
     ok, _ = step(f"order create {ticker[:18]}", create)
     if not ok:
         return
-    step("order visible as resting", lambda: next(
-        o for o in gw.resting_orders([ticker])[ticker] if o["order_id"] == state["id"]))
-    step("order amend (expiry only)", lambda: gw.amend_order(
-        state["id"], ticker=ticker, side="bid", count=1, price=0.01,
-        expiration_ts=int(time.time()) + 180))
+
+    def listed():
+        return next((o for o in gw.resting_orders([ticker])[ticker]
+                     if o["order_id"] == state["id"]), None)
+
+    def visible():
+        o, lag = _wait_for(listed)
+        if o["side"] != "bid" or abs(o["price"] - 0.01) > 1e-9 or o["remaining"] != 1.0 \
+                or not o["expiration_ts"]:
+            raise RuntimeError(f"listed order parsed wrong: {o}")
+        return {"listing_lag_s": lag, "side": o["side"], "price": o["price"],
+                "remaining": o["remaining"], "expires_in_s": round(o["expiration_ts"] - time.time())}
+    step("order visible as resting", visible)
+    new_exp = int(time.time()) + 180
+    ok, _ = step("order amend (expiry only)", lambda: gw.amend_order(
+        state["id"], ticker=ticker, side="bid", count=1, price=0.01, expiration_ts=new_exp))
+    if ok:
+        def refreshed():
+            o = listed()
+            return o if o and abs(o["expiration_ts"] - new_exp) < 1.5 else None
+
+        def amended():
+            o, lag = _wait_for(refreshed)
+            return {"listing_lag_s": lag, "expires_in_s": round(o["expiration_ts"] - time.time())}
+        step("amend visible", amended)
     step("order cancel", lambda: gw.cancel_order(state["id"], ticker))
 
     def gone():
-        if any(o["order_id"] == state["id"] for o in gw.resting_orders([ticker])[ticker]):
-            raise RuntimeError("order still resting after cancel")
-        return "not resting"
+        _, lag = _wait_for(lambda: listed() is None)
+        return f"not resting (listing caught up after {lag}s)"
     step("cancel confirmed", gone)
+
+
+def _wait_for(probe, timeout_s: float = 10.0, every_s: float = 0.2):
+    """The order listing lags writes by ~0.5-1s: poll until probe() is
+    truthy. Returns (value, seconds waited)."""
+    t0 = time.time()
+    while True:
+        value = probe()
+        if value:
+            return value, round(time.time() - t0, 2)
+        if time.time() - t0 > timeout_s:
+            raise RuntimeError(f"order listing did not catch up within {timeout_s:.0f}s")
+        time.sleep(every_s)
 
 
 def _save_preflight(results):

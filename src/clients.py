@@ -724,16 +724,20 @@ class KalshiHttpClient(KalshiBaseClient):
 
     def get_all_orders(self, tickers: Optional[List[str]] = None,
                        status: Optional[str] = None, limit: int = 1000) -> List[dict]:
+        """Orders across the account, optionally restricted to `tickers`.
+
+        GET /portfolio/orders filters on ONE market: `ticker=A,B` silently
+        matches nothing and `tickers` is ignored (verified on demo, Oct 2026),
+        so a multi-market listing is fetched account-wide and filtered here.
+        The listing also lags writes by ~0.5-1s; see OrderManager.view."""
         params: Dict[str, Any] = {"limit": limit}
         if status:
             params["status"] = status
-        if not tickers:
-            return self.paginate(f"{self.portfolio_url}/orders", "orders", params)
-        out: List[dict] = []
-        for i in range(0, len(tickers), 100):
-            params["ticker"] = ",".join(tickers[i:i + 100])
-            out.extend(self.paginate(f"{self.portfolio_url}/orders", "orders", dict(params)))
-        return out
+        orders = self.paginate(f"{self.portfolio_url}/orders", "orders", params)
+        if tickers:
+            wanted = set(tickers)
+            orders = [o for o in orders if o.get("ticker") in wanted]
+        return orders
 
     def get_all_positions(self, count_filter: Optional[str] = "position",
                           settlement_status: Optional[str] = None) -> List[dict]:

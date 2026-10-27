@@ -5,6 +5,11 @@ other participants' resting book (yes bids / no bids), our post-only orders
 (rejected if they would cross), V2 amend semantics (count = filled +
 remaining), positions, fills with fees, a public tape, and a hook for a
 taker to hit our resting orders. Prices are yes-axis dollars.
+
+listing_lag_s models the real order listing trailing writes (~0.5-1s on
+demo): resting_orders() shows the orders as they were listing_lag_s ago, so
+new orders are missing, cancelled/filled ones linger and amends show the
+old price until the lag has passed.
 """
 import itertools
 from collections import defaultdict
@@ -26,6 +31,8 @@ class FakeExchange:
         self.trading_active = True
         self.fail_reads = 0
         self.fee_per_contract = 0.0
+        self.listing_lag_s = 0.0
+        self._ghosts: Dict[str, tuple] = {}  # gone orders the lagging listing still shows
         self._ids = itertools.count(1)
 
     # ---------------- test setup ----------------
@@ -64,12 +71,14 @@ class FakeExchange:
                                     "qty": q, "taker_side": "no" if side == "bid" else "yes",
                                     "ts": now})
                 if o["remaining"] <= 1e-9:
+                    self._ghosts[o["order_id"]] = (dict(o, remaining=o["remaining"] + q,
+                                                        filled=o["filled"] - q), now)
                     del self.orders[o["order_id"]]
                 return q
         return 0.0
 
     def our_orders(self, ticker=None) -> List[dict]:
-        return [dict(o) for o in self.orders.values() if ticker in (None, o["ticker"])]
+        return [_public(o) for o in self.orders.values() if ticker in (None, o["ticker"])]
 
     # ---------------- gateway interface: reads ----------------
 
@@ -120,10 +129,19 @@ class FakeExchange:
 
     def resting_orders(self, tickers):
         self._read("resting_orders")
-        out = {t: [] for t in tickers}
+        now, lag = self.clock(), self.listing_lag_s
+        rows = []
         for o in self.orders.values():
+            if now - o["created_ts"] < lag:
+                continue                       # not listed yet
+            prev = o.get("_prev")
+            rows.append(prev[0] if prev and now - prev[1] < lag else o)
+        rows += [g for g, gone_ts in self._ghosts.values()
+                 if now - gone_ts < lag and now - g["created_ts"] >= lag]
+        out = {t: [] for t in tickers}
+        for o in rows:
             if o["ticker"] in out:
-                out[o["ticker"]].append(dict(o))
+                out[o["ticker"]].append(_public(o))
         return out
 
     def positions(self, tickers):
@@ -177,6 +195,7 @@ class FakeExchange:
         if o is None:
             raise KalshiAPIError(404, "POST", f"/portfolio/events/orders/{order_id}/amend",
                                  code="not_found", message="order not found")
+        o["_prev"] = (_public(o), self.clock())
         o["price"] = round(price, 4)
         o["remaining"] = max(0.0, count - o["filled"])
         if expiration_ts:
@@ -189,7 +208,12 @@ class FakeExchange:
         if o is None:
             raise KalshiAPIError(404, "DELETE", f"/portfolio/events/orders/{order_id}",
                                  code="not_found", message="order not found")
+        self._ghosts[order_id] = (_public(o), self.clock())
         return {"order_id": order_id, "reduced_by": o["remaining"]}
+
+
+def _public(order: dict) -> dict:
+    return {k: v for k, v in order.items() if not k.startswith("_")}
 
 
 class FakeClock:

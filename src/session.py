@@ -44,12 +44,14 @@ DEFAULT_EXECUTION = {
     "aggressive_reprice": "replace",    # replace (cancel + post-only create) | amend
     "cancel_order_on_pause": True, "post_only": True,
     "flatten_on_exit": False,
+    "listing_grace_s": 5.0,             # overlay our writes on the lagging order listing
 }
 
 DEFAULT_SESSION = {
     "cycle_s": 2.0, "meta_refresh_s": 30.0, "balance_refresh_s": 60.0,
     "trades_poll_s": 10.0, "api_stats_every_s": 60.0, "summary_every_cycles": 30,
     "markout_horizons": [10, 60, 300], "read_failures_before_pull": 3,
+    "listing_settle_s": 2.0,            # wait before verifying cancels at shutdown
 }
 
 
@@ -264,6 +266,7 @@ class TradingSession:
             cancel_order_on_pause=self.exec_cfg["cancel_order_on_pause"],
             post_only=self.exec_cfg["post_only"],
             aggressive_reprice=self.exec_cfg["aggressive_reprice"],
+            listing_grace_s=self.exec_cfg["listing_grace_s"],
             on_reject=lambda t: self.risk.record_reject(t, self.clock()), clock=clock)
         self.workers: Dict[str, MarketWorker] = {}
         for spec in specs:
@@ -396,7 +399,8 @@ class TradingSession:
                 block = "trading_paused"
             else:
                 block = None
-            d = w.decide(books.get(t), resting.get(t, []), now,
+            own = self.orders.view(t, resting.get(t, []))
+            d = w.decide(books.get(t), own, now,
                          cross_policy=self.exec_cfg["cross_policy"], block=block)
             if d["state"] == "quoting":
                 bid_size, ask_size, gate = self.risk.gate_sizes(
@@ -416,7 +420,7 @@ class TradingSession:
                        and d["bid_size"] > 0 else None,
                        "ask": (d["ask"], d["ask_size"]) if d["ask"] is not None
                        and d["ask_size"] > 0 else None}
-            self.orders.reconcile(t, desired, resting.get(t, []))
+            self.orders.reconcile(t, desired, own)
 
             mark = d.get("mid") if d.get("mid") is not None else w.last_mid
             w.tracker.check_markouts(now, mark)
@@ -424,8 +428,7 @@ class TradingSession:
             total_net += pnl["net_pnl"]
             self.risk.check_market(t, pnl["net_pnl"])
             d.update(net_pnl=pnl["net_pnl"], tracked_q=w.tracker.position,
-                     resting=[(o["side"], o["price"], o["remaining"])
-                              for o in resting.get(t, [])])
+                     resting=[(o["side"], o["price"], o["remaining"]) for o in own])
             self.journal.write("tick", cycle=self.cycle_no, ts=now, **d)
 
         self.risk.check_session(total_net, self.balance)
@@ -473,6 +476,7 @@ class TradingSession:
                 continue
             self._seen_fills.add(f["fill_id"])
             newest = max(newest, int(f["ts"]))
+            self.orders.on_fill(f)
             w = self.workers.get(f["ticker"])
             if w is not None:
                 w.on_fill(f)
@@ -521,20 +525,7 @@ class TradingSession:
     def shutdown(self) -> dict:
         reason = self.stop_reason or "unknown"
         self.logger.info(f"shutting down ({reason}): cancelling resting orders")
-        remaining_orders = 0
-        for attempt in range(3):
-            resting = self._safe(lambda: self.gw.resting_orders(self.tickers), None)
-            if resting is None:  # cannot read: fall back to what we know we placed
-                resting = {t: self.orders.known_orders(t) for t in self.tickers}
-            open_orders = {t: o for t, o in resting.items() if o}
-            remaining_orders = sum(len(o) for o in open_orders.values())
-            if not open_orders:
-                break
-            for t, orders in open_orders.items():
-                self.orders.cancel_all(t, orders, "shutdown")
-        else:
-            resting = self._safe(lambda: self.gw.resting_orders(self.tickers), {}) or {}
-            remaining_orders = sum(len(o) for o in resting.values())
+        remaining_orders, verified = self._cancel_everything()
 
         if self.exec_cfg.get("flatten_on_exit") and not self.dry_run:
             self._flatten()
@@ -567,19 +558,51 @@ class TradingSession:
         summary = {
             "reason": reason, "dry_run": self.dry_run, "cycles": self.cycle_no,
             "duration_s": round(self.clock() - self.start_ts, 1),
-            "orders_left_resting": remaining_orders, "markets": markets,
+            "orders_left_resting": remaining_orders,
+            "orders_left_verified": verified, "markets": markets,
             "total": {k: round(v, 4) for k, v in total.items()},
             "start_balance": self.start_balance, "end_balance": end_balance,
             "kill_reason": self.risk.kill_reason, "halted": dict(self.risk.halted),
             "api_stats": self.gw.api_stats(),
         }
         self.journal.write("session_end", **summary)
-        if remaining_orders:
-            self.logger.error(f"{remaining_orders} orders may still be resting; "
+        if remaining_orders or not verified:
+            self.logger.error(f"{remaining_orders} orders may still be resting "
+                              f"({'verified' if verified else 'listing unavailable'}); "
                               f"check the account (they expire after "
                               f"{self.exec_cfg['order_expiration_s']}s)")
         self.logger.info(f"FINAL {json.dumps(summary['total'])} reason={reason}")
         return summary
+
+    def _cancel_everything(self):
+        """Cancel every order we may have resting: the listing plus what we
+        placed that it may not show yet. Then wait for the listing to catch
+        up with the cancels and check the raw listing (not our view of it).
+        Returns (orders still listed, whether that count was verified)."""
+        listed = self._safe(lambda: self.gw.resting_orders(self.tickers), None) or {}
+        targets = {}
+        for t in self.tickers:
+            orders = self.orders.view(t, listed.get(t, []))
+            ids = {o["order_id"] for o in orders}
+            targets[t] = orders + [o for o in self.orders.known_orders(t)
+                                   if o["order_id"] not in ids]
+        remaining, verified = 0, False
+        for attempt in range(3):
+            for t, orders in targets.items():
+                self.orders.cancel_all(t, orders, "shutdown")
+            self.sleep(self.cfg["listing_settle_s"])
+            listed = self._safe(lambda: self.gw.resting_orders(self.tickers), None)
+            verified = listed is not None
+            if listed is None:  # cannot read: retry what we know we placed
+                targets = {t: self.orders.known_orders(t) for t in self.tickers}
+            else:
+                targets = {t: o for t, o in listed.items() if o}
+            remaining = sum(len(o) for o in targets.values())
+            self.journal.write("shutdown_check", attempt=attempt, verified=verified,
+                               remaining=remaining)
+            if verified and not remaining:
+                break
+        return remaining, verified
 
     def _flatten(self):
         books = self._safe(lambda: self.gw.orderbooks(self.tickers), {}) or {}

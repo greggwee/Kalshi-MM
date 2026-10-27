@@ -183,6 +183,24 @@ class StubSession:
         return r
 
 
+class OrdersEndpoint:
+    """GET /portfolio/orders as it behaves on demo (Oct 2026): `ticker`
+    matches exactly one market, so a comma-joined list matches nothing, and
+    `tickers` is ignored."""
+
+    def __init__(self, orders):
+        self.orders = orders
+        self.calls = []
+
+    def request(self, method, url, **kw):
+        params = kw.get("params") or {}
+        self.calls.append((method, url, kw))
+        rows = [o for o in self.orders if params.get("status") in (None, o["status"])]
+        if "ticker" in params:
+            rows = [o for o in rows if o["ticker"] == params["ticker"]]
+        return _resp(200, {"orders": rows, "cursor": ""})
+
+
 class TestHttpClient(unittest.TestCase):
     def make(self, responses):
         c = KalshiHttpClient("k", _RSA, Environment.DEMO,
@@ -241,11 +259,31 @@ class TestHttpClient(unittest.TestCase):
         self.assertEqual(cancel[2]["params"], {"market_ticker": "T"})
 
     def test_pagination(self):
-        c = self.make([_resp(200, {"orders": [{"order_id": 1}], "cursor": "c1"}),
-                       _resp(200, {"orders": [{"order_id": 2}], "cursor": ""})])
+        c = self.make([_resp(200, {"orders": [{"order_id": 1, "ticker": "A"},
+                                              {"order_id": 9, "ticker": "Z"}], "cursor": "c1"}),
+                       _resp(200, {"orders": [{"order_id": 2, "ticker": "B"}], "cursor": ""})])
         self.assertEqual([o["order_id"] for o in c.get_all_orders(tickers=["A", "B"])], [1, 2])
-        self.assertEqual(c.session.calls[0][2]["params"]["ticker"], "A,B")
+        self.assertNotIn("ticker", c.session.calls[0][2]["params"])
         self.assertEqual(c.session.calls[1][2]["params"]["cursor"], "c1")
+
+    def test_order_listing_matches_live_endpoint(self):
+        """Regression: `ticker=A,B` matched nothing on demo, so the session
+        never saw its own orders and re-created them every cycle."""
+        orders = [{"order_id": "a", "ticker": "A", "status": "resting", "book_side": "bid",
+                   "yes_price_dollars": "0.4000", "remaining_count_fp": "2.00",
+                   "fill_count_fp": "0.00"},
+                  {"order_id": "b", "ticker": "B", "status": "resting", "book_side": "ask",
+                   "yes_price_dollars": "0.6000", "remaining_count_fp": "2.00",
+                   "fill_count_fp": "0.00"},
+                  {"order_id": "z", "ticker": "Z", "status": "resting", "book_side": "bid",
+                   "yes_price_dollars": "0.1000", "remaining_count_fp": "1.00",
+                   "fill_count_fp": "0.00"}]
+        c = self.make([])
+        c.session = OrdersEndpoint(orders)
+        resting = ExchangeGateway(c).resting_orders(["A", "B"])
+        self.assertEqual({t: [o["order_id"] for o in v] for t, v in resting.items()},
+                         {"A": ["a"], "B": ["b"]})
+        self.assertEqual(ExchangeGateway(c).resting_orders(["B"])["B"][0]["side"], "ask")
 
     def test_stats_and_templates(self):
         self.assertEqual(path_template("/markets/KXFOO-26/orderbook"), "/markets/{x}/orderbook")
@@ -437,6 +475,48 @@ class TestOrderManager(unittest.TestCase):
         self.reconcile((0.41, 2), None)
         self.assertEqual(len(self.ex.our_orders()), 1)
 
+    def test_view_covers_listing_lag(self):
+        self.ex.listing_lag_s = 1.0
+        self.reconcile((0.42, 2), (0.48, 2))
+        self.assertEqual(self.ex.resting_orders(["T"])["T"], [])   # listing lags the creates
+        self.reconcile((0.42, 2), (0.48, 2))                       # ... nothing is re-created
+        self.assertEqual(self.ex.calls["create"], 2)
+        view = self.om.view("T", self.ex.resting_orders(["T"])["T"])
+        self.assertEqual(sorted(o["side"] for o in view), ["ask", "bid"])
+        self.assertTrue(all(o["unconfirmed"] for o in view))
+        self.assertEqual(self.om.view("T", view), view)            # idempotent
+        self.clock.advance(1.5)                                    # listing catches up
+        self.reconcile((0.41, 2), (0.48, 2))                       # bid backs off: amend
+        self.reconcile((0.41, 2), (0.48, 2))                       # old price still listed
+        self.assertEqual(self.ex.calls["amend"], 1)
+        self.reconcile((0.41, 2), None)
+        self.reconcile((0.41, 2), None)                            # cancelled ask still listed
+        self.assertEqual(self.ex.calls["cancel"], 1)
+        self.clock.advance(10)                                     # memory expires
+        self.reconcile((0.41, 2), None)
+        self.assertEqual((self.ex.calls["create"], self.ex.calls["amend"],
+                          self.ex.calls["cancel"]), (2, 1, 1))
+        self.assertFalse([e for e in self.j.of("order") if not e["ok"]])
+
+    def test_fill_before_listing_leaves_no_phantom(self):
+        self.ex.listing_lag_s = 1.0
+        self.reconcile((0.42, 2), None)
+        oid = self.ex.our_orders()[0]["order_id"]
+        self.ex.taker_hits("T", "bid", 2)
+        self.om.on_fill({"order_id": oid, "ticker": "T", "qty": 2.0})
+        self.assertEqual(self.om.view("T", self.ex.resting_orders(["T"])["T"]), [])
+
+    def test_amend_of_vanished_order_is_not_a_reject(self):
+        rejects = []
+        self.om.on_reject = rejects.append
+        self.reconcile((0.42, 2), None)
+        stale = self.ex.resting_orders(["T"])["T"]
+        self.ex.taker_hits("T", "bid", 2)
+        self.om.reconcile("T", {"bid": (0.41, 2), "ask": None}, stale)  # amend -> 404
+        self.assertEqual(self.j.of("order")[-1]["reject_reason"], "not_found")
+        self.assertEqual(rejects, [])
+        self.assertEqual(self.om.view("T", stale), [])
+
     def test_reject_is_journaled_and_counted(self):
         rejects = []
         self.om.on_reject = rejects.append
@@ -611,6 +691,28 @@ class TestSession(unittest.TestCase):
         self.assertEqual(s.risk.kill_reason, "consecutive_errors")
         summary = s.shutdown()                           # reads still failing
         self.assertEqual(summary["orders_left_resting"], 0)
+        self.assertFalse(summary["orders_left_verified"])
+
+    def test_listing_lag_no_duplicates_and_clean_shutdown(self):
+        self.ex.listing_lag_s = 1.0
+        s = self.session()
+        s.start()
+        for n in range(8):                       # cycles faster than the listing catches up
+            if n == 4:
+                self.ex.set_book("LIQ", {0.51: 50, 0.50: 100}, {0.47: 50, 0.46: 100})
+            s.run_cycle()
+            for t in ("LIQ", "ILQ"):
+                sides = [o["side"] for o in self.ex.our_orders(t)]
+                self.assertEqual(sorted(sides), ["ask", "bid"], f"cycle {n} {t}")
+            self.clock.advance(0.5)
+        self.assertLessEqual(self.ex.calls["create"], 6)   # 4 + at most one replace per side
+        summary = s.shutdown()
+        self.assertEqual(self.ex.our_orders(), [])
+        self.assertEqual((summary["orders_left_resting"], summary["orders_left_verified"]),
+                         (0, True))
+        failed = [e for e in read_journal(os.path.join(self.dir, "events.jsonl"))
+                  if e["type"] == "order" and not e["ok"]]
+        self.assertEqual(failed, [])
 
     def test_startup_failure_still_shuts_down_cleanly(self):
         self.ex.fail_reads = 100

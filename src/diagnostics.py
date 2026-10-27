@@ -371,6 +371,9 @@ def findings(report: dict) -> List[dict]:
     if s.get("orders_left_resting"):
         add("critical", "safety", f"{s['orders_left_resting']} orders were still resting after "
                                   f"shutdown; verify the account.")
+    if s.get("orders_left_verified") is False:
+        add("critical", "safety", "the order listing was unavailable at shutdown, so the "
+                                  "cancels were not verified; check the account.")
     if s.get("kill_reason"):
         add("high", "risk", f"session kill switch fired: {s['kill_reason']}")
     if s.get("position_mismatches"):
@@ -469,6 +472,7 @@ def build_report(run_dir: str, horizons=None) -> dict:
             "dry_run": start.get("dry_run"), "environment": cfg.get("environment"),
             "kill_reason": end.get("kill_reason"), "halted": end.get("halted"),
             "orders_left_resting": end.get("orders_left_resting"),
+            "orders_left_verified": end.get("orders_left_verified"),
             "start_balance": start.get("balance"), "end_balance": end.get("end_balance"),
             "cycle_ms_p50": _r(_pct(cycles_ms, .5), 1), "cycle_ms_p95": _r(_pct(cycles_ms, .95), 1),
             "cycle_overrun_pct": _r(100 * sum(1 for c in cycles_ms if c > cycle_s * 1000)
@@ -523,7 +527,8 @@ def render_markdown(r: dict) -> str:
              f"{' (DRY RUN)' if s.get('dry_run') else ''}  \n- Duration: "
              f"{_f(s.get('duration_s'))} s over {s.get('cycles')} cycles  \n- End reason: "
              f"{s.get('end_reason')}  \n- Orders left resting after shutdown: "
-             f"{_f(s.get('orders_left_resting'))}")
+             f"{_f(s.get('orders_left_resting'))}"
+             f"{' (UNVERIFIED)' if s.get('orders_left_verified') is False else ''}")
     sb, eb = s.get("start_balance") or {}, s.get("end_balance") or {}
     if sb or eb:
         L.append(f"- Balance: {_f(sb.get('balance'))} -> {_f(eb.get('balance'))} "
