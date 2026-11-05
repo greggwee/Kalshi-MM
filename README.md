@@ -195,6 +195,43 @@ This will:
 tail -f STRATEGY_NAME.log
 ```
 
+## Prediction Market Model (Feil & Nendel, 2026)
+
+A second quoting model, built for contracts that settle to 0 or 1: [Optimal Market Making in Prediction Markets](https://arxiv.org/abs/2607.17991). Set `strategy.model: pmm` to use it; the default stays `avellaneda`. Everything around the quotes (risk limits, order management, journal, report) is shared.
+
+**What it changes from A-S.** The price is a probability moving on a log-odds scale, so its volatility shrinks near 0 and 1. Fills depend on time, price and quote through an intensity. Settlement variance `q^2 p(1-p)` is priced at the end. There is no closed form: `src/pmm.py` solves a value function `V(t, p, q)` numerically, and quotes come from maximizing `intensity * (edge - z)`, where `z` is the value lost per contract by taking on the fill.
+
+| file | role |
+|---|---|
+| `src/pmm.py` | the model, the HJB solver, quote lookup, the paper's Monte Carlo |
+| `src/pmm_calibrate.py` | offline series fits and the online volatility and flow estimators |
+| `src/pmm_quoter.py` | one market's estimators and solved surface, used by the session and by replay |
+| `pmm_tool.py` | `reproduce`, `calibrate`, `surface`, `replay` |
+| `pmm_calibration.json` | fits for the recorded weather series, measured from data recorded in July 2026 |
+| `pmm_config.yaml`, `pmm_prod_config.yaml` | session configs for demo and production |
+
+```bash
+python pmm_tool.py reproduce                  # the solver against the paper's figures and table 2
+python pmm_tool.py surface --series KXHIGHNY  # the quotes a parameter set implies
+python pmm_tool.py replay --series KXHIGHNY   # A-S vs this model on recorded data, simulated fills
+python demo.py --config pmm_config.yaml run --dry-run --duration 600
+```
+
+**Where this departs from the paper.** With the paper's settings none of these change its results.
+
+- *Solver.* The paper's fixed-point iteration only converges for time steps below about `1 / (4 * intensity)`, which at Kalshi's flow means tens of thousands of steps. This uses policy iteration, which is stable at any step and takes about a second per market.
+- *Time.* A live market has no start date, so everything runs on time left, and `T` is the window over which volatility, activity and `k` ramp up before close.
+- *Stand-down.* The model's terminal time is when the bot stops quoting, not the market's close: what is held then goes to settlement, which is what the terminal penalty prices.
+- *Fees.* Maker fees come off the edge on series that charge them.
+- *Quote bound.* `min_offset` stops a quote from going through the mid, where the paper's intensity grows without bound.
+- *Queue position.* `queue_aware` scales the intensity by `1 / (queue ahead + size)` when choosing the final price. This is the one change to behavior at normal settings: without it the model joins a long queue in a wide market where stepping inside is what gets filled.
+
+**What it does not do.**
+
+- *Adverse selection.* The model assumes fills carry no information, so this is its biggest gap on Kalshi. Recorded weather tape was heavily adverse close to resolution, so the stand-down, not the model, handles that (8 hours before close in `pmm_prod_config.yaml`).
+- *Calibration.* The paper's table 1 is illustrative and it does not address calibration. The fits and the online estimators here are this repository's own choices, including `A` from `contract flow / (queue + size)` and `k` from how far orders reach past the touch.
+- *Risk aversion.* `gamma` and `gamma_T` are preferences, not estimates. Use `surface` to see what a value does before changing it.
+
 ## Demo Trading Harness
 
 `demo.py` runs the strategy live on the Kalshi **demo** exchange across several

@@ -101,6 +101,7 @@ class FakeExchange:
         return {t: dict(self.mkts[t]) for t in tickers if t in self.mkts}
 
     def list_open_markets(self, min_close_ts=None, max_close_ts=None, max_pages=10,
+                          series_ticker=None,
                           exclude_multivariate=True):
         self.calls["list_open_markets"] += 1
         return [dict(m) for m in self.mkts.values()]

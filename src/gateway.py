@@ -191,8 +191,11 @@ class ExchangeGateway:
 
     def list_open_markets(self, min_close_ts: Optional[int] = None,
                           max_close_ts: Optional[int] = None, max_pages: int = 10,
-                          exclude_multivariate: bool = True) -> List[dict]:
+                          exclude_multivariate: bool = True,
+                          series_ticker: Optional[str] = None) -> List[dict]:
         params = {"status": "open", "limit": 1000}
+        if series_ticker:
+            params["series_ticker"] = series_ticker
         if min_close_ts:
             params["min_close_ts"] = int(min_close_ts)
         if max_close_ts:

@@ -1,8 +1,9 @@
 """Shadow trading / backtest engine.
 
-Runs the AvellanedaMarketMaker quoting math against recorded market data (the
-SQLite DB written by the recorder) and simulates fills locally — no exchange
-account needed. Two modes share one engine:
+Runs a quoting strategy (the AvellanedaMarketMaker math, or with pmm_config the
+Feil-Nendel model in src/pmm_quoter.py) against recorded market data (the SQLite
+DB written by the recorder) and simulates fills locally — no exchange account
+needed. Two modes share one engine:
 
   replay  - iterate a ticker's recorded history (backtest)
   follow  - tail the DB the live recorder is writing (live shadow trading)
@@ -31,6 +32,7 @@ from typing import Dict, Iterator, List, Optional, Tuple
 
 from helper import AvellanedaMarketMaker, PerformanceTracker, estimate_k_from_depth, TICK
 from src.orderbook import OrderBook
+from src.pmm_quoter import PMMQuoter, maker_fee_rate
 
 LAST_TRADE_MID_MAX_AGE_S = 1800  # one-sided-book fallback: trust last trade for 30 min
 
@@ -123,7 +125,7 @@ class ShadowEngine:
     def __init__(self, ticker: str, close_time: Optional[str], fee_type: str,
                  fee_multiplier: float, mm_params: dict, logger: logging.Logger,
                  fill_mode: str = "queue", fills_log_path: Optional[str] = None,
-                 event_sink=None):
+                 event_sink=None, pmm_config: Optional[dict] = None):
         self.ticker = ticker
         self.logger = logger
         self.close_time = (datetime.fromisoformat(close_time.replace("Z", "+00:00"))
@@ -134,6 +136,13 @@ class ShadowEngine:
         self.mm = AvellanedaMarketMaker(logger=logger, client=None,
                                         market_ticker=ticker, perf_log_path="",
                                         **mm_params)
+        self.pmm: Optional[PMMQuoter] = None
+        if pmm_config is not None:
+            self.pmm = PMMQuoter(ticker, delta=self.mm.base_order_size, Q=self.mm.max_position,
+                                 cfg=pmm_config, stand_down_h=self.mm.min_time_to_resolution_h,
+                                 maker_fee=maker_fee_rate(fee_type, fee_multiplier),
+                                 logger=logger)
+            self.mm.min_time_to_resolution_h = self.pmm.stand_down_h
         self.tracker = PerformanceTracker(logger, log_path=fills_log_path,
                                           event_sink=event_sink)
         self.sim = FillSimulator(fill_mode)
@@ -161,6 +170,9 @@ class ShadowEngine:
             if payload.get("yes_price") is not None:
                 self.last_trade_price = payload["yes_price"]
                 self.last_trade_ts_ms = ts_ms
+            if self.pmm is not None:
+                self.pmm.observe_trade(ts_ms / 1000.0, payload.get("yes_price"),
+                                       payload.get("count") or 0.0, payload.get("taker_side"))
             for side, price, qty in self.sim.on_trade(payload):
                 self._apply_fill(side, price, qty, ts_ms)
         self._requote(ts_ms)
@@ -188,18 +200,25 @@ class ShadowEngine:
             self.sim.cancel("ask")
             return
         self.mm.vol.add(ts_ms / 1000.0, mid)
-        self._requotes_since_k += 1
-        if self._requotes_since_k >= self.mm.k_refresh_every:
-            self._requotes_since_k = 0
-            self.mm.k = estimate_k_from_depth(self.book.depth_profile(),
-                                              self.mm.default_k)
-        sigma = self.mm.vol.sigma(mid)
-        quotes = self.mm.compute_quotes(mid, self.position, tth, sigma)
+        if self.pmm is not None:
+            quotes = self._pmm_quotes(ts_ms, mid, tth)
+            if quotes is None:
+                self.sim.cancel("bid")
+                self.sim.cancel("ask")
+                return
+        else:
+            self._requotes_since_k += 1
+            if self._requotes_since_k >= self.mm.k_refresh_every:
+                self._requotes_since_k = 0
+                self.mm.k = estimate_k_from_depth(self.book.depth_profile(),
+                                                  self.mm.default_k)
+            sigma = self.mm.vol.sigma(mid)
+            quotes = self.mm.compute_quotes(mid, self.position, tth, sigma)
         bid_size, ask_size = self.mm.desired_sizes(self.position)
 
         for side, price, size in (("bid", quotes["bid"], bid_size),
                                   ("ask", quotes["ask"], ask_size)):
-            if size <= 0 or self._would_cross(side, price):
+            if price is None or size <= 0 or self._would_cross(side, price):
                 self.sim.cancel(side)
                 continue
             existing = self.sim.orders[side]
@@ -208,6 +227,16 @@ class ShadowEngine:
                 continue  # unchanged: keep our queue position
             self.sim.place(side, price, size, self.book, ts_ms)
             self.quote_updates += 1
+
+    def _pmm_quotes(self, ts_ms: int, mid: float, tth: float) -> Optional[dict]:
+        now = ts_ms / 1000.0
+        book = self.book
+        if book.mid is None:    # as live: the last trade is no price to make a market on
+            return None
+        self.pmm.observe_book(now, mid, book.best_yes_bid, book.best_yes_ask,
+                              book.yes.get(book.best_yes_bid) if book.yes else None,
+                              book.no.get(book.best_no_bid) if book.no else None)
+        return self.pmm.quote(now, mid, self.position, tth, ladders=(book.yes, book.no))
 
     def _would_cross(self, side: str, price: float) -> bool:
         """post_only equivalent: never model a fill that takes liquidity."""
@@ -332,12 +361,14 @@ def fetch_settle_price(ticker: str, environment: str = "prod") -> Optional[float
     import requests
     base = ("https://api.elections.kalshi.com/trade-api/v2" if environment == "prod"
             else "https://demo-api.kalshi.co/trade-api/v2")
-    try:
-        market = requests.get(f"{base}/markets/{ticker}", timeout=15).json()["market"]
-    except Exception:
-        return None
-    if market.get("status") == "settled":
-        result = market.get("result")
-        if result in ("yes", "no"):
-            return 1.0 if result == "yes" else 0.0
+    # markets leave the live listing after settling and move to the historical one
+    for path in (f"{base}/markets/{ticker}", f"{base}/historical/markets/{ticker}"):
+        try:
+            market = requests.get(path, timeout=15).json().get("market")
+        except Exception:
+            continue
+        if market and market.get("status") in ("settled", "finalized"):
+            result = market.get("result")
+            if result in ("yes", "no"):
+                return 1.0 if result == "yes" else 0.0
     return None

@@ -1,11 +1,13 @@
-"""Live trading session: runs the Avellaneda-Stoikov strategy on several
-markets at once against the exchange gateway.
+"""Live trading session: runs a quoting strategy on several markets at once
+against the exchange gateway.
 
 The strategy math is NOT reimplemented here: each market gets an
 AvellanedaMarketMaker (client=None) used purely for its quoting functions
 (volatility estimator with the binary sqrt(p(1-p)) scaling, k estimation,
-compute_quotes, desired_sizes), exactly as the shadow backtester does. This
-module adds what live trading needs around it:
+compute_quotes, desired_sizes), exactly as the shadow backtester does. With
+strategy `model: pmm`, a PMMQuoter (src/pmm_quoter.py) sets the prices instead
+and the rest of the loop is unchanged. This module adds what live trading needs
+around it:
 
   * one loop for all markets, polling portfolio state in batch per cycle
     (1 orderbooks call for up to 100 markets, 1 orders, 1 positions,
@@ -28,6 +30,7 @@ from helper import (AvellanedaMarketMaker, PerformanceTracker, TICK,
                     estimate_k_from_depth, resolution_risk_premium)
 from src.execution import OrderManager
 from src.orderbook import OrderBook
+from src.pmm_quoter import PMMQuoter, maker_fee_rate
 from src.risk import RiskManager
 
 DEFAULT_STRATEGY = {
@@ -70,6 +73,14 @@ class MarketWorker:
         self.mm = AvellanedaMarketMaker(logger=logger, client=None,
                                         market_ticker=self.ticker, perf_log_path="",
                                         **params)
+        self.pmm: Optional[PMMQuoter] = None
+        if strategy.get("model", "avellaneda") == "pmm":
+            self.pmm = PMMQuoter(
+                self.ticker, delta=self.mm.base_order_size, Q=self.mm.max_position,
+                cfg=strategy.get("pmm"), stand_down_h=self.mm.min_time_to_resolution_h,
+                logger=logger, on_solve=lambda e: journal.write("pmm_solve", **e))
+            self.mm.min_time_to_resolution_h = self.pmm.stand_down_h
+            self.strategy = {**params, "model": "pmm", "pmm": self.pmm.describe()}
         self.tracker = PerformanceTracker(logger, log_path=None,
                                           markout_horizons=tuple(markout_horizons),
                                           event_sink=self._tracker_event)
@@ -108,7 +119,8 @@ class MarketWorker:
     # ------------------------------------------------------------------
 
     def decide(self, raw_book: Optional[dict], own_orders: List[dict], now: float,
-               cross_policy: str = "clamp", block: Optional[str] = None) -> dict:
+               cross_policy: str = "clamp", block: Optional[str] = None,
+               allow_solve: bool = True) -> dict:
         """Run the strategy for this cycle. Returns a decision dict holding
         the desired quotes plus every intermediate the diagnostics need."""
         mm = self.mm
@@ -168,13 +180,20 @@ class MarketWorker:
 
         mm.vol.add(now, mid)
         self._iteration += 1
+        q = self.position
+        if self.pmm is not None:
+            bid, ask = self._pmm_prices(d, book, mid, q, tth, now, allow_solve)
+            if d["reason"]:
+                self.last_decision = d
+                self.last_mid = mid
+                return d
+            return self._finish_decision(d, book, mid, bid, ask, q, cross_policy)
+
         if self._iteration % mm.k_refresh_every == 1:
             mm.k = estimate_k_from_depth(book.depth_profile(), mm.default_k)
 
-        q = self.position
         sigma = mm.vol.sigma(mid)
         quotes = mm.compute_quotes(mid, q, tth, sigma)
-        bid_size, ask_size = mm.desired_sizes(q)
 
         # spread decomposition: which A-S term actually sets the width?
         gamma, k = quotes["gamma"], quotes["k"]
@@ -191,13 +210,51 @@ class MarketWorker:
             spread_liq=round(liq_term, 6), spread_prem=round(prem_term, 6),
             min_spread_binding=(inv_term + liq_term + prem_term) < mm.min_spread,
             model_bid=quotes["bid"], model_ask=quotes["ask"])
+        return self._finish_decision(d, book, mid, quotes["bid"], quotes["ask"], q, cross_policy)
 
+    def _pmm_prices(self, d: dict, book: OrderBook, mid: float, q: float, tth: float, now: float,
+                    allow_solve: bool):
+        """Feil-Nendel quotes for this cycle. The journal keeps the field names the
+        diagnostics read: the inventory term is the z's, liquidity the rest."""
+        if d.get("mid_source") != "book":   # the last trade is no price to make a market on
+            d["reason"] = "no_two_sided_book"
+            return None, None
+        self.pmm.observe_book(now, mid, d.get("best_bid"), d.get("best_ask"),
+                              d.get("bid_depth_top"), d.get("ask_depth_top"))
+        quotes = self.pmm.quote(now, mid, q, tth, allow_solve=allow_solve,
+                                ladders=(book.yes, book.no))
+        if quotes is None:
+            d["reason"] = "pmm_no_surface"
+            return None, None
         bid, ask = quotes["bid"], quotes["ask"]
+        spread = ask - bid if bid is not None and ask is not None else None
+        z_b, z_a = quotes["z_b"], quotes["z_a"]
+        inv_term = (z_b or 0.0) + (z_a or 0.0)
+        d.update(
+            state="quoting", sigma=round(quotes["price_vol"], 6),
+            sigma_raw=round(quotes["sigma_latent"], 6),
+            binary_scale=round(mid * (1.0 - mid), 4),
+            sigma_from_data=len(self.pmm.vol.increments) >= 10, k=round(quotes["k"], 3),
+            gamma=self.pmm.cfg["gamma"], reservation=round(quotes["indifference"], 5),
+            spread=round(spread, 5) if spread is not None else None,
+            spread_inv=round(inv_term, 6),
+            spread_liq=round(spread - inv_term, 6) if spread is not None else None,
+            spread_prem=0.0, min_spread_binding=False, model_bid=quotes["model_bid"],
+            model_ask=quotes["model_ask"],
+            pmm_tau=round(quotes["tau"], 3), pmm_z_b=z_b, pmm_z_a=z_a,
+            pmm_fill_rate=round(quotes["fill_rate"], 4), pmm_scales=quotes["scales"],
+            pmm_surface_age_s=round(quotes["surface_age_s"], 1), pmm_solved=quotes["solved"])
+        return bid, ask
+
+    def _finish_decision(self, d: dict, book: OrderBook, mid: float, bid: Optional[float],
+                         ask: Optional[float], q: float, cross_policy: str) -> dict:
+        """Apply the post-only cross policy and size the quotes."""
+        bid_size, ask_size = self.mm.desired_sizes(q)
         best_bid, best_ask = book.best_yes_bid, book.best_yes_ask
-        if best_ask is not None and bid >= best_ask - 1e-9:
+        if bid is not None and best_ask is not None and bid >= best_ask - 1e-9:
             d["bid_crossed"] = True
             bid = round(best_ask - TICK, 4) if cross_policy == "clamp" else None
-        if best_bid is not None and ask <= best_bid + 1e-9:
+        if ask is not None and best_bid is not None and ask <= best_bid + 1e-9:
             d["ask_crossed"] = True
             ask = round(best_bid + TICK, 4) if cross_policy == "clamp" else None
         if bid is not None and bid < TICK - 1e-9:
@@ -322,10 +379,23 @@ class TradingSession:
                                start_position=w.position,
                                start_exchange_position=positions.get(t),
                                preexisting_orders=len(resting.get(t, [])))
+            if w.pmm is not None:
+                self._prepare_pmm(w, now)
             self.logger.info(f"{t} [{w.liquidity_class}] status={w.meta.get('status')} "
                              f"close_in={w.time_to_close_h(now):.1f}h q0={w.position:g} "
                              f"preexisting_orders={len(resting.get(t, []))}")
         self._last_meta = self._last_balance = self._last_stats = now
+
+    def _prepare_pmm(self, w: MarketWorker, now: float):
+        """The model's fee and flow estimates need a look at the series and the
+        tape from before the session. Neither is required to start quoting."""
+        fees = self._safe(lambda: self.gw.series_info(w.meta.get("series_ticker")
+                                                      or w.pmm.series), {}) or {}
+        w.pmm.set_maker_fee(maker_fee_rate(fees.get("fee_type"), fees.get("fee_multiplier")))
+        since = now - w.pmm.flow.window_s
+        w.pmm.seed_tape(self._safe(lambda: self.gw.trades_since(w.ticker, int(since)), []) or [],
+                        since)
+        self.journal.write("pmm_setup", ticker=w.ticker, **w.pmm.describe())
 
     def run(self, duration_s: Optional[float]) -> dict:
         try:
@@ -387,6 +457,7 @@ class TradingSession:
         headroom = self.risk.cfg["max_gross_position"] - gross
         total_net = 0.0
         quoting = 0
+        solved = False       # a model solve takes a second: at most one per cycle
         for t, w in self.workers.items():
             exch = positions.get(t, {})
             w.position = exch.get("position", 0.0)
@@ -401,7 +472,9 @@ class TradingSession:
                 block = None
             own = self.orders.view(t, resting.get(t, []))
             d = w.decide(books.get(t), own, now,
-                         cross_policy=self.exec_cfg["cross_policy"], block=block)
+                         cross_policy=self.exec_cfg["cross_policy"], block=block,
+                         allow_solve=not solved)
+            solved = solved or bool(d.get("pmm_solved"))
             if d["state"] == "quoting":
                 bid_size, ask_size, gate = self.risk.gate_sizes(
                     w.position, d["bid_size"], d["ask_size"], headroom)
@@ -503,6 +576,8 @@ class TradingSession:
                 self.journal.write("trade", ticker=t, trade_id=key, price=tr["price"],
                                    qty=tr["qty"], taker_side=tr["taker_side"],
                                    trade_ts=tr["ts"])
+                if w.pmm is not None:
+                    w.pmm.observe_trade(tr["ts"], tr["price"], tr["qty"], tr["taker_side"])
                 w.last_trade_ts = max(w.last_trade_ts, int(tr["ts"]))
 
     def _check_position(self, w: MarketWorker, exch: dict):

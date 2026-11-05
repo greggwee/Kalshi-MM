@@ -407,7 +407,7 @@ def findings(report: dict) -> List[dict]:
                 and q["avg_quoted_spread_c"] > 2 * m["market"]["avg_spread_c"]
                 and (q["bid_at_touch_pct"] or 0) < 20):
             add("medium", t, f"[{cls}] quoted {q['avg_quoted_spread_c']}c vs market "
-                             f"{m['market']['avg_spread_c']}c: the A-S width is not competitive "
+                             f"{m['market']['avg_spread_c']}c: the model's width is not competitive "
                              f"here (k={mo['k']}, gamma={mo['gamma']}).")
         if (mo["min_spread_binding_pct"] or 0) > 80:
             add("info", t, f"[{cls}] min_spread floor bound {mo['min_spread_binding_pct']}% of "

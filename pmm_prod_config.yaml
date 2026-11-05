@@ -1,0 +1,90 @@
+# Feil-Nendel prediction market model on PRODUCTION: real money. Review every number.
+# The limits below are a small starting point, not a recommendation.
+#
+# Needs PROD_KEYID and PROD_KEYFILE in .env, and --env prod --allow-prod on every command:
+#
+#   python demo.py --config pmm_prod_config.yaml --env prod --allow-prod preflight
+#   python demo.py --config pmm_prod_config.yaml --env prod --allow-prod select
+#   python demo.py --config pmm_prod_config.yaml --env prod --allow-prod run --dry-run --duration 600
+#   python demo.py --config pmm_prod_config.yaml --env prod --allow-prod run --duration 3600
+#
+# Do not run `preflight --order-test` here: it places and cancels a real order.
+environment: prod
+duration_s: 3600
+
+selection:
+  liquid_count: 2
+  illiquid_count: 0
+  tickers: {liquid: [], illiquid: []}
+  # the series pmm_calibration.json covers, none of which charged maker fees when
+  # recorded. Check the fee_type column `select` prints.
+  series_tickers: [KXHIGHNY, KXHIGHCHI, KXHIGHMIA, KXHIGHLAX, KXHIGHDEN, KXHIGHPHIL, KXHIGHAUS]
+  min_hours_to_close: 9        # past the 8h stand-down the calibration uses
+  max_hours_to_close: 48
+  exclude_multivariate: true
+  one_per_event: true          # strikes of one event move together
+  min_mid: 0.20
+  max_mid: 0.80
+  liquid_max_spread: 0.03
+  illiquid_min_spread: 0.04
+  illiquid_max_volume_24h: 50
+  illiquid_max_spread: 0.25
+  book_check_top_n: 40
+  depth_band: 0.05
+
+strategy:
+  model: pmm
+  base_order_size: 1
+  max_position: 5
+  # Same-day weather prints were heavily adverse inside 8h of close in the recorded
+  # tape, and the model assumes fills carry no information, so it cannot see that.
+  min_time_to_resolution_h: 8
+  min_quote_mid: 0.10
+  max_quote_mid: 0.90
+  pmm:
+    gamma: 0.2
+    gamma_T: 0.05
+    min_offset: 0.005
+    queue_aware: true
+    calibration_file: pmm_calibration.json
+    T: 48.0
+    sigma0: 0.15
+    A0: 2.0
+    k0: 80.0
+    k1: 80.0
+    flow_window_h: 2.0
+    vol_sample_s: 120
+    resolve_every_s: 3600
+    resolve_min_s: 300
+    resolve_change: 0.3
+
+strategy_overrides:
+  liquid: {}
+  illiquid: {}
+
+execution:
+  order_expiration_s: 120      # shorter dead-man's switch than demo
+  expiry_refresh_frac: 0.33
+  replenish_threshold: 0.5
+  cross_policy: skip           # never reprice a crossed quote to one tick inside
+  aggressive_reprice: replace  # moving toward the market cancels and re-posts post-only
+  cancel_order_on_pause: true
+  post_only: true
+  flatten_on_exit: false       # inventory left at the end stays open: check it
+
+risk:
+  max_session_loss: 10.0
+  max_market_loss: 5.0
+  max_gross_position: 10
+  max_consecutive_errors: 5
+  min_balance: 0.0
+  max_rejects_per_min: 6
+
+session:
+  cycle_s: 2.0
+  meta_refresh_s: 30
+  balance_refresh_s: 60
+  trades_poll_s: 10
+  api_stats_every_s: 60
+  summary_every_cycles: 30
+  markout_horizons: [10, 60, 300]

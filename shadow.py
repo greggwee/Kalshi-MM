@@ -77,7 +77,8 @@ def main():
         engines[ticker] = ShadowEngine(
             ticker, close_time, fee_type or "quadratic", fee_mult or 1.0,
             mm_params, logger, fill_mode=fill_mode,
-            fills_log_path=config.get("fills_log"))
+            fills_log_path=config.get("fills_log"),
+            pmm_config=(config.get("pmm") or {}) if config.get("model") == "pmm" else None)
 
     logger.info(f"{'FOLLOW (live shadow)' if args.follow else 'REPLAY (backtest)'} "
                 f"on {len(engines)} markets, fill_mode={fill_mode}, params={mm_params}")

@@ -30,6 +30,7 @@ DEFAULT_SELECTION = {
     "liquid_count": 3,
     "illiquid_count": 3,
     "tickers": {"liquid": [], "illiquid": []},   # manual override per class
+    "series_tickers": [],                        # only these series (listed by the exchange)
     "min_hours_to_close": 6.0,
     "max_hours_to_close": 336.0,
     "exclude_multivariate": True,
@@ -166,10 +167,15 @@ def select_markets(gw, cfg: Optional[dict] = None, logger: Optional[logging.Logg
         result["scanned"] = len(wanted)
         return _annotate_fees(gw, result, logger)
 
-    listed = gw.list_open_markets(
-        min_close_ts=now + cfg["min_hours_to_close"] * 3600,
-        max_close_ts=now + cfg["max_hours_to_close"] * 3600,
-        max_pages=cfg["max_pages"], exclude_multivariate=cfg["exclude_multivariate"])
+    window = {"min_close_ts": now + cfg["min_hours_to_close"] * 3600,
+              "max_close_ts": now + cfg["max_hours_to_close"] * 3600,
+              "max_pages": cfg["max_pages"],
+              "exclude_multivariate": cfg["exclude_multivariate"]}
+    if cfg["series_tickers"]:
+        listed = [m for s in cfg["series_tickers"]
+                  for m in gw.list_open_markets(series_ticker=s, **window)]
+    else:
+        listed = gw.list_open_markets(**window)
     result["scanned"] = len(listed)
     eligible = []
     for m in listed:
