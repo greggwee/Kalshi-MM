@@ -7,7 +7,7 @@ Everything here is a demo order, a simulated fill or a read of public data. No r
 
 - The solver reproduces the paper's figures and table 2.
 - It runs live on the demo exchange without order or position problems, and it fixes the last run's zero fills: it quotes at the touch, where A-S sat behind it.
-- On recorded production data it does what the paper says relative to its benchmark: same mean, less dispersion.
+- On recorded production data it does roughly what the paper says relative to its benchmark: about 29% less dispersion per market, for a mean that is the same under the queue fill model and $8 worse under the strict one.
 - It does not make money there. Replay is slightly negative at best, on only two event dates.
 - The cause is the paper's central assumption, that fills carry no information. Fills went against us by more than the edge captured.
 
@@ -59,11 +59,11 @@ Two sessions on one account (`20261105-000744_demo`, `20261105-000857_demo`), 1h
 
 ## 3. Read-only on production data
 
-`analysis/prod_readonly.py` with `pmm_prod_config.yaml`: an unsigned client with no keys, so it cannot place an order. It selected KXHIGHNY-26NOV05-T70, took the calibration and the 16h stand-down, and held the 0.48 / 0.49 touch for all 120 cycles. An earlier 7-minute check on NY and LAX with the 8h config was at the touch 100% of the time, with 2 markets and a 1.04c spread.
+`analysis/prod_readonly.py` with `pmm_prod_config.yaml`: an unsigned client with no keys, so it cannot place an order. It selected KXHIGHNY-26NOV05-T70, took the calibration and the 16h stand-down, and held the 0.48 / 0.49 touch for all 120 cycles. An earlier 7-minute check on NY and LAX with the 8h config sat at the touch 100% of the time, with a 1.04c spread.
 
 ## 4. Replay on recorded production data
 
-Seven weather series recorded in July, 134 markets, sized 2 with a limit of 10. Simulated fills on a tape our quotes did not influence. "Myopic" is the paper's benchmark, the same model with both risk aversions at zero. Fees are zero: none of these series charged makers when recorded.
+Seven weather series recorded in July, 133-134 markets with known outcomes, sized 2 with a limit of 10. Simulated fills on a tape our quotes did not influence. "Myopic" is the paper's benchmark, the same model with both risk aversions at zero. Fees are zero: none of these series charged makers when recorded.
 
 Standing down 8h before close, queue fill model:
 
@@ -81,7 +81,7 @@ Where that loss came from (`analysis/fill_autopsy.out.txt`, 34,919 contracts, pe
 | 12-16 | 10,458 | +0.81c | -0.47c | -1.18c | -$124 |
 | 16-20 | 4,927 | +0.72c | -0.41c | +0.16c | +$8 |
 | 20-24 | 1,270 | +0.75c | -0.32c | -0.52c | -$7 |
-| 24-48 | 2,976 | +0.73c | -0.31c | -0.95c | -$28 |
+| 24-48 | 2,976 | +0.74c | -0.24c | -0.95c | -$28 |
 
 Fills 8-16h out are 93% of the loss. The worst stretch is 17-22 UTC, the US afternoon, when the day's high is being observed.
 
