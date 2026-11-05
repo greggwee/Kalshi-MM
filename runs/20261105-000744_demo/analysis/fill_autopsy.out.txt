@@ -1,0 +1,68 @@
+18677 fills; 34919 contracts
+all ct   34919  edge  +0.89c  m60  -0.61c  m600  -0.94c  to-settle   -1.15c   total to-settle $ -403.27
+
+-- hours to close
+           8-12h  ct   15283  edge  +1.04c  m60  -0.87c  m600  -1.44c  to-settle   -1.64c   total to-settle $ -251.14
+          12-16h  ct   10458  edge  +0.81c  m60  -0.47c  m600  -0.66c  to-settle   -1.18c   total to-settle $ -123.73
+          16-20h  ct    4927  edge  +0.72c  m60  -0.41c  m600  -0.50c  to-settle   +0.16c   total to-settle $   +8.09
+          20-24h  ct    1270  edge  +0.75c  m60  -0.32c  m600  -0.19c  to-settle   -0.52c   total to-settle $   -6.62
+          24-30h  ct    1708  edge  +0.78c  m60  +0.05c  m600  -0.11c  to-settle   -0.71c   total to-settle $  -12.20
+          30-36h  ct    1122  edge  +0.69c  m60  -0.70c  m600  -0.82c  to-settle   -2.08c   total to-settle $  -23.34
+          36-48h  ct     146  edge  +0.70c  m60  -0.13c  m600  -0.68c  to-settle   +5.05c   total to-settle $   +7.39
+
+-- market spread at fill
+              1c  ct   17625  edge  +0.78c  m60  -0.72c  m600  -0.87c  to-settle   -0.44c   total to-settle $  -78.16
+              2c  ct    6658  edge  +1.13c  m60  -0.68c  m600  -1.17c  to-settle   -0.88c   total to-settle $  -58.56
+              3c  ct    6341  edge  +0.68c  m60  -0.34c  m600  -1.07c  to-settle   -3.46c   total to-settle $ -219.56
+              4c  ct    2467  edge  +1.07c  m60  -0.68c  m600  -0.67c  to-settle   -1.71c   total to-settle $  -42.12
+            5-9c  ct    1566  edge  +1.41c  m60  +0.17c  m600  -0.99c  to-settle   +0.17c   total to-settle $   +2.68
+            10c+  ct     259  edge  +2.21c  m60  -1.96c  m600  +1.17c  to-settle   -2.91c   total to-settle $   -7.55
+
+-- side
+             ask  ct   17355  edge  +0.92c  m60  -0.46c  m600  -0.80c  to-settle   +1.49c   total to-settle $ +258.12
+             bid  ct   17563  edge  +0.86c  m60  -0.76c  m600  -1.08c  to-settle   -3.77c   total to-settle $ -661.39
+
+-- price band
+             <.2  ct   10123  edge  +0.75c  m60  -0.50c  m600  -0.61c  to-settle   -0.44c   total to-settle $  -44.15
+           .2-.4  ct    9261  edge  +0.91c  m60  -0.79c  m600  -1.10c  to-settle   -1.72c   total to-settle $ -158.84
+           .4-.6  ct    7588  edge  +0.98c  m60  -0.65c  m600  -1.28c  to-settle   -1.24c   total to-settle $  -94.32
+           .6-.8  ct    5270  edge  +0.97c  m60  -0.66c  m600  -0.87c  to-settle   -1.00c   total to-settle $  -52.96
+             >.8  ct    2675  edge  +0.91c  m60  -0.21c  m600  -0.79c  to-settle   -1.98c   total to-settle $  -53.00
+
+-- was the quote stale at the fill
+quote on our side of mid  ct   34919  edge  +0.89c  m60  -0.61c  m600  -0.94c  to-settle   -1.15c   total to-settle $ -403.27
+
+-- series
+       KXHIGHAUS  ct    2762  edge  +0.83c  m60  -0.31c  m600  -0.34c  to-settle   -1.20c   total to-settle $  -33.05
+       KXHIGHCHI  ct    5176  edge  +0.91c  m60  -1.00c  m600  -2.17c  to-settle   -1.98c   total to-settle $ -102.32
+       KXHIGHDEN  ct    2747  edge  +0.95c  m60  -0.57c  m600  -1.11c  to-settle   -1.81c   total to-settle $  -49.63
+       KXHIGHLAX  ct    7403  edge  +0.75c  m60  -0.49c  m600  -0.63c  to-settle   -0.70c   total to-settle $  -51.54
+       KXHIGHMIA  ct    7012  edge  +0.96c  m60  -0.75c  m600  -0.95c  to-settle   -1.24c   total to-settle $  -87.06
+        KXHIGHNY  ct    7252  edge  +0.89c  m60  -0.46c  m600  -0.70c  to-settle   -0.73c   total to-settle $  -53.25
+      KXHIGHPHIL  ct    2564  edge  +1.09c  m60  -0.62c  m600  -0.49c  to-settle   -1.03c   total to-settle $  -26.42
+
+-- UTC hour
+              00  ct     298  edge  +0.74c  m60  -0.58c  m600  -0.70c  to-settle   +3.39c   total to-settle $  +10.10
+              01  ct     452  edge  +0.77c  m60  -0.91c  m600  -1.36c  to-settle   -6.00c   total to-settle $  -27.12
+              02  ct     498  edge  +0.77c  m60  +0.44c  m600  +0.29c  to-settle   -2.00c   total to-settle $  -10.00
+              03  ct     219  edge  +0.85c  m60  +0.27c  m600  +0.29c  to-settle   -2.27c   total to-settle $   -4.99
+              04  ct     155  edge  +0.86c  m60  +0.66c  m600  +0.78c  to-settle   +2.08c   total to-settle $   +3.24
+              05  ct     215  edge  +0.85c  m60  +0.52c  m600  +0.50c  to-settle   +1.26c   total to-settle $   +2.73
+              06  ct     283  edge  +0.81c  m60  +0.75c  m600  +0.57c  to-settle   -4.06c   total to-settle $  -11.53
+              07  ct      99  edge  +0.71c  m60  -1.50c  m600  -1.47c  to-settle   +1.64c   total to-settle $   +1.64
+              08  ct     188  edge  +0.72c  m60  -0.25c  m600  +0.11c  to-settle   +6.65c   total to-settle $  +12.55
+              09  ct     352  edge  +0.77c  m60  -0.16c  m600  -0.17c  to-settle   +4.01c   total to-settle $  +14.15
+              10  ct     731  edge  +0.73c  m60  -0.59c  m600  -0.58c  to-settle   -4.40c   total to-settle $  -32.16
+              11  ct    1374  edge  +0.72c  m60  -0.66c  m600  -0.57c  to-settle   +1.93c   total to-settle $  +26.47
+              12  ct    1578  edge  +0.71c  m60  -0.24c  m600  -0.30c  to-settle   +1.07c   total to-settle $  +16.88
+              13  ct    1839  edge  +0.73c  m60  -0.27c  m600  -0.41c  to-settle   -3.68c   total to-settle $  -67.78
+              14  ct    1772  edge  +0.78c  m60  -0.23c  m600  -0.30c  to-settle   -2.46c   total to-settle $  -43.60
+              15  ct    1606  edge  +0.81c  m60  -0.06c  m600  -0.24c  to-settle   +0.79c   total to-settle $  +12.63
+              16  ct    2296  edge  +0.83c  m60  -0.52c  m600  -0.65c  to-settle   -1.98c   total to-settle $  -45.51
+              17  ct    4875  edge  +0.87c  m60  -0.78c  m600  -1.24c  to-settle   -0.17c   total to-settle $   -8.26
+              18  ct    4657  edge  +0.96c  m60  -0.57c  m600  -1.01c  to-settle   -2.26c   total to-settle $ -105.09
+              19  ct    5575  edge  +1.02c  m60  -0.91c  m600  -0.85c  to-settle   -0.72c   total to-settle $  -39.96
+              20  ct    3764  edge  +0.99c  m60  -0.77c  m600  -1.55c  to-settle   -1.54c   total to-settle $  -58.04
+              21  ct    1528  edge  +1.07c  m60  -1.29c  m600  -3.20c  to-settle   -2.24c   total to-settle $  -34.19
+              22  ct     352  edge  +1.25c  m60  -2.42c  m600  -3.65c  to-settle   -2.83c   total to-settle $   -9.98
+              23  ct     201  edge  +0.66c  m60  -0.30c  m600  -0.57c  to-settle   -2.70c   total to-settle $   -5.44

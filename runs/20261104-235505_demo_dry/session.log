@@ -1,0 +1,151 @@
+2026-11-04 15:55:05,347 INFO API usage tier basic: {'read': (200.0, 600.0), 'write': (100.0, 100.0)}
+2026-11-04 15:55:05,364 INFO selected markets:
+class     ticker                                     mid  sprd  vol24h      OI  depth5c  close_h  score  fee_type
+liquid    KXNBAGAME-26NOV04PHIDET-PHI               0.46  0.01    7028    9620     2764     48.1  20.56  quadratic
+liquid    KXNBAGAME-26NOV04MILBOS-MIL               0.17  0.01    2169    4799    17172     48.6  20.86  quadratic
+liquid    KXNFLTOTAL-26NOV09BUFMIN-48               0.43  0.01     377     377    11257    169.3  16.98  quadratic
+illiquid  KXRAINSHARD2-26NOV05-CMH                  0.50  0.04     292       4      400     29.1  11.48  quadratic
+illiquid  KXRAINSHARD2-26NOV05-TPA                  0.50  0.04     314       8      400     29.1  11.85  quadratic
+illiquid  KXNCAAFTOTAL-26NOV04TOLSAC-38             0.83  0.05      55      61       72     48.1   9.13  quadratic
+2026-11-04 15:55:05,375 INFO session runs\20261104-235505_demo_dry: 6 markets, duration 600.0s, DRY RUN on demo
+2026-11-04 15:55:05,550 INFO KXNBAGAME-26NOV04PHIDET-PHI [liquid] status=active close_in=48.1h q0=0 preexisting_orders=0
+2026-11-04 15:55:05,621 INFO KXNBAGAME-26NOV04MILBOS-MIL [liquid] status=active close_in=48.6h q0=0 preexisting_orders=0
+2026-11-04 15:55:05,693 INFO KXNFLTOTAL-26NOV09BUFMIN-48 [liquid] status=active close_in=169.3h q0=0 preexisting_orders=0
+2026-11-04 15:55:05,764 INFO KXRAINSHARD2-26NOV05-CMH [illiquid] status=active close_in=29.1h q0=0 preexisting_orders=0
+2026-11-04 15:55:05,834 INFO KXRAINSHARD2-26NOV05-TPA [illiquid] status=active close_in=29.1h q0=0 preexisting_orders=0
+2026-11-04 15:55:05,907 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 [illiquid] status=active close_in=48.1h q0=0 preexisting_orders=0
+2026-11-04 15:55:06,328 INFO KXNBAGAME-26NOV04PHIDET-PHI create bid 2@0.45  (0ms)
+2026-11-04 15:55:06,328 INFO KXNBAGAME-26NOV04PHIDET-PHI create ask 2@0.46  (0ms)
+2026-11-04 15:55:06,541 INFO KXNBAGAME-26NOV04MILBOS-MIL create bid 2@0.17  (0ms)
+2026-11-04 15:55:06,541 INFO KXNBAGAME-26NOV04MILBOS-MIL create ask 2@0.18  (0ms)
+2026-11-04 15:55:07,152 INFO KXNFLTOTAL-26NOV09BUFMIN-48 create bid 2@0.43  (0ms)
+2026-11-04 15:55:07,154 INFO KXNFLTOTAL-26NOV09BUFMIN-48 create ask 2@0.44  (0ms)
+2026-11-04 15:55:07,287 INFO KXRAINSHARD2-26NOV05-CMH create bid 2@0.49  (0ms)
+2026-11-04 15:55:07,287 INFO KXRAINSHARD2-26NOV05-CMH create ask 2@0.51  (0ms)
+2026-11-04 15:55:07,546 INFO KXRAINSHARD2-26NOV05-TPA create bid 2@0.49  (0ms)
+2026-11-04 15:55:07,546 INFO KXRAINSHARD2-26NOV05-TPA create ask 2@0.51  (0ms)
+2026-11-04 15:55:07,846 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create bid 2@0.82  (0ms)
+2026-11-04 15:55:07,846 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create ask 2@0.85  (0ms)
+2026-11-04 15:56:03,972 INFO cycle 30 (38ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 15:56:03,972 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:56:03,972 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:56:03,972 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:56:03,972 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:56:03,972 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:56:03,972 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:57:04,009 INFO cycle 60 (42ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 15:57:04,009 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:57:04,009 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:57:04,009 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:57:04,010 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:57:04,010 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:57:04,010 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:57:14,015 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel bid 2@0.82 reprice_toward (0ms)
+2026-11-04 15:57:14,015 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create bid 2@0.83  (0ms)
+2026-11-04 15:58:04,145 INFO cycle 90 (46ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 15:58:04,146 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:58:04,146 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:58:04,146 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:58:04,147 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:58:04,147 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:58:04,147 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:58:28,187 INFO KXNBAGAME-26NOV04PHIDET-PHI amend bid 2@0.45 refresh_expiry (0ms)
+2026-11-04 15:58:28,188 INFO KXNBAGAME-26NOV04PHIDET-PHI amend ask 2@0.46 refresh_expiry (0ms)
+2026-11-04 15:58:28,189 INFO KXNBAGAME-26NOV04MILBOS-MIL amend bid 2@0.17 refresh_expiry (0ms)
+2026-11-04 15:58:28,191 INFO KXNBAGAME-26NOV04MILBOS-MIL amend ask 2@0.18 refresh_expiry (0ms)
+2026-11-04 15:58:28,193 INFO KXNFLTOTAL-26NOV09BUFMIN-48 amend bid 2@0.43 refresh_expiry (0ms)
+2026-11-04 15:58:28,193 INFO KXNFLTOTAL-26NOV09BUFMIN-48 amend ask 2@0.44 refresh_expiry (0ms)
+2026-11-04 15:58:28,198 INFO KXRAINSHARD2-26NOV05-CMH amend bid 2@0.49 refresh_expiry (0ms)
+2026-11-04 15:58:28,199 INFO KXRAINSHARD2-26NOV05-CMH amend ask 2@0.51 refresh_expiry (0ms)
+2026-11-04 15:58:28,202 INFO KXRAINSHARD2-26NOV05-TPA amend bid 2@0.49 refresh_expiry (0ms)
+2026-11-04 15:58:28,203 INFO KXRAINSHARD2-26NOV05-TPA amend ask 2@0.51 refresh_expiry (0ms)
+2026-11-04 15:58:28,206 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 amend ask 2@0.85 refresh_expiry (0ms)
+2026-11-04 15:59:04,340 INFO cycle 120 (88ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 15:59:04,341 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:59:04,341 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:59:04,343 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:59:04,343 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:59:04,343 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:59:04,344 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 15:59:12,299 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 amend ask 2@0.88 reprice (0ms)
+2026-11-04 15:59:42,342 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 amend bid 2@0.82 reprice (0ms)
+2026-11-04 15:59:42,342 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel ask 2.0@0.88 reprice_toward (0ms)
+2026-11-04 15:59:42,343 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create ask 2@0.85  (0ms)
+2026-11-04 16:00:00,359 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel bid 2.0@0.82 reprice_toward (0ms)
+2026-11-04 16:00:00,362 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create bid 2@0.83  (0ms)
+2026-11-04 16:00:00,362 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 amend ask 2@0.88 reprice (0ms)
+2026-11-04 16:00:04,341 INFO cycle 150 (51ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 16:00:04,341 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:00:04,345 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:00:04,346 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:00:04,346 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:00:04,347 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:00:04,347 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:00:16,570 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 amend bid 2@0.82 reprice (0ms)
+2026-11-04 16:00:16,571 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel ask 2.0@0.88 reprice_toward (0ms)
+2026-11-04 16:00:16,572 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create ask 2@0.85  (0ms)
+2026-11-04 16:01:04,405 INFO cycle 180 (45ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 16:01:04,405 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:01:04,405 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:01:04,406 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:01:04,407 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:01:04,408 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:01:04,408 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:01:24,434 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 amend ask 2@0.86 reprice (0ms)
+2026-11-04 16:01:50,562 INFO KXNBAGAME-26NOV04PHIDET-PHI amend bid 2.0@0.45 refresh_expiry (0ms)
+2026-11-04 16:01:50,562 INFO KXNBAGAME-26NOV04PHIDET-PHI amend ask 2.0@0.46 refresh_expiry (0ms)
+2026-11-04 16:01:50,564 INFO KXNBAGAME-26NOV04MILBOS-MIL amend bid 2.0@0.17 refresh_expiry (0ms)
+2026-11-04 16:01:50,565 INFO KXNBAGAME-26NOV04MILBOS-MIL amend ask 2.0@0.18 refresh_expiry (0ms)
+2026-11-04 16:01:50,567 INFO KXNFLTOTAL-26NOV09BUFMIN-48 amend bid 2.0@0.43 refresh_expiry (0ms)
+2026-11-04 16:01:50,568 INFO KXNFLTOTAL-26NOV09BUFMIN-48 amend ask 2.0@0.44 refresh_expiry (0ms)
+2026-11-04 16:01:50,571 INFO KXRAINSHARD2-26NOV05-CMH amend bid 2.0@0.49 refresh_expiry (0ms)
+2026-11-04 16:01:50,571 INFO KXRAINSHARD2-26NOV05-CMH amend ask 2.0@0.51 refresh_expiry (0ms)
+2026-11-04 16:01:50,577 INFO KXRAINSHARD2-26NOV05-TPA amend bid 2.0@0.49 refresh_expiry (0ms)
+2026-11-04 16:01:50,581 INFO KXRAINSHARD2-26NOV05-TPA amend ask 2.0@0.51 refresh_expiry (0ms)
+2026-11-04 16:02:04,576 INFO cycle 210 (44ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 16:02:04,576 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:02:04,577 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:02:04,577 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:02:04,577 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:02:04,577 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:02:04,577 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:02:42,676 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel bid 2.0@0.82 reprice_toward (0ms)
+2026-11-04 16:02:42,676 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create bid 2@0.84  (0ms)
+2026-11-04 16:02:42,676 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 amend ask 2@0.89 reprice (0ms)
+2026-11-04 16:03:04,700 INFO cycle 240 (53ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 16:03:04,701 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:03:04,701 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:03:04,701 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:03:04,701 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:03:04,702 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:03:04,702 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:03:07,545 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel bid 2@0.84 reprice_toward (0ms)
+2026-11-04 16:03:07,545 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 create bid 2@0.85  (0ms)
+2026-11-04 16:04:04,754 INFO cycle 270 (44ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 16:04:04,754 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:04:04,754 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:04:04,754 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:04:04,755 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:04:04,755 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:04:04,755 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:05:04,779 INFO cycle 300 (45ms) net_pnl=+0.0000 gross=0 quoting=6/6
+2026-11-04 16:05:04,780 INFO   PERF KXNBAGAME-26NOV04PHIDET-PHI: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:05:04,780 INFO   PERF KXNBAGAME-26NOV04MILBOS-MIL: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:05:04,780 INFO   PERF KXNFLTOTAL-26NOV09BUFMIN-48: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:05:04,780 INFO   PERF KXRAINSHARD2-26NOV05-CMH: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:05:04,780 INFO   PERF KXRAINSHARD2-26NOV05-TPA: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:05:04,780 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-38: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:05:06,735 INFO shutting down (duration_reached): cancelling resting orders
+2026-11-04 16:05:06,735 INFO KXNBAGAME-26NOV04PHIDET-PHI cancel bid 2.0@0.45 shutdown (0ms)
+2026-11-04 16:05:06,736 INFO KXNBAGAME-26NOV04PHIDET-PHI cancel ask 2.0@0.46 shutdown (0ms)
+2026-11-04 16:05:06,736 INFO KXNBAGAME-26NOV04MILBOS-MIL cancel bid 2.0@0.17 shutdown (0ms)
+2026-11-04 16:05:06,736 INFO KXNBAGAME-26NOV04MILBOS-MIL cancel ask 2.0@0.18 shutdown (0ms)
+2026-11-04 16:05:06,737 INFO KXNFLTOTAL-26NOV09BUFMIN-48 cancel bid 2.0@0.43 shutdown (0ms)
+2026-11-04 16:05:06,737 INFO KXNFLTOTAL-26NOV09BUFMIN-48 cancel ask 2.0@0.44 shutdown (0ms)
+2026-11-04 16:05:06,737 INFO KXRAINSHARD2-26NOV05-CMH cancel bid 2.0@0.49 shutdown (0ms)
+2026-11-04 16:05:06,737 INFO KXRAINSHARD2-26NOV05-CMH cancel ask 2.0@0.51 shutdown (0ms)
+2026-11-04 16:05:06,737 INFO KXRAINSHARD2-26NOV05-TPA cancel bid 2.0@0.49 shutdown (0ms)
+2026-11-04 16:05:06,738 INFO KXRAINSHARD2-26NOV05-TPA cancel ask 2.0@0.51 shutdown (0ms)
+2026-11-04 16:05:06,738 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel ask 2.0@0.89 shutdown (0ms)
+2026-11-04 16:05:06,738 INFO KXNCAAFTOTAL-26NOV04TOLSAC-38 cancel bid 2@0.85 shutdown (0ms)
+2026-11-04 16:05:08,811 INFO FINAL {"realized_pnl": 0.0, "unrealized_pnl": 0.0, "fees": 0.0, "net_pnl": 0.0, "fills": 0} reason=duration_reached

@@ -1,0 +1,25 @@
+solved the paper's Table 1 in 8.47s: {'steps': 2000, 'horizon': 1.0, 'reached_tau': 1.0, 'worst_iterations': 3, 'unconverged_steps': 0, 'stopped_early': False}
+
+Figure 1, spread at q = 0        ours    paper
+  t = 0.0, p = 0.50            0.0567   0.0568
+  t = 0.0, p = 0.30            0.0561   0.0560
+  t = 0.0, p = 0.10            0.0523   0.0524
+  t = 1.0, p = 0.50            0.0442   0.0442
+  t = 1.0, p = 0.10            0.0392   0.0394
+Figure 2, skew at t = 0          ours    paper
+  p = 0.4, q =  -50            +0.0064  +0.0065
+  p = 0.4, q =   +0            +0.0002  +0.0001
+  p = 0.4, q =  +50            -0.0060  -0.0060
+  p = 0.2, q =   +0            +0.0008  +0.0008
+  p = 0.2, q =  +50            -0.0039  -0.0038
+  p = 0.8, q =  -50            +0.0039  +0.0038
+
+Table 2, 10000 paths         mean    std    |q|   VaR5    ES5
+  paper baseline           12.47  28.11  49.37  32.41  40.50
+  paper optimal            12.39  10.34  15.23   4.20   9.68
+  ours baseline, bounded   12.18  27.81  48.54  32.66  40.15
+  ours baseline, no bound  12.40  35.58  58.77  45.64  62.55
+  ours optimal             12.38  10.44  15.44   4.41   9.72
+
+The paper's footnote 4 says its baseline has no inventory bound, but its table
+matches the bounded run here: unbounded gives a mean |q| near 58, not its 49.

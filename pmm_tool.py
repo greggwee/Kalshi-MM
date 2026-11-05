@@ -64,8 +64,8 @@ def cmd_reproduce(args):
     for name, surf, kw in runs:
         r = simulate(surf, ModelParams(), n_paths=args.paths, seed=args.seed, **kw)
         print(f"  {name:23s}" + "".join(f"{r[k]:7.2f}" for k in TABLE_FIELDS))
-    print("\nThe paper's footnote 4 says its baseline has no inventory bound, but its figures"
-          "\nmatch the bounded run here (figure 5b also shows it stopping flat at +-100).")
+    print("\nThe paper's footnote 4 says its baseline has no inventory bound, but its table"
+          "\nmatches the bounded run here: unbounded gives a mean |q| near 58, not its 49.")
     return 0
 
 
@@ -202,9 +202,9 @@ def main(argv=None):
     p = sub.add_parser("calibrate", help="fit series parameters from a recorder database")
     p.add_argument("--db", default="data/kalshi_recorder.db")
     p.add_argument("--series", help="comma-separated series (default: all recorded)")
-    p.add_argument("--stand-down", type=float, default=8.0, help="hours before close the bot stops")
+    p.add_argument("--stand-down", type=float, default=16.0, help="hours before close the bot stops")
     p.add_argument("--delta", type=float, default=2.0, help="our order size, contracts")
-    p.add_argument("--T", type=float, default=40.0, help="hours over which the ramps act")
+    p.add_argument("--T", type=float, default=32.0, help="hours over which the ramps act")
     p.add_argument("--out", default="pmm_calibration.json")
     p.set_defaults(func=cmd_calibrate)
 
@@ -223,7 +223,7 @@ def main(argv=None):
     p.add_argument("--db", default="data/kalshi_recorder.db")
     p.add_argument("--series", required=True, help="comma-separated series")
     p.add_argument("--calibration", default="pmm_calibration.json")
-    p.add_argument("--stand-down", type=float, default=8.0)
+    p.add_argument("--stand-down", type=float, default=16.0)
     p.add_argument("--gamma", type=float, default=DEFAULT_PMM["gamma"])
     p.add_argument("--gamma-T", type=float, default=DEFAULT_PMM["gamma_T"])
     p.add_argument("--fill-modes", nargs="+", default=["queue", "strict"])

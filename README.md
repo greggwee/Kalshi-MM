@@ -207,7 +207,7 @@ A second quoting model, built for contracts that settle to 0 or 1: [Optimal Mark
 | `src/pmm_calibrate.py` | offline series fits and the online volatility and flow estimators |
 | `src/pmm_quoter.py` | one market's estimators and solved surface, used by the session and by replay |
 | `pmm_tool.py` | `reproduce`, `calibrate`, `surface`, `replay` |
-| `pmm_calibration.json` | fits for the recorded weather series, measured from data recorded in July 2026 |
+| `pmm_calibration.json` | fits for the recorded weather series, from data recorded in July 2026, with a 16h stand-down |
 | `pmm_config.yaml`, `pmm_prod_config.yaml` | session configs for demo and production |
 
 ```bash
@@ -228,7 +228,7 @@ python demo.py --config pmm_config.yaml run --dry-run --duration 600
 
 **What it does not do.**
 
-- *Adverse selection.* The model assumes fills carry no information, so this is its biggest gap on Kalshi. Recorded weather tape was heavily adverse close to resolution, so the stand-down, not the model, handles that (8 hours before close in `pmm_prod_config.yaml`).
+- *Adverse selection.* The model assumes fills carry no information, so this is its biggest gap on Kalshi. Recorded weather tape was heavily adverse close to resolution, so the stand-down, not the model, handles that (16 hours before close in `pmm_calibration.json` and `pmm_prod_config.yaml`). Replay results are in `runs/` with the run they verify, and they do not show a profit.
 - *Calibration.* The paper's table 1 is illustrative and it does not address calibration. The fits and the online estimators here are this repository's own choices, including `A` from `contract flow / (queue + size)` and `k` from how far orders reach past the touch.
 - *Risk aversion.* `gamma` and `gamma_T` are preferences, not estimates. Use `surface` to see what a value does before changing it.
 

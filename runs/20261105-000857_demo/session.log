@@ -1,0 +1,525 @@
+2026-11-04 16:08:58,145 INFO API usage tier basic: {'read': (200.0, 600.0), 'write': (100.0, 100.0)}
+2026-11-04 16:08:58,164 INFO selected markets:
+class     ticker                                     mid  sprd  vol24h      OI  depth5c  close_h  score  fee_type
+illiquid  KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT    0.14  0.00      67      63        0    333.9  -6.19  quadratic
+illiquid  KXHIGHTOKC-26NOV05-T67                    0.21  0.09      26      20       10     30.9   4.95  quadratic
+illiquid  KXNCAAFTOTAL-26NOV04TOLSAC-35             0.88  0.06      56      59       99     47.9   9.19  quadratic
+illiquid  KXNFLTOTAL-26NOV08TBCHI-45                0.58  0.03     385     333     4795    145.2  15.96  quadratic
+2026-11-04 16:08:58,181 INFO session runs\20261105-000857_demo: 4 markets, duration 3400.0s, LIVE ORDERS on demo
+2026-11-04 16:08:58,434 INFO KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT [illiquid] status=active close_in=333.9h q0=0 preexisting_orders=0
+2026-11-04 16:08:58,511 INFO KXHIGHTOKC-26NOV05-T67 [illiquid] status=active close_in=30.9h q0=0 preexisting_orders=0
+2026-11-04 16:08:58,585 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 [illiquid] status=active close_in=47.9h q0=0 preexisting_orders=0
+2026-11-04 16:08:58,656 INFO KXNFLTOTAL-26NOV08TBCHI-45 [illiquid] status=active close_in=145.2h q0=0 preexisting_orders=0
+2026-11-04 16:08:59,455 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.18  (38ms)
+2026-11-04 16:08:59,489 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.25  (34ms)
+2026-11-04 16:09:00,052 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.86  (40ms)
+2026-11-04 16:09:00,092 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.90  (38ms)
+2026-11-04 16:09:01,474 INFO KXNFLTOTAL-26NOV08TBCHI-45 create bid 2@0.58  (65ms)
+2026-11-04 16:09:01,510 INFO KXNFLTOTAL-26NOV08TBCHI-45 create ask 2@0.59  (35ms)
+2026-11-04 16:09:11,691 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.86 no_quote (34ms)
+2026-11-04 16:09:11,725 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.90 no_quote (33ms)
+2026-11-04 16:09:21,698 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2@0.17 reprice (34ms)
+2026-11-04 16:09:21,732 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.26 reprice (34ms)
+2026-11-04 16:09:23,698 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.17 reprice_toward (34ms)
+2026-11-04 16:09:23,736 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.20  (37ms)
+2026-11-04 16:09:23,770 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.26 reprice_toward (34ms)
+2026-11-04 16:09:23,807 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.23  (38ms)
+2026-11-04 16:09:23,849 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.85  (38ms)
+2026-11-04 16:09:23,882 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.88  (34ms)
+2026-11-04 16:09:29,916 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.88 reprice_toward (35ms)
+2026-11-04 16:09:29,955 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.87  (38ms)
+2026-11-04 16:09:49,904 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.85 no_quote (33ms)
+2026-11-04 16:09:49,982 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.87 no_quote (77ms)
+2026-11-04 16:09:57,682 INFO cycle 30 (147ms) net_pnl=+0.0000 gross=0 quoting=2/4
+2026-11-04 16:09:57,682 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:09:57,683 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:09:57,684 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:09:57,684 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:10:33,730 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2@0.17 reprice (33ms)
+2026-11-04 16:10:33,765 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.26 reprice (34ms)
+2026-11-04 16:10:57,726 INFO cycle 60 (144ms) net_pnl=+0.0000 gross=0 quoting=2/4
+2026-11-04 16:10:57,726 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:10:57,726 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:10:57,727 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:10:57,727 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:11:06,290 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.88  (34ms)
+2026-11-04 16:11:06,329 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.91  (38ms)
+2026-11-04 16:11:19,231 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.88 no_quote (37ms)
+2026-11-04 16:11:19,265 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.91 no_quote (34ms)
+2026-11-04 16:11:29,559 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.87  (97ms)
+2026-11-04 16:11:29,595 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.90  (35ms)
+2026-11-04 16:11:35,452 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend bid 2@0.86 reprice (35ms)
+2026-11-04 16:11:35,490 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.90 reprice_toward (37ms)
+2026-11-04 16:11:35,525 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.89  (35ms)
+2026-11-04 16:11:41,417 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 FILL ask 1.7 @ 0.89 (taker=False, fee 0.0000) -> tracked q -1.7
+2026-11-04 16:11:43,467 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend ask 2@0.89 replenish (37ms)
+2026-11-04 16:11:45,425 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 FILL ask 0.5 @ 0.89 (taker=False, fee 0.0000) -> tracked q -2.2
+2026-11-04 16:11:45,462 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.17 reprice_toward (36ms)
+2026-11-04 16:11:45,498 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.19  (35ms)
+2026-11-04 16:11:45,535 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.26 reprice_toward (37ms)
+2026-11-04 16:11:45,570 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.24  (35ms)
+2026-11-04 16:11:55,469 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.86 no_quote (34ms)
+2026-11-04 16:11:55,506 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 1.5@0.89 no_quote (36ms)
+2026-11-04 16:12:03,424 INFO cycle 90 (144ms) net_pnl=+0.0000 gross=2.2 quoting=2/4
+2026-11-04 16:12:03,425 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:12:03,425 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:12:03,425 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -2.2, "avg_entry": 0.89, "realized_pnl": 0.0, "unrealized_pnl": -0.0, "total_pnl": -0.0, "fills": 2, "avg_markout_10s": 0.015, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.0}
+2026-11-04 16:12:03,425 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:12:23,468 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (34ms)
+2026-11-04 16:12:23,504 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (36ms)
+2026-11-04 16:12:43,472 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.87  (33ms)
+2026-11-04 16:12:43,507 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.90  (34ms)
+2026-11-04 16:12:55,513 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend bid 2@0.86 reprice (38ms)
+2026-11-04 16:12:55,551 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.90 reprice_toward (37ms)
+2026-11-04 16:12:55,598 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.89  (46ms)
+2026-11-04 16:12:57,499 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.86 reprice_toward (36ms)
+2026-11-04 16:12:57,539 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.87  (39ms)
+2026-11-04 16:12:57,575 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend ask 2@0.90 reprice (35ms)
+2026-11-04 16:13:03,491 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.19 reprice_toward (35ms)
+2026-11-04 16:13:03,529 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.21  (37ms)
+2026-11-04 16:13:03,569 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.29 reprice (40ms)
+2026-11-04 16:13:03,607 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.87 no_quote (37ms)
+2026-11-04 16:13:03,644 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.90 no_quote (37ms)
+2026-11-04 16:13:03,646 INFO cycle 120 (336ms) net_pnl=+0.0000 gross=2.2 quoting=2/4
+2026-11-04 16:13:03,646 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:13:03,647 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:13:03,647 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -2.2, "avg_entry": 0.89, "realized_pnl": 0.0, "unrealized_pnl": -0.0, "total_pnl": -0.0, "fills": 2, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0025, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.0}
+2026-11-04 16:13:03,647 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:13:05,505 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2@0.17 reprice (35ms)
+2026-11-04 16:13:05,541 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.29 reprice_toward (36ms)
+2026-11-04 16:13:05,575 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.26  (34ms)
+2026-11-04 16:13:53,520 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.91  (38ms)
+2026-11-04 16:13:53,560 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.94  (38ms)
+2026-11-04 16:13:59,999 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.17 reprice_toward (34ms)
+2026-11-04 16:14:00,036 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.21  (36ms)
+2026-11-04 16:14:00,072 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.26 reprice_toward (35ms)
+2026-11-04 16:14:00,109 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.22  (37ms)
+2026-11-04 16:14:03,490 INFO cycle 150 (151ms) net_pnl=-0.0770 gross=2.2 quoting=3/4
+2026-11-04 16:14:03,490 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:14:03,490 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:14:03,491 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -2.2, "avg_entry": 0.89, "realized_pnl": 0.0, "unrealized_pnl": -0.077, "total_pnl": -0.077, "fills": 2, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0025, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.077}
+2026-11-04 16:14:03,491 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:14:17,530 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2@0.18 reprice (36ms)
+2026-11-04 16:14:17,567 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.22 reprice_toward (36ms)
+2026-11-04 16:14:17,606 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.21  (40ms)
+2026-11-04 16:14:19,518 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.25 reprice (34ms)
+2026-11-04 16:14:19,552 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.18 reprice_toward (33ms)
+2026-11-04 16:14:19,585 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.21  (33ms)
+2026-11-04 16:14:39,500 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 FILL ask 1.99 @ 0.94 (taker=False, fee 0.0000) -> tracked q -4.19
+2026-11-04 16:14:39,537 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend ask 2@0.96 reprice (35ms)
+2026-11-04 16:14:49,508 INFO KXHIGHTOKC-26NOV05-T67 FILL ask 2 @ 0.25 (taker=False, fee 0.0000) -> tracked q -2
+2026-11-04 16:14:49,546 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.21 reprice_toward (35ms)
+2026-11-04 16:14:49,592 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.28  (46ms)
+2026-11-04 16:14:49,625 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.31  (33ms)
+2026-11-04 16:15:03,541 INFO cycle 180 (167ms) net_pnl=-0.1272 gross=6.19 quoting=3/4
+2026-11-04 16:15:03,541 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:15:03,542 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.08, "total_pnl": -0.08, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.08}
+2026-11-04 16:15:03,542 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.0472, "total_pnl": -0.0472, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0025, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.0472}
+2026-11-04 16:15:03,542 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:15:45,612 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (35ms)
+2026-11-04 16:15:45,651 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (39ms)
+2026-11-04 16:16:03,585 INFO cycle 210 (156ms) net_pnl=-0.1272 gross=6.19 quoting=3/4
+2026-11-04 16:16:03,585 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:16:03,585 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.08, "total_pnl": -0.08, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.08}
+2026-11-04 16:16:03,586 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.0472, "total_pnl": -0.0472, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.0472}
+2026-11-04 16:16:03,586 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:16:53,858 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.91 no_quote (63ms)
+2026-11-04 16:16:53,910 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.96 no_quote (52ms)
+2026-11-04 16:17:03,774 INFO cycle 240 (149ms) net_pnl=-0.2319 gross=6.19 quoting=2/4
+2026-11-04 16:17:03,774 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:17:03,774 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.08, "total_pnl": -0.08, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.08}
+2026-11-04 16:17:03,774 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.1519, "total_pnl": -0.1519, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.035, "fees": 0.0, "net_pnl": -0.1519}
+2026-11-04 16:17:03,775 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:17:58,094 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2@0.22 reprice (36ms)
+2026-11-04 16:17:58,133 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.31 reprice_toward (39ms)
+2026-11-04 16:17:58,169 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.25  (35ms)
+2026-11-04 16:18:03,801 INFO cycle 270 (151ms) net_pnl=-0.1119 gross=6.19 quoting=2/4
+2026-11-04 16:18:03,801 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:18:03,802 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": 0.04, "total_pnl": 0.04, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.04}
+2026-11-04 16:18:03,802 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.1519, "total_pnl": -0.1519, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.035, "fees": 0.0, "net_pnl": -0.1519}
+2026-11-04 16:18:03,802 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:18:37,892 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.31 reprice (39ms)
+2026-11-04 16:18:37,930 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.22 reprice_toward (38ms)
+2026-11-04 16:18:37,969 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.28  (38ms)
+2026-11-04 16:18:57,908 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.93  (37ms)
+2026-11-04 16:18:57,944 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.97  (37ms)
+2026-11-04 16:19:00,353 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2@0.26 reprice (35ms)
+2026-11-04 16:19:00,390 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.36 reprice (37ms)
+2026-11-04 16:19:03,930 INFO cycle 300 (222ms) net_pnl=-0.2110 gross=6.19 quoting=3/4
+2026-11-04 16:19:03,930 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:19:03,931 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.08, "total_pnl": -0.08, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": null, "fees": 0.0, "net_pnl": -0.08}
+2026-11-04 16:19:03,931 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.131, "total_pnl": -0.131, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.035, "fees": 0.0, "net_pnl": -0.131}
+2026-11-04 16:19:03,931 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:19:07,895 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (34ms)
+2026-11-04 16:19:07,930 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (36ms)
+2026-11-04 16:19:09,897 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.26 reprice_toward (34ms)
+2026-11-04 16:19:09,935 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.28  (37ms)
+2026-11-04 16:19:09,970 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.36 reprice_toward (35ms)
+2026-11-04 16:19:10,005 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.34  (34ms)
+2026-11-04 16:19:10,041 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.93 no_quote (36ms)
+2026-11-04 16:19:10,077 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.97 no_quote (35ms)
+2026-11-04 16:19:17,897 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.28 reprice_toward (34ms)
+2026-11-04 16:19:17,930 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.30  (33ms)
+2026-11-04 16:19:17,963 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.38 reprice (32ms)
+2026-11-04 16:19:22,044 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.93  (34ms)
+2026-11-04 16:19:22,080 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.97  (36ms)
+2026-11-04 16:19:30,441 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.97 reprice_toward (36ms)
+2026-11-04 16:19:30,474 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.96  (33ms)
+2026-11-04 16:19:45,904 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.93 no_quote (34ms)
+2026-11-04 16:19:45,939 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.96 no_quote (34ms)
+2026-11-04 16:20:03,916 INFO cycle 330 (165ms) net_pnl=-0.2719 gross=6.19 quoting=2/4
+2026-11-04 16:20:03,916 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:20:03,916 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:20:03,917 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.1519, "total_pnl": -0.1519, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.1519}
+2026-11-04 16:20:03,917 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:21:03,968 INFO cycle 360 (164ms) net_pnl=-0.2719 gross=6.19 quoting=2/4
+2026-11-04 16:21:03,968 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:21:03,969 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:21:03,969 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.1519, "total_pnl": -0.1519, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.1519}
+2026-11-04 16:21:03,969 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:22:03,979 INFO cycle 390 (149ms) net_pnl=-0.2719 gross=6.19 quoting=2/4
+2026-11-04 16:22:03,979 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:22:03,980 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:22:03,980 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.1519, "total_pnl": -0.1519, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.1519}
+2026-11-04 16:22:03,980 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:22:12,157 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.94  (32ms)
+2026-11-04 16:22:12,191 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.96  (35ms)
+2026-11-04 16:22:30,037 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (36ms)
+2026-11-04 16:22:30,071 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (33ms)
+2026-11-04 16:22:40,024 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (34ms)
+2026-11-04 16:22:40,057 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.38 refresh_expiry (32ms)
+2026-11-04 16:23:04,052 INFO cycle 420 (154ms) net_pnl=-0.2510 gross=6.19 quoting=3/4
+2026-11-04 16:23:04,052 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:23:04,052 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:23:04,053 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.131, "total_pnl": -0.131, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.131}
+2026-11-04 16:23:04,053 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:24:00,456 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.38 reprice_toward (34ms)
+2026-11-04 16:24:00,494 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.34  (37ms)
+2026-11-04 16:24:04,075 INFO cycle 450 (148ms) net_pnl=-0.2510 gross=6.19 quoting=3/4
+2026-11-04 16:24:04,075 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:24:04,075 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:24:04,075 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.131, "total_pnl": -0.131, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.131}
+2026-11-04 16:24:04,075 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:24:30,122 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.94 no_quote (34ms)
+2026-11-04 16:24:30,155 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.96 no_quote (33ms)
+2026-11-04 16:24:56,148 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.94  (36ms)
+2026-11-04 16:24:56,182 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.96  (33ms)
+2026-11-04 16:25:04,108 INFO cycle 480 (153ms) net_pnl=-0.2510 gross=6.19 quoting=3/4
+2026-11-04 16:25:04,108 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:25:04,109 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:25:04,109 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.131, "total_pnl": -0.131, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.131}
+2026-11-04 16:25:04,109 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:25:06,139 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.94 no_quote (34ms)
+2026-11-04 16:25:06,176 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.96 no_quote (37ms)
+2026-11-04 16:25:46,164 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.94  (33ms)
+2026-11-04 16:25:46,200 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.96  (35ms)
+2026-11-04 16:25:52,304 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (33ms)
+2026-11-04 16:25:52,339 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (35ms)
+2026-11-04 16:26:00,172 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (34ms)
+2026-11-04 16:26:04,134 INFO cycle 510 (147ms) net_pnl=-0.2510 gross=6.19 quoting=3/4
+2026-11-04 16:26:04,134 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:26:04,136 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:26:04,136 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.131, "total_pnl": -0.131, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.131}
+2026-11-04 16:26:04,136 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:26:16,198 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.94 no_quote (35ms)
+2026-11-04 16:26:16,234 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.96 no_quote (36ms)
+2026-11-04 16:26:58,201 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.94  (34ms)
+2026-11-04 16:26:58,238 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.96  (37ms)
+2026-11-04 16:27:04,174 INFO cycle 540 (149ms) net_pnl=-0.2510 gross=6.19 quoting=3/4
+2026-11-04 16:27:04,174 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:27:04,174 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:27:04,174 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -4.19, "avg_entry": 0.9137, "realized_pnl": 0.0, "unrealized_pnl": -0.131, "total_pnl": -0.131, "fills": 3, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.131}
+2026-11-04 16:27:04,175 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:27:08,174 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 FILL ask 1.97 @ 0.96 (taker=False, fee 0.0000) -> tracked q -6.16
+2026-11-04 16:27:08,215 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend ask 2@0.98 reprice (38ms)
+2026-11-04 16:27:14,229 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend ask 2@0.98 reprice (48ms)
+2026-11-04 16:27:22,347 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (34ms)
+2026-11-04 16:28:04,307 INFO cycle 570 (174ms) net_pnl=-0.2214 gross=8.16 quoting=3/4
+2026-11-04 16:28:04,307 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:28:04,307 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:28:04,308 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1014, "total_pnl": -0.1014, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0067, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.1014}
+2026-11-04 16:28:04,308 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:29:04,303 INFO cycle 600 (147ms) net_pnl=-0.2214 gross=8.16 quoting=3/4
+2026-11-04 16:29:04,304 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:29:04,304 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:29:04,304 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1014, "total_pnl": -0.1014, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.1014}
+2026-11-04 16:29:04,304 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:29:14,342 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (35ms)
+2026-11-04 16:29:14,377 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (35ms)
+2026-11-04 16:29:22,491 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (33ms)
+2026-11-04 16:29:42,503 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.94 no_quote (37ms)
+2026-11-04 16:29:42,537 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.98 no_quote (34ms)
+2026-11-04 16:30:04,336 INFO cycle 630 (157ms) net_pnl=-0.3754 gross=8.16 quoting=2/4
+2026-11-04 16:30:04,336 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:30:04,336 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:30:04,337 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.2554, "total_pnl": -0.2554, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.2554}
+2026-11-04 16:30:04,337 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:30:42,510 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.93  (32ms)
+2026-11-04 16:30:42,543 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.97  (32ms)
+2026-11-04 16:30:44,380 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (36ms)
+2026-11-04 16:30:48,375 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend bid 2@0.92 reprice (32ms)
+2026-11-04 16:30:56,375 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.92 no_quote (33ms)
+2026-11-04 16:30:56,409 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.97 no_quote (34ms)
+2026-11-04 16:31:04,370 INFO cycle 660 (164ms) net_pnl=-0.3754 gross=8.16 quoting=2/4
+2026-11-04 16:31:04,370 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:31:04,370 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:31:04,370 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.2554, "total_pnl": -0.2554, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.2554}
+2026-11-04 16:31:04,370 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:32:04,400 INFO cycle 690 (152ms) net_pnl=-0.3754 gross=8.16 quoting=2/4
+2026-11-04 16:32:04,400 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:32:04,400 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:32:04,401 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.2554, "total_pnl": -0.2554, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.0233, "fees": 0.0, "net_pnl": -0.2554}
+2026-11-04 16:32:04,401 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:32:36,452 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (36ms)
+2026-11-04 16:32:36,490 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (37ms)
+2026-11-04 16:32:44,458 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (34ms)
+2026-11-04 16:33:05,032 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.92  (37ms)
+2026-11-04 16:33:05,068 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.97  (36ms)
+2026-11-04 16:33:05,070 INFO cycle 720 (785ms) net_pnl=-0.1290 gross=8.16 quoting=3/4
+2026-11-04 16:33:05,070 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:33:05,070 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:33:05,071 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.009, "total_pnl": -0.009, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.009}
+2026-11-04 16:33:05,071 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:34:04,498 INFO cycle 750 (165ms) net_pnl=-0.1290 gross=8.16 quoting=3/4
+2026-11-04 16:34:04,498 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:34:04,498 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:34:04,498 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.009, "total_pnl": -0.009, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.009}
+2026-11-04 16:34:04,498 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:34:06,529 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (37ms)
+2026-11-04 16:34:44,565 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.92 no_quote (37ms)
+2026-11-04 16:34:44,603 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.97 no_quote (37ms)
+2026-11-04 16:35:04,535 INFO cycle 780 (149ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:35:04,535 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:35:04,535 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:35:04,536 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:35:04,536 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:35:06,575 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.92  (37ms)
+2026-11-04 16:35:06,617 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.97  (41ms)
+2026-11-04 16:35:20,586 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.92 no_quote (40ms)
+2026-11-04 16:35:20,622 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.97 no_quote (36ms)
+2026-11-04 16:35:58,595 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (38ms)
+2026-11-04 16:35:58,631 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (35ms)
+2026-11-04 16:36:04,583 INFO cycle 810 (170ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:36:04,583 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:36:04,584 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:36:04,584 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:36:04,584 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:36:06,616 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (37ms)
+2026-11-04 16:36:06,664 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.91  (41ms)
+2026-11-04 16:36:06,717 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.96  (52ms)
+2026-11-04 16:36:16,630 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend bid 2@0.90 reprice (37ms)
+2026-11-04 16:36:34,637 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.90 no_quote (36ms)
+2026-11-04 16:36:34,674 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.96 no_quote (36ms)
+2026-11-04 16:37:04,666 INFO cycle 840 (147ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:37:04,667 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:37:04,667 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:37:04,667 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:37:04,668 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:37:10,716 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.90  (44ms)
+2026-11-04 16:37:10,750 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.95  (34ms)
+2026-11-04 16:37:12,850 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.90 no_quote (34ms)
+2026-11-04 16:37:12,886 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.95 no_quote (35ms)
+2026-11-04 16:37:28,716 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (33ms)
+2026-11-04 16:38:04,704 INFO cycle 870 (152ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:38:04,705 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:38:04,705 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:38:04,705 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:38:04,705 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:39:04,763 INFO cycle 900 (153ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:39:04,763 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:39:04,764 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:39:04,764 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:39:04,764 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:39:20,856 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (35ms)
+2026-11-04 16:39:20,894 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (37ms)
+2026-11-04 16:39:33,746 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (35ms)
+2026-11-04 16:39:43,023 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (33ms)
+2026-11-04 16:40:17,046 INFO cycle 930 (293ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:40:17,047 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:40:17,047 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:40:17,047 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:40:17,047 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:40:50,952 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (34ms)
+2026-11-04 16:41:17,112 INFO cycle 960 (329ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:41:17,114 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:41:17,115 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:41:17,115 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:41:17,116 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:42:13,406 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2@0.29 reprice (33ms)
+2026-11-04 16:42:13,439 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.34 reprice_toward (34ms)
+2026-11-04 16:42:13,477 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.32  (38ms)
+2026-11-04 16:42:17,155 INFO cycle 990 (312ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:42:17,155 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:42:17,156 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:42:17,156 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:42:17,156 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:42:41,042 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (34ms)
+2026-11-04 16:42:41,074 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (32ms)
+2026-11-04 16:43:17,152 INFO cycle 1020 (286ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:43:17,152 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:43:17,152 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:43:17,152 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:43:17,153 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:44:17,196 INFO cycle 1050 (302ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:44:17,197 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:44:17,197 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:44:17,197 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:44:17,197 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:45:17,222 INFO cycle 1080 (302ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:45:17,222 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:45:17,222 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:45:17,222 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:45:17,222 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:45:35,184 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.29 refresh_expiry (33ms)
+2026-11-04 16:45:35,219 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.32 refresh_expiry (33ms)
+2026-11-04 16:46:03,201 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (36ms)
+2026-11-04 16:46:03,238 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (36ms)
+2026-11-04 16:46:17,244 INFO cycle 1110 (282ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:46:17,244 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:46:17,244 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:46:17,244 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:46:17,245 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:47:17,308 INFO cycle 1140 (322ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:47:17,308 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:47:17,309 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:47:17,309 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:47:17,309 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:48:17,701 INFO cycle 1170 (691ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:48:17,701 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:48:17,701 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:48:17,702 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:48:17,702 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:48:57,352 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.29 refresh_expiry (36ms)
+2026-11-04 16:48:57,388 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.32 refresh_expiry (35ms)
+2026-11-04 16:49:17,352 INFO cycle 1200 (315ms) net_pnl=-0.2938 gross=8.16 quoting=2/4
+2026-11-04 16:49:17,352 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:49:17,352 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.1, "total_pnl": -0.1, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.1}
+2026-11-04 16:49:17,353 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:49:17,353 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:49:25,214 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (33ms)
+2026-11-04 16:49:25,249 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (35ms)
+2026-11-04 16:50:15,527 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.29 reprice_toward (34ms)
+2026-11-04 16:50:15,562 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.30  (35ms)
+2026-11-04 16:50:15,598 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2@0.34 reprice (36ms)
+2026-11-04 16:50:17,391 INFO cycle 1230 (332ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:50:17,391 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:50:17,392 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:50:17,392 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:50:17,392 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:51:17,395 INFO cycle 1260 (308ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:51:17,395 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:51:17,396 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:51:17,396 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:51:17,396 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:52:17,416 INFO cycle 1290 (303ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:52:17,416 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:52:17,416 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:52:17,416 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:52:17,416 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:52:43,319 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.93  (37ms)
+2026-11-04 16:52:43,356 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.97  (36ms)
+2026-11-04 16:52:47,490 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (35ms)
+2026-11-04 16:52:47,530 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (40ms)
+2026-11-04 16:52:59,320 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 amend bid 2@0.92 reprice (34ms)
+2026-11-04 16:53:17,435 INFO cycle 1320 (293ms) net_pnl=-0.0982 gross=8.16 quoting=3/4
+2026-11-04 16:53:17,435 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:53:17,436 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:53:17,436 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": 0.0218, "total_pnl": 0.0218, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": 0.0218}
+2026-11-04 16:53:17,436 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:53:37,634 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (65ms)
+2026-11-04 16:53:37,703 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (68ms)
+2026-11-04 16:54:13,344 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.92 no_quote (35ms)
+2026-11-04 16:54:13,377 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.97 no_quote (33ms)
+2026-11-04 16:54:17,484 INFO cycle 1350 (317ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:54:17,484 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:54:17,484 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:54:17,484 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:54:17,486 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:55:17,489 INFO cycle 1380 (299ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:55:17,490 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:55:17,490 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:55:17,490 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:55:17,490 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:56:09,413 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (37ms)
+2026-11-04 16:56:09,448 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (34ms)
+2026-11-04 16:56:17,501 INFO cycle 1410 (283ms) net_pnl=-0.3138 gross=8.16 quoting=2/4
+2026-11-04 16:56:17,501 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:56:17,502 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:56:17,502 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.1938, "total_pnl": -0.1938, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.1938}
+2026-11-04 16:56:17,502 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:56:59,433 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (37ms)
+2026-11-04 16:56:59,469 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (36ms)
+2026-11-04 16:57:17,547 INFO cycle 1440 (301ms) net_pnl=-0.2830 gross=8.16 quoting=2/4
+2026-11-04 16:57:17,547 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:57:17,548 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:57:17,548 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.163, "total_pnl": -0.163, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.163}
+2026-11-04 16:57:17,548 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:58:18,160 INFO cycle 1470 (895ms) net_pnl=-0.2830 gross=8.16 quoting=2/4
+2026-11-04 16:58:18,160 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:58:18,160 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:58:18,160 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.163, "total_pnl": -0.163, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.163}
+2026-11-04 16:58:18,162 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:59:17,602 INFO cycle 1500 (310ms) net_pnl=-0.2830 gross=8.16 quoting=2/4
+2026-11-04 16:59:17,603 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:59:17,603 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 16:59:17,603 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.163, "total_pnl": -0.163, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.163}
+2026-11-04 16:59:17,603 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 16:59:31,493 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend bid 2.0@0.58 refresh_expiry (38ms)
+2026-11-04 16:59:31,530 INFO KXNFLTOTAL-26NOV08TBCHI-45 amend ask 2.0@0.59 refresh_expiry (36ms)
+2026-11-04 17:00:17,627 INFO cycle 1530 (309ms) net_pnl=-0.2830 gross=8.16 quoting=2/4
+2026-11-04 17:00:17,627 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:00:17,627 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 17:00:17,627 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.163, "total_pnl": -0.163, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.163}
+2026-11-04 17:00:17,627 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:00:21,518 INFO KXHIGHTOKC-26NOV05-T67 amend bid 2.0@0.30 refresh_expiry (39ms)
+2026-11-04 17:00:21,557 INFO KXHIGHTOKC-26NOV05-T67 amend ask 2.0@0.34 refresh_expiry (39ms)
+2026-11-04 17:01:17,648 INFO cycle 1560 (304ms) net_pnl=-0.4370 gross=8.16 quoting=2/4
+2026-11-04 17:01:17,648 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:01:17,649 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 17:01:17,649 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.317, "total_pnl": -0.317, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.317}
+2026-11-04 17:01:17,649 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:02:17,666 INFO cycle 1590 (294ms) net_pnl=-0.2830 gross=8.16 quoting=2/4
+2026-11-04 17:02:17,666 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:02:17,666 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 17:02:17,666 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.163, "total_pnl": -0.163, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.163}
+2026-11-04 17:02:17,667 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:02:43,060 WARNING auxiliary call failed: 503 GET /exchange/status:
+2026-11-04 17:02:49,456 WARNING KXNFLTOTAL-26NOV08TBCHI-45 create bid failed (http_503_service_unavailable): 503 POST /portfolio/events/orders: service_unavailable service_unavailable
+2026-11-04 17:02:49,494 WARNING KXNFLTOTAL-26NOV08TBCHI-45 create ask failed (http_503_service_unavailable): 503 POST /portfolio/events/orders: service_unavailable service_unavailable
+2026-11-04 17:02:51,449 WARNING KXNFLTOTAL-26NOV08TBCHI-45 create bid failed (http_503_service_unavailable): 503 POST /portfolio/events/orders: service_unavailable service_unavailable
+2026-11-04 17:02:51,486 WARNING KXNFLTOTAL-26NOV08TBCHI-45 create ask failed (http_503_service_unavailable): 503 POST /portfolio/events/orders: service_unavailable service_unavailable
+2026-11-04 17:02:53,587 WARNING KXNFLTOTAL-26NOV08TBCHI-45 create bid failed (http_503_service_unavailable): 503 POST /portfolio/events/orders: service_unavailable service_unavailable
+2026-11-04 17:02:53,622 WARNING KXNFLTOTAL-26NOV08TBCHI-45 create ask failed (http_503_service_unavailable): 503 POST /portfolio/events/orders: service_unavailable service_unavailable
+2026-11-04 17:02:55,436 INFO KXNFLTOTAL-26NOV08TBCHI-45 create bid 2@0.58  (34ms)
+2026-11-04 17:02:55,471 INFO KXNFLTOTAL-26NOV08TBCHI-45 create ask 2@0.59  (35ms)
+2026-11-04 17:03:17,740 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.27  (33ms)
+2026-11-04 17:03:17,775 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.37  (35ms)
+2026-11-04 17:03:23,570 INFO cycle 1620 (301ms) net_pnl=-0.4370 gross=8.16 quoting=2/4
+2026-11-04 17:03:23,570 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:03:23,570 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 17:03:23,571 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.317, "total_pnl": -0.317, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.317}
+2026-11-04 17:03:23,571 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:04:29,765 INFO cycle 1650 (147ms) net_pnl=-0.4370 gross=8.16 quoting=2/4
+2026-11-04 17:04:29,765 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:04:29,765 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.12, "total_pnl": -0.12, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.12}
+2026-11-04 17:04:29,766 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.317, "total_pnl": -0.317, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.317}
+2026-11-04 17:04:29,766 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:04:41,825 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.27 reprice_toward (38ms)
+2026-11-04 17:04:41,863 INFO KXHIGHTOKC-26NOV05-T67 create bid 2@0.29  (38ms)
+2026-11-04 17:04:41,899 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.37 reprice_toward (35ms)
+2026-11-04 17:04:41,934 INFO KXHIGHTOKC-26NOV05-T67 create ask 2@0.35  (35ms)
+2026-11-04 17:05:25,974 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create bid 2@0.92  (36ms)
+2026-11-04 17:05:26,010 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 create ask 2@0.97  (36ms)
+2026-11-04 17:05:29,798 INFO cycle 1680 (154ms) net_pnl=-0.1490 gross=8.16 quoting=3/4
+2026-11-04 17:05:29,798 INFO   PERF KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:05:29,798 INFO   PERF KXHIGHTOKC-26NOV05-T67: {"position": -2.0, "avg_entry": 0.25, "realized_pnl": 0.0, "unrealized_pnl": -0.14, "total_pnl": -0.14, "fills": 1, "avg_markout_10s": -0.04, "avg_markout_60s": -0.04, "avg_markout_300s": -0.06, "fees": 0.0, "net_pnl": -0.14}
+2026-11-04 17:05:29,798 INFO   PERF KXNCAAFTOTAL-26NOV04TOLSAC-35: {"position": -6.16, "avg_entry": 0.9285, "realized_pnl": 0.0, "unrealized_pnl": -0.009, "total_pnl": -0.009, "fills": 4, "avg_markout_10s": 0.015, "avg_markout_60s": 0.0087, "avg_markout_300s": -0.02, "fees": 0.0, "net_pnl": -0.009}
+2026-11-04 17:05:29,799 INFO   PERF KXNFLTOTAL-26NOV08TBCHI-45: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:05:39,648 INFO shutting down (duration_reached): cancelling resting orders
+2026-11-04 17:05:39,725 INFO KXHIGHTOKC-26NOV05-T67 cancel ask 2.0@0.35 shutdown (36ms)
+2026-11-04 17:05:39,762 INFO KXHIGHTOKC-26NOV05-T67 cancel bid 2.0@0.29 shutdown (36ms)
+2026-11-04 17:05:39,801 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel ask 2.0@0.97 shutdown (38ms)
+2026-11-04 17:05:39,837 INFO KXNCAAFTOTAL-26NOV04TOLSAC-35 cancel bid 2.0@0.92 shutdown (36ms)
+2026-11-04 17:05:39,873 INFO KXNFLTOTAL-26NOV08TBCHI-45 cancel ask 2.0@0.59 shutdown (36ms)
+2026-11-04 17:05:39,905 INFO KXNFLTOTAL-26NOV08TBCHI-45 cancel bid 2.0@0.58 shutdown (31ms)
+2026-11-04 17:05:42,100 INFO FINAL {"realized_pnl": 0.0, "unrealized_pnl": -0.149, "fees": 0.0, "net_pnl": -0.149, "fills": 5} reason=duration_reached

@@ -16,10 +16,11 @@ selection:
   liquid_count: 2
   illiquid_count: 0
   tickers: {liquid: [], illiquid: []}
-  # the series pmm_calibration.json covers, none of which charged maker fees when
-  # recorded. Check the fee_type column `select` prints.
-  series_tickers: [KXHIGHNY, KXHIGHCHI, KXHIGHMIA, KXHIGHLAX, KXHIGHDEN, KXHIGHPHIL, KXHIGHAUS]
-  min_hours_to_close: 9        # past the 8h stand-down the calibration uses
+  # NY did best in both the tape study and the replay. pmm_calibration.json also covers
+  # KXHIGHCHI, MIA, LAX, DEN, PHIL and AUS. None charged maker fees when recorded: check
+  # the fee_type column `select` prints.
+  series_tickers: [KXHIGHNY]
+  min_hours_to_close: 17       # past the 16h stand-down the calibration uses
   max_hours_to_close: 48
   exclude_multivariate: true
   one_per_event: true          # strikes of one event move together
@@ -36,9 +37,10 @@ strategy:
   model: pmm
   base_order_size: 1
   max_position: 5
-  # Same-day weather prints were heavily adverse inside 8h of close in the recorded
-  # tape, and the model assumes fills carry no information, so it cannot see that.
-  min_time_to_resolution_h: 8
+  # In replay, fills 8-16h before close lost $375 of the $403 lost: the day's high is
+  # being observed then, and the model assumes fills carry no information, so it cannot
+  # see that. pmm_calibration.json sets this same floor for the series it covers.
+  min_time_to_resolution_h: 16
   min_quote_mid: 0.10
   max_quote_mid: 0.90
   pmm:

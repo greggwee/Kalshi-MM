@@ -1,0 +1,18 @@
+134 recorded markets in ['KXHIGHNY', 'KXHIGHCHI', 'KXHIGHMIA', 'KXHIGHLAX', 'KXHIGHDEN', 'KXHIGHPHIL', 'KXHIGHAUS']; looking up outcomes
+133 markets with outcomes, 798 replays
+replayed in 1479s
+
+strategy      fills  mkts     net $    fees $ per fill worst mkt  mo60 c  solves
+-- fill model: queue
+avellaneda      372    78    -34.34    0.00     -0.092     -4.94   -1.04       0
+pmm           19368   105   -411.59    0.00     -0.021    -31.32   -1.09    1852
+pmm_myopic    19638   105   -429.93    0.00     -0.022    -32.09   -1.12    1852
+-- fill model: strict
+avellaneda      238    65    -29.88    0.00     -0.126     -4.94   -0.82       0
+pmm           14964   103   -454.46    0.00     -0.030    -33.02   -1.46    1852
+pmm_myopic    15165   103   -472.30    0.00     -0.031    -34.02   -1.49    1852
+
+A replay sits on a tape our quotes did not influence, and a few recorded days are little evidence.
+Read the sizes and risk, not the sign of the P&L.
+
+[exited with code 0]

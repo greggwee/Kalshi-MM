@@ -1,0 +1,40 @@
+== runs\20261105-000744_demo {'cycle': 1780, 'fill': 6, 'order': 212, 'trade': 205, 'pmm_solve': 12, 'position_mismatch': 0, 'risk': 2, 'cycle_error': 1, 'api_error': 41}
+  end duration_reached duration 3602.9 left 0 verified True total {'realized_pnl': -0.24, 'unrealized_pnl': 0.01, 'fees': 0.0, 'net_pnl': -0.23, 'fills': 6}
+  errors Counter({'insufficient_shard_balance': 24, 'service_unavailable': 16, None: 1})
+  writes Counter({('amend', True): 135, ('create', False): 40, ('create', True): 25, ('cancel', True): 12})
+  cycle ms p50 159 p99 1178 max 8503; solve ms max 2091
+  KXNBAGAME-26NOV04MILBOS-MIL            quoting 100% crossed 0 touch b/a 100/100% spread  1.1c vs mkt  1.2c prints  80 fills  5 maxq  4.00 corr(skew,q) -0.973 net -0.24 
+  KXNBAGAME-26NOV04PHIDET-PHI            quoting 100% crossed 0 touch b/a 100/ 77% spread  1.2c vs mkt  1.0c prints  71 fills  1 maxq  2.00 corr(skew,q) -1.0 net 0.01 
+  KXNFLTOTAL-26NOV09BUFMIN-48            quoting 100% crossed 0 touch b/a 100/100% spread  1.0c vs mkt  1.0c prints   0 fills  0 maxq  0.00 corr(skew,q) None net 0.0 
+  KXNFLTOTAL-26NOV09BUFMIN-53            quoting 100% crossed 0 touch b/a 100/100% spread  1.0c vs mkt  3.0c prints   0 fills  0 maxq  0.00 corr(skew,q) None net 0.0 
+  KXRAINSHARD2-26NOV05-CMH               quoting   0% crossed 0 touch b/a 100/100% spread  2.0c vs mkt  4.0c prints  30 fills  0 maxq  0.00 corr(skew,q) None net 0.0 {'halted:reject_rate': 1774}
+  KXRAINSHARD2-26NOV05-TPA               quoting   0% crossed 0 touch b/a 100/100% spread  2.0c vs mkt  4.0c prints  24 fills  0 maxq  0.00 corr(skew,q) None net 0.0 {'halted:reject_rate': 1774}
+  markout 10s: n 6 mean -3.17c
+  markout 60s: n 6 mean -3.08c
+  markout 300s: n 2 mean +0.50c
+   fill KXNBAGAME-26NOV04MILBOS-MIL bid 2.0 @ 0.17 mid 0.175 res 0.17505 q 0.0 -> 2.0 fee 0.0
+   fill KXNBAGAME-26NOV04PHIDET-PHI ask 2.0 @ 0.46 mid 0.455 res 0.455 q 0.0 -> -2.0 fee 0.0
+   fill KXNBAGAME-26NOV04MILBOS-MIL bid 2.0 @ 0.17 mid 0.175 res 0.1734 q 2.0 -> 4.0 fee 0.0
+   fill KXNBAGAME-26NOV04MILBOS-MIL ask 0.34 @ 0.11 mid 0.095 res 0.09259 q 4.0 -> 3.66 fee 0.0
+   fill KXNBAGAME-26NOV04MILBOS-MIL ask 1.66 @ 0.11 mid 0.095 res 0.0928 q 3.66 -> 2.0 fee 0.0
+   fill KXNBAGAME-26NOV04MILBOS-MIL ask 2.0 @ 0.11 mid 0.095 res 0.09383 q 2.0 -> 0.0 fee 0.0
+== runs\20261105-000857_demo {'cycle': 1684, 'fill': 5, 'order': 225, 'trade': 14, 'pmm_solve': 14, 'position_mismatch': 0, 'risk': 0, 'cycle_error': 1, 'api_error': 7}
+  end duration_reached duration 3403.9 left 0 verified True total {'realized_pnl': 0.0, 'unrealized_pnl': -0.149, 'fees': 0.0, 'net_pnl': -0.149, 'fills': 5}
+  errors Counter({'service_unavailable': 6, None: 1})
+  writes Counter({('amend', True): 78, ('create', True): 73, ('cancel', True): 68, ('create', False): 6})
+  cycle ms p50 157 p99 1021 max 9275; solve ms max 1316
+  KXATPCHALLENGERMATCH-26NOV04RATZAR-RAT quoting   0% crossed 0 touch b/a   0/  0% spread  0.0c vs mkt  0.0c prints   0 fills  0 maxq  0.00 corr(skew,q) None net 0.0 {'no_two_sided_book': 1538, 'market_status:determined': 30, 'market_status:finalized': 116}
+  KXHIGHTOKC-26NOV05-T67                 quoting  99% crossed 0 touch b/a  98/ 21% spread  4.5c vs mkt  6.2c prints   2 fills  1 maxq  2.00 corr(skew,q) -0.683 net -0.14 {'no_two_sided_book': 14}
+  KXNCAAFTOTAL-26NOV04TOLSAC-35          quoting  27% crossed 0 touch b/a 100/ 41% spread  3.8c vs mkt  5.1c prints  12 fills  4 maxq  6.16 corr(skew,q) -0.921 net -0.009 {'no_two_sided_book': 287, 'mid_out_of_band': 942}
+  KXNFLTOTAL-26NOV08TBCHI-45             quoting 100% crossed 0 touch b/a 100/100% spread  1.0c vs mkt  3.0c prints   0 fills  0 maxq  0.00 corr(skew,q) None net 0.0 
+  markout 10s: n 5 mean +0.40c
+  markout 60s: n 5 mean -0.10c
+  markout 300s: n 5 mean -2.80c
+   fill KXNCAAFTOTAL-26NOV04TOLSAC-35 ask 1.7 @ 0.89 mid 0.875 res 0.87535 q 0.0 -> -1.7 fee 0.0
+   fill KXNCAAFTOTAL-26NOV04TOLSAC-35 ask 0.5 @ 0.89 mid 0.875 res 0.8785 q -1.7 -> -2.2 fee 0.0
+   fill KXNCAAFTOTAL-26NOV04TOLSAC-35 ask 1.99 @ 0.94 mid 0.925 res 0.933 q -2.2 -> -4.19 fee 0.0
+   fill KXHIGHTOKC-26NOV05-T67 ask 2.0 @ 0.25 mid 0.23 res 0.23 q 0.0 -> -2.0 fee 0.0
+   fill KXNCAAFTOTAL-26NOV04TOLSAC-35 ask 1.97 @ 0.96 mid 0.945 res 0.95559 q -4.19 -> -6.16 fee 0.0
+
+resting on the demo account now: 0
+balance {'balance': 2449.9495, 'portfolio_value': 3.28}

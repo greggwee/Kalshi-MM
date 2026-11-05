@@ -1,0 +1,80 @@
+environment: demo
+duration_s: 3600
+selection:
+  liquid_count: 3
+  illiquid_count: 3
+  tickers:
+    liquid:
+    - KXNBAGAME-26NOV04PHIDET-PHI
+    - KXNBAGAME-26NOV04MILBOS-MIL
+    - KXNFLTOTAL-26NOV09BUFMIN-48
+    illiquid:
+    - KXRAINSHARD2-26NOV05-CMH
+    - KXRAINSHARD2-26NOV05-TPA
+    - KXNFLTOTAL-26NOV09BUFMIN-53
+  series_tickers: []
+  min_hours_to_close: 6
+  max_hours_to_close: 336
+  exclude_multivariate: true
+  one_per_event: true
+  min_mid: 0.1
+  max_mid: 0.9
+  liquid_max_spread: 0.05
+  illiquid_min_spread: 0.04
+  illiquid_max_volume_24h: 50
+  illiquid_max_spread: 0.25
+  book_check_top_n: 40
+  depth_band: 0.05
+strategy:
+  model: pmm
+  base_order_size: 2
+  max_position: 10
+  min_time_to_resolution_h: 1
+  min_quote_mid: 0.05
+  max_quote_mid: 0.95
+  pmm:
+    gamma: 0.2
+    gamma_T: 0.05
+    min_offset: 0.005
+    queue_aware: true
+    calibration_file: C:/Users/grego/AppData/Local/Temp/claude/840c593829146935/8552379b-feeb-4475-830b-aaa408586bd7/scratchpad/wt/pmm_calibration.json
+    T: 48.0
+    sigma0: 0.15
+    A0: 2.0
+    k0: 80.0
+    k1: 80.0
+    flow_window_h: 2.0
+    vol_sample_s: 120
+    resolve_every_s: 3600
+    resolve_min_s: 300
+    resolve_change: 0.3
+strategy_overrides:
+  liquid: {}
+  illiquid: {}
+execution:
+  order_expiration_s: 300
+  expiry_refresh_frac: 0.33
+  replenish_threshold: 0.5
+  cross_policy: clamp
+  aggressive_reprice: replace
+  cancel_order_on_pause: true
+  post_only: true
+  flatten_on_exit: false
+risk:
+  max_session_loss: 25.0
+  max_market_loss: 10.0
+  max_gross_position: 40
+  max_consecutive_errors: 8
+  min_balance: 0.0
+  max_rejects_per_min: 12
+session:
+  cycle_s: 2.0
+  meta_refresh_s: 30
+  balance_refresh_s: 60
+  trades_poll_s: 10
+  api_stats_every_s: 60
+  summary_every_cycles: 30
+  markout_horizons:
+  - 10
+  - 60
+  - 300

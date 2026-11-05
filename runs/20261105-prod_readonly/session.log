@@ -1,0 +1,20 @@
+2026-11-04 17:10:27,287 INFO scanned 6 open markets, 2 quotable (rejected: {'mid_out_of_band': 4})
+2026-11-04 17:10:27,671 INFO KXHIGHNY-26NOV05-T70 [liquid] status=active close_in=28.8h q0=0 preexisting_orders=0
+2026-11-04 17:10:28,041 INFO KXHIGHNY-26NOV05-T70 create bid 1@0.48  (0ms)
+2026-11-04 17:10:28,042 INFO KXHIGHNY-26NOV05-T70 create ask 1@0.49  (0ms)
+2026-11-04 17:11:25,763 INFO cycle 30 (65ms) net_pnl=+0.0000 gross=0 quoting=1/1
+2026-11-04 17:11:25,763 INFO   PERF KXHIGHNY-26NOV05-T70: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:11:49,787 INFO KXHIGHNY-26NOV05-T70 amend bid 1@0.48 refresh_expiry (0ms)
+2026-11-04 17:11:49,789 INFO KXHIGHNY-26NOV05-T70 amend ask 1@0.49 refresh_expiry (0ms)
+2026-11-04 17:12:25,808 INFO cycle 60 (70ms) net_pnl=+0.0000 gross=0 quoting=1/1
+2026-11-04 17:12:25,808 INFO   PERF KXHIGHNY-26NOV05-T70: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:13:09,824 INFO KXHIGHNY-26NOV05-T70 amend bid 1.0@0.48 refresh_expiry (0ms)
+2026-11-04 17:13:09,824 INFO KXHIGHNY-26NOV05-T70 amend ask 1.0@0.49 refresh_expiry (0ms)
+2026-11-04 17:13:25,830 INFO cycle 90 (67ms) net_pnl=+0.0000 gross=0 quoting=1/1
+2026-11-04 17:13:25,830 INFO   PERF KXHIGHNY-26NOV05-T70: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:14:25,857 INFO cycle 120 (67ms) net_pnl=+0.0000 gross=0 quoting=1/1
+2026-11-04 17:14:25,857 INFO   PERF KXHIGHNY-26NOV05-T70: {"position": 0.0, "avg_entry": 0.0, "realized_pnl": 0.0, "unrealized_pnl": 0.0, "total_pnl": 0.0, "fills": 0, "avg_markout_10s": null, "avg_markout_60s": null, "avg_markout_300s": null, "fees": 0.0, "net_pnl": 0.0}
+2026-11-04 17:14:27,791 INFO shutting down (duration_reached): cancelling resting orders
+2026-11-04 17:14:27,791 INFO KXHIGHNY-26NOV05-T70 cancel bid 1.0@0.48 shutdown (0ms)
+2026-11-04 17:14:27,791 INFO KXHIGHNY-26NOV05-T70 cancel ask 1.0@0.49 shutdown (0ms)
+2026-11-04 17:14:29,857 INFO FINAL {"realized_pnl": 0.0, "unrealized_pnl": 0.0, "fees": 0.0, "net_pnl": 0.0, "fills": 0} reason=duration_reached
