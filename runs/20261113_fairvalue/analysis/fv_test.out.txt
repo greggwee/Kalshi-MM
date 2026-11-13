@@ -1,0 +1,105 @@
+17,628 settled markets, 2,938 station-days, 876,100 orders at 0.03-0.97
+
+1. WHICH FAIR VALUE FINDS THE ORDERS THAT EARN? taker P&L after the fee on the orders
+   each model liked by 2c or more, by assumed report delay (hourly / 5-minute)
+        delay model      orders dates   taker net (c/contract)   station weight c by block of the climate day
+      0/0     station   145,183   121   +2.40 [ +0.77, +4.00]
+      0/0     price      31,698   107   +3.73 [ +2.31, +5.15]
+      0/0     blend      55,072   121   +6.29 [ +4.70, +7.90]   +0.07 +0.20 +0.00 -0.01 +0.08
+     60/300   station   140,342   121   +1.52 [ -0.25, +3.25]
+     60/300   price      32,620   107   +3.70 [ +2.28, +5.10]
+     60/300   blend      47,655   121   +5.18 [ +3.59, +6.76]   +0.04 +0.12 -0.02 -0.02 +0.05
+    180/900   station   136,470   121   +0.78 [ -1.13, +2.61]
+    180/900   price      34,670   107   +3.95 [ +2.50, +5.35]
+    180/900   blend      42,494   121   +3.89 [ +2.28, +5.49]   -0.00 +0.06 -0.06 -0.03 +0.02
+    600/1800  station   132,300   121   +0.12 [ -1.80, +2.07]
+    600/1800  price      35,300   107   +4.04 [ +2.62, +5.44]
+    600/1800  blend      43,857   121   +3.25 [ +1.56, +4.86]   -0.04 +0.03 -0.06 -0.03 +0.01
+   blocks: hour 00-04, hour 04-08, hour 08-12, hour 12-18, hour 18-24
+
+Everything below uses the 180s / 900s delay: 372,011 orders on 121 event dates from 2026-07-14
+
+2. DATA CHECK. settled low minus the lowest report of the day, 2,938 station-days: median +0.00F, within 1F 97.7%, settled lower by more than 1F 1.8%, higher by more than 1F 0.5%
+
+3. IS THE STATION MODEL CALIBRATED where nobody chose the moment? Every 10 minutes of every
+   station-day, out of sample: P(the low ends at least 1F below the running low), predicted vs realised
+   predicted        hour 00-04      hour 04-08      hour 08-12      hour 12-18      hour 18-24
+   0.00-0.02                 -               -               -               -    0.03 n=8987 
+   0.02-0.10                 -    0.09 n=1058     0.10 n=6847     0.09 n=23838    0.05 n=44620
+   0.10-0.30                 -    0.21 n=19150    0.21 n=39100    0.19 n=50423    0.21 n=20139
+   0.30-0.50      0.42 n=929      0.40 n=18941    0.36 n=7922     0.36 n=6857     0.44 n=3739 
+   0.50-0.70      0.62 n=5382     0.60 n=9194     0.49 n=426      0.47 n=350      0.63 n=3048 
+   0.70-0.90      0.83 n=25693    0.78 n=5950                -               -    0.75 n=933  
+   0.90-0.98      0.94 n=16792               -               -               -               -
+   0.98-1.00                 -               -               -               -               -
+
+4a. STATION MODEL ALONE: taker P&L to settlement by the edge the model saw
+   model edge after fee      orders dates   taker net (c/contract)  $ per date, 10 lots
+   below -5c                166,482   121   +0.38 [ -0.83, +1.61]                31.31
+   -5c to -2c                28,651   121   +1.18 [ +0.43, +1.97]                16.69
+   -2c to +0c                20,443   121   +0.66 [ -0.06, +1.32]                 6.51
+   +0c to +1c                 9,861   121   +0.55 [ -0.31, +1.43]                 2.64
+   +1c to +2c                10,104   121   +1.08 [ +0.14, +1.91]                 5.23
+   +2c to +3c                10,458   121   +0.46 [ -1.40, +1.88]                 2.28
+   +3c to +5c                16,368   121   +1.14 [ -0.13, +2.33]                 8.75
+   +5c to +10c               29,394   121   +1.05 [ -0.29, +2.23]                14.56
+   above +10c                80,250   121   +0.65 [ -2.03, +3.34]                25.14
+
+4b. RECALIBRATED PRICE (no station data): same table
+   model edge after fee      orders dates   taker net (c/contract)  $ per date, 10 lots
+   below -5c                 13,545   113   -1.69 [ -4.58, +1.16]                -9.77
+   -5c to -2c                77,589   121   -0.47 [ -2.01, +0.89]               -17.78
+   -2c to +0c               152,178   121   +0.15 [ -0.39, +0.65]                11.06
+   +0c to +1c                63,341   121   +0.08 [ -0.81, +0.95]                 2.48
+   +1c to +2c                30,688   121   +3.70 [ +2.29, +5.08]                58.15
+   +2c to +3c                21,136   107   +4.38 [ +2.94, +5.72]                47.49
+   +3c to +5c                13,168   100   +3.11 [ +0.85, +5.39]                20.04
+   +5c to +10c                  366    33   +8.66 [ -3.65,+21.35]                 1.44
+
+5. THE ORDERS THE RECALIBRATED PRICE LIKED by 2c or more: who are they?
+   slice                           orders dates   taker net (c/contract)
+   all                             34,670   107   +3.95 [ +2.50, +5.35]
+   taker buys YES                  28,484   107   +4.45 [ +2.70, +6.07]
+   taker sells YES                  6,186   100   +1.46 [ -2.36, +5.58]
+   taker on the favourite          28,497   107   +4.43 [ +2.67, +6.07]
+   taker on the longshot            6,112   100   +1.64 [ -2.15, +5.80]
+   inside :52-:57                   3,869   107   +5.67 [ +3.33, +7.91]
+   outside :52-:57                 30,801   107   +3.73 [ +2.25, +5.17]
+   climate-day hour 00-04           8,033   107   +3.08 [ +0.18, +5.95]
+   climate-day hour 04-08          20,451   105   +4.91 [ +3.06, +6.74]
+   climate-day hour 08-12           3,910   100   +2.14 [ -2.04, +6.71]
+   climate-day hour 12-18           2,276    58   +0.36 [ -4.92, +6.10]
+   level-clearing orders            8,591   107   +3.11 [ +1.55, +4.68]
+   single-level orders             26,079   107   +4.42 [ +2.78, +6.02]
+   KXLOWTATL                        2,191   105   +2.27 [ -4.91, +8.43]
+   KXLOWTAUS                        2,682   105   -0.91 [ -8.60, +5.69]
+   KXLOWTBOS                        1,281    95   -0.25 [ -7.48, +6.55]
+   KXLOWTCHI                        2,187   102   +6.01 [ +0.77,+10.44]
+   KXLOWTDAL                        2,758   107   +6.17 [ +0.25,+11.22]
+   KXLOWTDC                         1,796   100   +7.12 [ +1.46,+12.22]
+   KXLOWTDEN                        2,361   106   -1.98 [ -7.58, +3.41]
+   KXLOWTHOU                        2,040   105   +9.02 [ +4.35,+13.32]
+   KXLOWTLAX                        2,849   106   +3.67 [ -2.38, +9.22]
+   KXLOWTMIA                        2,556   102   +0.55 [ -5.19, +5.70]
+   KXLOWTMIN                        1,994   102   +5.97 [ +0.22,+10.92]
+   KXLOWTNYC                        2,772   102   +6.10 [ +1.54,+10.38]
+   KXLOWTPHIL                       1,727    97   +2.91 [ -3.39, +8.37]
+   KXLOWTPHX                        3,015   103   +2.67 [ -3.38, +8.31]
+   KXLOWTSEA                        2,461   106   +9.03 [ +2.68,+14.05]
+   2026-07                            936     4  +10.20 [ +5.65,+15.97]
+   2026-08                         13,476    31   +6.93 [ +4.85, +9.01]
+   2026-09                          9,289    30   +2.01 [ -0.97, +5.01]
+   2026-10                          8,587    31   +2.09 [ -0.14, +4.44]
+   2026-11                          2,382    11   -4.69 [ -7.78, -1.47]
+
+6. IS IT A STANDING MISPRICING OR THE TAKER'S INFORMATION? If favourites were simply
+   underpriced, the resting order that BOUGHT the favourite would earn at least as much
+   who holds the favourite      price band      orders dates      P&L before fees (c)
+   taker took the favourite     0.03-0.20       65,618   121   +0.13 [ -0.85, +1.04]
+   maker ended with the favourite 0.03-0.20       56,109   121   -0.16 [ -1.28, +0.91]
+   taker took the favourite     0.20-0.40       30,690   121   +2.60 [ +0.77, +4.39]
+   maker ended with the favourite 0.20-0.40       36,081   121   -2.63 [ -4.19, -1.04]
+   taker took the favourite     0.60-0.80       35,899   121   +2.01 [ -0.29, +4.21]
+   maker ended with the favourite 0.60-0.80       13,802   121   -6.42 [ -9.93, -3.00]
+   taker took the favourite     0.80-0.97       52,065   121   +0.59 [ -0.83, +1.97]
+   maker ended with the favourite 0.80-0.97       21,273   121   -1.33 [ -3.49, +0.77]
