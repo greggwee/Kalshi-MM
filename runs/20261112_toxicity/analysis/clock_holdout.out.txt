@@ -1,0 +1,13 @@
+series: KXLOWTATL, KXLOWTBOS, KXLOWTHOU, KXLOWTMIN, KXLOWTPHX, KXLOWTSEA
+201,164 orders, 196 event dates; 6,527 inside the window
+H1 maker settle inside -7.34, outside -4.98, diff -2.35 [-4.26,-0.51]  PASS
+H2 taker net of fee, inside the window: +4.01 [+2.07,+5.87] n=6,527 dates=196  PASS
+H3 taker net of fee, rest of outcome window: +2.50 [+1.48,+3.44] n=67,707 dates=196  PASS
+H4 maker settle, whole day, skipping the window: -2.38 [-2.95,-1.82] dates=196  PASS
+per series (not part of the test):
+  KXLOWTATL   maker inside-outside  -5.11 [ -8.57, -1.56]   taker net inside  +7.18 [ +3.86,+10.24] n=1,331
+  KXLOWTBOS   maker inside-outside  -4.21 [-10.19, +1.99]   taker net inside  +5.05 [ -2.08,+11.55] n=581
+  KXLOWTHOU   maker inside-outside  -3.59 [ -7.45, +0.18]   taker net inside  +5.72 [ +1.95, +9.91] n=919
+  KXLOWTMIN   maker inside-outside  -2.42 [ -6.44, +1.49]   taker net inside  +4.13 [ +0.16, +7.80] n=1,196
+  KXLOWTPHX   maker inside-outside  +0.02 [ -4.48, +4.17]   taker net inside  +1.73 [ -2.83, +6.57] n=1,413
+  KXLOWTSEA   maker inside-outside  +0.15 [ -4.82, +5.33]   taker net inside  +1.00 [ -3.71, +5.08] n=1,087

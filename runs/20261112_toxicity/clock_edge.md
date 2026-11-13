@@ -21,6 +21,10 @@ recorded books. Outputs: `analysis/clock_edge.out.txt`,
 - **So the project worth building is an observation-driven fair value**, used
   to requote or take when a reading settles a strike. The clock rule is the
   fallback for when that signal is absent.
+- **The lows result held on six series never examined** (all four
+  pre-registered hypotheses passed; see the holdout section).
+- **Central Park is the exception**, and the station schedules explain why
+  (section 5): it reports once an hour, the airports every five minutes.
 
 Cents per contract for a maker at the touch unless stated, weight
 `min(size, 10)`, fill price 0.10-0.90, 95% intervals from resampling event
@@ -166,5 +170,71 @@ window, outcome window, price band and weighting all fixed as above:
   the whole day.
 
 Each passes only if its date-bootstrap interval excludes zero in the stated
-direction, all six series pooled. Results are appended below when the
-download finishes.
+direction, all six series pooled.
+
+### Result: all four pass
+
+201,164 orders, 196 event dates, 6,527 orders inside the window
+(`analysis/clock_holdout.out.txt`):
+
+| | hypothesis | result | |
+|---|---|---|---|
+| H1 | maker settlement, inside minus outside, is negative | -2.35 [-4.26,-0.51] (inside -7.34, outside -4.98) | pass |
+| H2 | takers inside the window earn after the fee | +4.01 [+2.07,+5.87] | pass |
+| H3 | takers in the rest of the outcome window earn after the fee | +2.50 [+1.48,+3.44] | pass |
+| H4 | a touch maker skipping the window still loses over the whole day | -2.38 [-2.95,-1.82] | pass |
+
+- The taker edge in the lows is not an artefact of looking: on unseen series
+  it is +4.0c inside the window and +2.5c in the rest of the outcome window,
+  after the fee.
+- Passive touch making in airport-station lows loses about 2.4c per fill at
+  settlement even with the clock rule. That is settled too.
+- Per series (not part of the test) the taker edge inside the window is
+  positive in all six and significant alone in Atlanta, Houston and
+  Minneapolis.
+
+## 5. Why New York is different: the stations' reporting schedules
+
+Exploratory, found after the tests above (`analysis/clock_stations.out.txt`).
+From the public NWS station feeds, over the last week:
+
+- **Central Park (KNYC)** reported at :51 in 124 of 171 observations, and
+  almost never in between.
+- **Every airport station checked** (Midway, Miami, LAX, Austin, Denver,
+  Philadelphia, Seattle, Newark, Boston) reports hourly at :51-:54 and also
+  every five minutes.
+
+So at Central Park the temperature is public once an hour; at the airports it
+is public continuously. That predicts the Central Park markets are uninformed
+for most of the hour, and that the clock rule should work best there.
+
+Maker settlement P&L over the whole day with the clock rule applied:
+
+| market | every order | level-clearing orders only | 30 min, every order |
+|---|---|---|---|
+| KXHIGHNY (Central Park) | +0.60 [+0.01,+1.18] | -0.17 [-0.77,+0.42] | +0.23 [+0.11,+0.34] |
+| KXLOWTNYC (Central Park) | +0.41 [-0.49,+1.21] | +0.25 [-0.71,+1.20] | **+1.16 [+0.62,+1.66]** |
+| 17 airport series | -6.4 to +0.15 | -11.0 to -0.4 | mostly negative |
+
+- The two Central Park markets are the only ones where the maker is not
+  negative at settlement, and KXLOWTNYC is not negative even for
+  level-clearing fills.
+- No five-minute rhythm shows up in the airport markets: their five-minute
+  markout is flat at about zero through each five-minute block. Their
+  information arrives smoothly, so there is no window to avoid.
+- This comparison was made after seeing the schedules, on two markets. Treat
+  it as a hypothesis: **markets settled at stations that report only hourly
+  are where a clock-aware maker can work.** It is testable on other series by
+  looking up each station's schedule first and predicting before measuring.
+
+## Where this leaves the edge question
+
+| what | where | evidence | size |
+|---|---|---|---|
+| Take on the observation | airport-station lows | holdout passed | +4.0c per contract after fee in the window, +2.5c in the rest of the outcome window, for takers who know the direction |
+| Make with the clock rule | Central Park markets | in-sample, two markets | +0.2 to +1.2c at 30 min; settlement positive but intervals touch zero |
+| Make passively | everything else | holdout passed (lows), 200 dates (highs) | negative |
+
+The taker numbers are what informed takers earned. Earning them requires the
+station reading and a view of what it does to each strike; that is the next
+thing to build, and KXLOWTNYC with the clock rule is the place to test making.
