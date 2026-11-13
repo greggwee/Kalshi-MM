@@ -257,7 +257,8 @@ class TestMarketRefresh(RecorderTestCase):
         self.ex.add_market("S-D1-A")
         self.ex.add_market("S-D2-A")
         listing = {"now": ["S-D1-A"]}
-        p = self.poller(["S-D1-A"], refresh=lambda: listing["now"], refresh_interval=600.0)
+        p = self.poller(["S-D1-A"], refresh=lambda session: listing["now"],
+                        refresh_interval=600.0)
         p.run_cycle()
         self.assertEqual(p.tickers, ["S-D1-A"])
 
@@ -274,10 +275,25 @@ class TestMarketRefresh(RecorderTestCase):
                   if path.endswith("/orderbook")}
         self.assertEqual(polled, {"S-D2-A"})                          # and recorded
 
+    def test_refresh_goes_through_the_paced_session(self):
+        """The series re-expansion used its own unpaced session and was
+        answered 429 while a backfill shared the request budget."""
+        from src.recorder import expand_markets
+        self.ex.add_market("S-D1-A")
+        cfg = {"markets": {"series_tickers": ["S"], "max_markets": 10}}
+        p = self.poller(["S-D1-A"], refresh_interval=1.0,
+                        refresh=lambda session: expand_markets(cfg, "prod", self.logger,
+                                                               quiet=True, session=session))
+        self.ex.calls.clear()
+        self.clock.t += 2
+        p.run_cycle()
+        listed = [prm for path, prm in self.ex.calls if prm.get("series_ticker") == "S"]
+        self.assertEqual(len(listed), 1)          # the fake session saw the listing call
+
     def test_refresh_not_called_before_interval(self):
         self.ex.add_market("S-D1-A")
         calls = []
-        p = self.poller(["S-D1-A"], refresh=lambda: calls.append(1) or ["S-D1-A"],
+        p = self.poller(["S-D1-A"], refresh=lambda session: calls.append(1) or ["S-D1-A"],
                         refresh_interval=600.0)
         p.run_cycle()
         self.clock.t += 599
@@ -287,13 +303,13 @@ class TestMarketRefresh(RecorderTestCase):
     def test_failed_or_empty_refresh_keeps_the_current_list(self):
         self.ex.add_market("S-D1-A")
 
-        def broken():
+        def broken(session):
             raise requests.ConnectionError("dns")
         p = self.poller(["S-D1-A"], refresh=broken, refresh_interval=1.0)
         self.clock.t += 2
         p.run_cycle()
         self.assertEqual(p.tickers, ["S-D1-A"])
-        p.refresh = lambda: []
+        p.refresh = lambda session: []
         self.clock.t += 2
         p.run_cycle()
         self.assertEqual(p.tickers, ["S-D1-A"])

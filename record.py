@@ -54,7 +54,8 @@ def main():
             poller = RestPoller(
                 environment, tickers, db, logger,
                 poll_interval=float(config.get("poll_interval", 2.0)),
-                refresh=lambda: expand_markets(config, environment, logger, quiet=True),
+                refresh=lambda session: expand_markets(config, environment, logger,
+                                                       quiet=True, session=session),
                 refresh_interval=float(config.get("refresh_interval", 600.0)),
                 full_sweep_interval=float(config.get("full_sweep_interval", 120.0)),
                 quote_poll=bool(config.get("quote_poll", True)),

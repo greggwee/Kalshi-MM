@@ -77,12 +77,12 @@ def _trade_fields(t: dict) -> dict:
 # --------------------------------------------------------------------------
 
 def expand_markets(config: dict, environment: str, logger: logging.Logger,
-                   quiet: bool = False) -> List[str]:
+                   quiet: bool = False, session=None) -> List[str]:
     base = PUBLIC_REST_BASE[environment]
     mcfg = config.get("markets", {})
     tickers = list(mcfg.get("tickers") or [])
     max_markets = int(mcfg.get("max_markets", 50))
-    session = requests.Session()
+    session = session or requests.Session()
 
     for series in mcfg.get("series_tickers") or []:
         cursor = None
@@ -291,8 +291,8 @@ class RestPoller:
          every market is fully swept once per `full_sweep_interval` (catches
          depth changes behind the touch and anything the listing missed).
 
-    `refresh` (optional callable returning the current ticker list) is called
-    every `refresh_interval` seconds, so daily markets that open after startup
+    `refresh` (optional callable taking the paced session and returning the
+    current ticker list) is called every `refresh_interval` seconds, so daily markets that open after startup
     get recorded and closed ones are retired after one last tape poll.
     """
 
@@ -308,7 +308,7 @@ class RestPoller:
         self.db = db
         self.logger = logger
         self.poll_interval = poll_interval
-        self.refresh = refresh
+        self.refresh = refresh          # callable(session) -> current ticker list
         self.refresh_interval = refresh_interval
         self.full_sweep_interval = full_sweep_interval
         self.quote_poll = quote_poll
@@ -399,7 +399,7 @@ class RestPoller:
     def refresh_markets(self):
         self._last_refresh = self._clock()
         try:
-            new = list(self.refresh())
+            new = list(self.refresh(self))    # through the paced session
         except (requests.RequestException, ValueError, KeyError) as e:
             self.logger.warning(f"market refresh failed, keeping current list: {e}")
             return
