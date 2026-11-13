@@ -12,7 +12,8 @@ Two modes:
          markets where the book changes slowly.
 
 Market list comes from config: explicit tickers and/or series tickers that are
-expanded to all open markets at startup.
+expanded to all open markets at startup and re-expanded periodically
+(daily markets open and close while the recorder runs).
 """
 import asyncio
 import json
@@ -75,7 +76,8 @@ def _trade_fields(t: dict) -> dict:
 # Market list expansion (public REST, no auth)
 # --------------------------------------------------------------------------
 
-def expand_markets(config: dict, environment: str, logger: logging.Logger) -> List[str]:
+def expand_markets(config: dict, environment: str, logger: logging.Logger,
+                   quiet: bool = False) -> List[str]:
     base = PUBLIC_REST_BASE[environment]
     mcfg = config.get("markets", {})
     tickers = list(mcfg.get("tickers") or [])
@@ -85,7 +87,7 @@ def expand_markets(config: dict, environment: str, logger: logging.Logger) -> Li
     for series in mcfg.get("series_tickers") or []:
         cursor = None
         while len(tickers) < max_markets:
-            params = {"series_ticker": series, "status": "open", "limit": 100}
+            params = {"series_ticker": series, "status": "open", "limit": 1000}
             if cursor:
                 params["cursor"] = cursor
             r = session.get(f"{base}/markets", params=params, timeout=15)
@@ -99,14 +101,16 @@ def expand_markets(config: dict, environment: str, logger: logging.Logger) -> Li
             cursor = data.get("cursor")
             if not cursor or not data.get("markets"):
                 break
-    logger.info(f"Recording {len(tickers)} markets: {tickers[:10]}{'...' if len(tickers) > 10 else ''}")
+    if not quiet:
+        logger.info(f"Recording {len(tickers)} markets: "
+                    f"{tickers[:10]}{'...' if len(tickers) > 10 else ''}")
     return tickers[:max_markets]
 
 
 def store_market_metadata(db: RecorderDB, tickers: List[str], environment: str,
-                          logger: logging.Logger):
+                          logger: logging.Logger, session=None):
     base = PUBLIC_REST_BASE[environment]
-    session = requests.Session()
+    session = session or requests.Session()
     series_cache: Dict[str, dict] = {}
     for t in tickers:
         try:
@@ -236,41 +240,229 @@ class _SeqGap(Exception):
 # REST poller (public endpoints, no auth required)
 # --------------------------------------------------------------------------
 
+QUOTE_CHUNK = 100            # tickers per bulk /markets request
+MAX_TRADE_PAGES = 50         # safety cap per market per poll
+_QUOTE_KEYS = ("yes_bid_dollars", "yes_ask_dollars", "yes_bid_size_fp", "yes_ask_size_fp")
+_TICKER_ROW_KEYS = _QUOTE_KEYS + ("last_price_dollars", "volume_fp", "open_interest_fp",
+                                  "status")
+
+
+def refresh_outcomes(db: RecorderDB, environment: str, logger: logging.Logger,
+                     session=None, now: Optional[float] = None, limit: int = 200) -> int:
+    """Fill in status/result for stored markets that have closed but have no
+    outcome yet. Finalized markets leave GET /markets/{t} (404) and move to
+    GET /historical/markets/{t}. Returns how many outcomes were stored."""
+    base = PUBLIC_REST_BASE[environment]
+    session = session or requests.Session()
+    now_iso = datetime.fromtimestamp(now or time.time(), tz=timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M:%SZ")
+    stored = 0
+    for ticker in db.markets_missing_outcome(now_iso, limit=limit):
+        try:
+            market = None
+            for path in (f"/markets/{ticker}", f"/historical/markets/{ticker}"):
+                r = session.get(f"{base}{path}", timeout=15)
+                if r.status_code == 404:
+                    continue
+                r.raise_for_status()
+                market = r.json().get("market")
+                break
+            if not market:
+                continue
+            db.update_outcome(ticker, market)
+            if market.get("result") in ("yes", "no"):
+                stored += 1
+        except (requests.RequestException, ValueError) as e:
+            logger.warning(f"outcome refresh failed for {ticker}: {e}")
+    db.commit()
+    return stored
+
+
 class RestPoller:
+    """Polls public REST market data.
+
+    Each cycle:
+      1. one bulk GET /markets?tickers=... per 100 markets gives every
+         market's touch (bid/ask + sizes) and cumulative volume. A changed
+         touch is stored as a `tickers` row and marks the market's book dirty;
+         a changed volume marks its tape dirty.
+      2. dirty markets get a full-depth book and/or an incremental tape poll.
+      3. a rotating slice of all markets is polled regardless, sized so that
+         every market is fully swept once per `full_sweep_interval` (catches
+         depth changes behind the touch and anything the listing missed).
+
+    `refresh` (optional callable returning the current ticker list) is called
+    every `refresh_interval` seconds, so daily markets that open after startup
+    get recorded and closed ones are retired after one last tape poll.
+    """
+
     def __init__(self, environment: str, tickers: List[str], db: RecorderDB,
-                 logger: logging.Logger, poll_interval: float = 2.0):
+                 logger: logging.Logger, poll_interval: float = 2.0,
+                 refresh=None, refresh_interval: float = 600.0,
+                 full_sweep_interval: float = 120.0, quote_poll: bool = True,
+                 max_rps: float = 4.0, session=None, clock=time.time,
+                 sleep=time.sleep):
+        self.environment = environment
         self.base = PUBLIC_REST_BASE[environment]
-        self.tickers = tickers
+        self.tickers = list(tickers)
         self.db = db
         self.logger = logger
         self.poll_interval = poll_interval
-        self.session = requests.Session()
+        self.refresh = refresh
+        self.refresh_interval = refresh_interval
+        self.full_sweep_interval = full_sweep_interval
+        self.quote_poll = quote_poll
+        self._http = session or requests.Session()
+        self.session = self            # helpers that take a session get the paced one
+        self._min_gap = 1.0 / max_rps if max_rps and max_rps > 0 else 0.0
+        self._next_request = 0.0
+        self._clock = clock
+        self._sleep = sleep
         self._last_book_state: Dict[str, str] = {}
         self._last_trade_ts: Dict[str, int] = {}   # unix seconds
+        self._last_quote: Dict[str, tuple] = {}
+        self._last_volume: Dict[str, str] = {}
+        self._last_refresh = clock()
+        self._sweep_pos = 0
+
+    # ---------- paced HTTP ----------
+
+    def get(self, url, params=None, timeout=15):
+        """GET through the shared budget: at most max_rps requests per second
+        across everything the poller does, and a 429 is retried after a
+        growing pause instead of dropping the request."""
+        r = None
+        for attempt in range(4):
+            wait = self._next_request - self._clock()
+            if wait > 0:
+                self._sleep(wait)
+            self._next_request = max(self._clock(), self._next_request) + self._min_gap
+            r = self._http.get(url, params=params, timeout=timeout)
+            if r.status_code != 429:
+                return r
+            pause = 2.0 * 2 ** attempt
+            self.logger.warning(f"rate limited (429); pausing {pause:.0f}s")
+            self._sleep(pause)
+            self._next_request = self._clock() + self._min_gap
+        return r
+
+    # ---------- main loop ----------
 
     def run(self, duration: Optional[float] = None):
-        deadline = time.time() + duration if duration else None
+        deadline = self._clock() + duration if duration else None
         cycle = 0
-        while deadline is None or time.time() < deadline:
-            start = time.time()
-            for t in self.tickers:
-                try:
-                    self._poll_book(t)
-                    self._poll_trades(t)
-                except requests.HTTPError as e:
-                    status = e.response.status_code if e.response is not None else "?"
-                    if status == 429:
-                        self.logger.warning("rate limited (429); backing off 10s")
-                        time.sleep(10)
-                    else:
-                        self.logger.warning(f"{t}: HTTP {status}")
-                except requests.RequestException as e:
-                    self.logger.warning(f"{t}: {e}")
+        while deadline is None or self._clock() < deadline:
+            start = self._clock()
+            self.run_cycle()
             cycle += 1
             if cycle % 50 == 0:
-                self.logger.info(f"cycle {cycle}: rows={self.db.counts()}")
-            time.sleep(max(0.0, self.poll_interval - (time.time() - start)))
+                self.logger.info(f"cycle {cycle}: {len(self.tickers)} markets, "
+                                 f"rows={self.db.counts()}")
+            self._sleep(max(0.0, self.poll_interval - (self._clock() - start)))
         self.db.commit()
+
+    def run_cycle(self):
+        if self.refresh and self._clock() - self._last_refresh >= self.refresh_interval:
+            self.refresh_markets()
+        dirty_books, dirty_tapes = self._poll_quotes()
+        sweep = set(self._sweep_slice())
+        for t in list(self.tickers):
+            want_book = t in dirty_books or t in sweep
+            want_tape = t in dirty_tapes or t in sweep
+            if not (want_book or want_tape):
+                continue
+            try:
+                if want_book:
+                    self._poll_book(t)
+                if want_tape:
+                    self._poll_trades(t)
+            except requests.HTTPError as e:
+                status = e.response.status_code if e.response is not None else "?"
+                self.logger.warning(f"{t}: HTTP {status}")
+            except requests.RequestException as e:
+                self.logger.warning(f"{t}: {e}")
+
+    def _sweep_slice(self) -> List[str]:
+        n = len(self.tickers)
+        if n == 0:
+            return []
+        if not self.quote_poll or self.full_sweep_interval <= self.poll_interval:
+            return list(self.tickers)
+        k = max(1, -(-n * self.poll_interval // self.full_sweep_interval))
+        k = int(min(n, k))
+        start = self._sweep_pos % n
+        self._sweep_pos = (start + k) % n
+        return [self.tickers[(start + i) % n] for i in range(k)]
+
+    # ---------- market list refresh ----------
+
+    def refresh_markets(self):
+        self._last_refresh = self._clock()
+        try:
+            new = list(self.refresh())
+        except (requests.RequestException, ValueError, KeyError) as e:
+            self.logger.warning(f"market refresh failed, keeping current list: {e}")
+            return
+        if not new:
+            self.logger.warning("market refresh returned no markets; keeping current list")
+            return
+        current = set(self.tickers)
+        added = [t for t in new if t not in current]
+        removed = [t for t in self.tickers if t not in set(new)]
+        for t in removed:               # last look at the tape before retiring
+            try:
+                self._poll_trades(t)
+            except requests.RequestException as e:
+                self.logger.warning(f"{t}: final tape poll failed: {e}")
+            for cache in (self._last_book_state, self._last_trade_ts,
+                          self._last_quote, self._last_volume):
+                cache.pop(t, None)
+        if added:
+            store_market_metadata(self.db, added, self.environment, self.logger,
+                                  self.session)
+        self.tickers = new
+        settled = refresh_outcomes(self.db, self.environment, self.logger, self.session,
+                                   now=self._clock())
+        if added or removed or settled:
+            self.logger.info(f"market refresh: +{len(added)} -{len(removed)} "
+                             f"-> {len(new)} markets; {settled} outcomes stored")
+
+    # ---------- pollers ----------
+
+    def _poll_quotes(self):
+        """Returns (dirty_books, dirty_tapes). On any failure every market is
+        treated as dirty for this cycle's sweep slice only (no data is lost:
+        books dedupe and the tape is incremental)."""
+        dirty_books, dirty_tapes = set(), set()
+        if not self.quote_poll:
+            return dirty_books, dirty_tapes
+        for i in range(0, len(self.tickers), QUOTE_CHUNK):
+            chunk = self.tickers[i:i + QUOTE_CHUNK]
+            try:
+                r = self.session.get(f"{self.base}/markets",
+                                     params={"tickers": ",".join(chunk), "limit": 1000},
+                                     timeout=15)
+                r.raise_for_status()
+                markets = r.json().get("markets", [])
+            except (requests.RequestException, ValueError) as e:
+                self.logger.warning(f"quote poll failed: {e}")
+                continue
+            ts = _now_ms()
+            for m in markets:
+                t = m.get("ticker")
+                if not t:
+                    continue
+                quote = tuple(m.get(k) for k in _QUOTE_KEYS)
+                volume = m.get("volume_fp")
+                if quote != self._last_quote.get(t):
+                    self._last_quote[t] = quote
+                    self.db.insert_ticker(ts, t, {k: m.get(k) for k in _TICKER_ROW_KEYS})
+                    dirty_books.add(t)
+                if volume != self._last_volume.get(t):
+                    self._last_volume[t] = volume
+                    dirty_tapes.add(t)
+                    dirty_books.add(t)
+        return dirty_books, dirty_tapes
 
     def _poll_book(self, ticker: str):
         r = self.session.get(f"{self.base}/markets/{ticker}/orderbook", timeout=15)
@@ -286,19 +478,34 @@ class RestPoller:
         self.db.insert_snapshot(_now_ms(), ticker, "rest", yes, no)
 
     def _poll_trades(self, ticker: str):
-        params = {"ticker": ticker, "limit": 100}
+        """Incremental tape poll. Pages newest-first until it reaches a trade
+        that is already stored, so a burst of more than one page between two
+        polls is not truncated."""
         last = self._last_trade_ts.get(ticker)
-        if last:
-            params["min_ts"] = last
-        r = self.session.get(f"{self.base}/markets/trades", params=params, timeout=15)
-        r.raise_for_status()
         newest = last or 0
-        for t in r.json().get("trades", []):
-            f = _trade_fields(t)
-            if f["trade_id"]:
-                self.db.insert_trade(f["trade_id"], f["ts_ms"], f["ticker"] or ticker,
-                                     f["yes_price"], f["no_price"], f["count"],
-                                     f["taker_side"], f["is_block"], "rest")
-            newest = max(newest, f["ts_ms"] // 1000)
+        cursor = None
+        for _ in range(MAX_TRADE_PAGES):
+            params = {"ticker": ticker, "limit": 100}
+            if last:
+                params["min_ts"] = last
+            if cursor:
+                params["cursor"] = cursor
+            r = self.session.get(f"{self.base}/markets/trades", params=params, timeout=15)
+            r.raise_for_status()
+            data = r.json()
+            batch = data.get("trades", [])
+            seen_known = False
+            for t in batch:
+                f = _trade_fields(t)
+                if f["trade_id"]:
+                    is_new = self.db.insert_trade(
+                        f["trade_id"], f["ts_ms"], f["ticker"] or ticker,
+                        f["yes_price"], f["no_price"], f["count"],
+                        f["taker_side"], f["is_block"], "rest")
+                    seen_known = seen_known or not is_new
+                newest = max(newest, f["ts_ms"] // 1000)
+            cursor = data.get("cursor")
+            if not cursor or len(batch) < 100 or seen_known:
+                break
         if newest:
             self._last_trade_ts[ticker] = newest

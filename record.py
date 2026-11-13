@@ -51,9 +51,16 @@ def main():
 
     try:
         if mode == "rest":
-            poller = RestPoller(environment, tickers, db, logger,
-                                poll_interval=float(config.get("poll_interval", 2.0)))
-            logger.info(f"REST poller starting ({environment}, {poller.poll_interval}s interval)")
+            poller = RestPoller(
+                environment, tickers, db, logger,
+                poll_interval=float(config.get("poll_interval", 2.0)),
+                refresh=lambda: expand_markets(config, environment, logger, quiet=True),
+                refresh_interval=float(config.get("refresh_interval", 600.0)),
+                full_sweep_interval=float(config.get("full_sweep_interval", 120.0)),
+                quote_poll=bool(config.get("quote_poll", True)),
+                max_rps=float(config.get("max_rps", 4.0)))
+            logger.info(f"REST poller starting ({environment}, {poller.poll_interval}s interval, "
+                        f"market refresh every {poller.refresh_interval:.0f}s)")
             poller.run(duration=args.duration)
         else:
             load_dotenv()

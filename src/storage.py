@@ -127,6 +127,22 @@ class RecorderDB:
              market.get("status"), market.get("result")))
         self._maybe_commit()
 
+    def update_outcome(self, ticker: str, market: dict):
+        """Refresh status/result/raw_json of a stored market without touching
+        its series fee fields."""
+        self.conn.execute(
+            "UPDATE markets SET status=?, result=?, raw_json=? WHERE ticker=?",
+            (market.get("status"), market.get("result"), json.dumps(market), ticker))
+        self._maybe_commit()
+
+    def markets_missing_outcome(self, now_iso: str, limit: int = 200) -> list:
+        """Tickers whose close_time has passed but that have no yes/no result."""
+        rows = self.conn.execute(
+            "SELECT ticker FROM markets WHERE close_time IS NOT NULL AND close_time < ?"
+            " AND (result IS NULL OR result NOT IN ('yes','no'))"
+            " ORDER BY close_time DESC LIMIT ?", (now_iso, limit)).fetchall()
+        return [r[0] for r in rows]
+
     def insert_snapshot(self, ts_ms: int, ticker: str, source: str,
                         yes_levels, no_levels, seq: Optional[int] = None):
         self.conn.execute(

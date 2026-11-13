@@ -1,0 +1,49 @@
+features (quote): htc_h, utc_hour, dist_half, spread, edge, absmove_300, flow_align_300, log_vol_300, log_dt_prev, run_60
+fold: train 26APR27..26JUN29 (64 dates, 110,862 orders) -> test 26JUN30..26AUG30 (24 dates, 28,760 orders)
+fold: train 26APR27..26AUG30 (88 dates, 139,622 orders) -> test 26AUG31..26SEP23 (24 dates, 35,297 orders)
+fold: train 26APR27..26SEP23 (112 dates, 174,919 orders) -> test 26SEP24..26OCT17 (24 dates, 43,511 orders)
+fold: train 26APR27..26OCT17 (136 dates, 218,430 orders) -> test 26OCT18..26NOV11 (25 dates, 38,194 orders)
+  ridge coefficients on the last fold (cents per 1 sd of the feature):
+   edge=+0.34, run_60=-0.33, dist_half=+0.15, spread=+0.14, flow_align_300=-0.14, log_vol_300=+0.08, utc_hour=-0.08, htc_h=+0.06, absmove_300=+0.03, log_dt_prev=-0.00
+
+== out-of-sample, gradient boosting: 97 test dates, 145,762 orders, target mo_300 ==
+weighted correlation of forecast with realized: +0.102
+forecast decile    orders  forecast        realized mo_300              mo_settle
+ 1 (most toxic)    14,577     -1.42  -0.99 [-1.39,-0.61]  +0.59 [-1.59,+2.71]
+ 2                 14,576     -0.23  -0.15 [-0.30,+0.00]  +0.99 [-0.40,+2.51]
+ 3                 14,576     -0.04  +0.00 [-0.11,+0.11]  +0.94 [-0.49,+2.29]
+ 4                 14,512     +0.07  +0.09 [-0.02,+0.20]  +0.85 [-0.50,+2.14]
+ 5                 14,639     +0.14  +0.15 [+0.07,+0.22]  +0.97 [-0.20,+2.09]
+ 6                 14,577     +0.26  +0.25 [+0.15,+0.34]  +0.88 [-0.23,+1.99]
+ 7                 14,573     +0.40  +0.45 [+0.34,+0.56]  +1.61 [+0.31,+2.97]
+ 8                 14,579     +0.53  +0.58 [+0.47,+0.68]  +1.05 [-0.21,+2.28]
+ 9                 14,576     +0.73  +0.76 [+0.65,+0.87]  +1.11 [-0.28,+2.59]
+10 (least toxic)   14,577     +1.46  +1.01 [+0.70,+1.30]  +0.90 [-0.70,+2.47]
+no-quote filter      kept                  realized mo_300              mo_settle
+drop worst   0%      100%            +0.22 [+0.14,+0.31]  +0.99 [+0.25,+1.72]
+drop worst  10%       90%            +0.36 [+0.29,+0.44]  +1.04 [+0.22,+1.84]
+drop worst  20%       80%            +0.43 [+0.35,+0.50]  +1.04 [+0.22,+1.83]
+drop worst  30%       70%            +0.48 [+0.40,+0.56]  +1.06 [+0.21,+1.86]
+drop worst  50%       50%            +0.61 [+0.53,+0.70]  +1.11 [+0.21,+1.95]
+drop worst  70%       30%            +0.78 [+0.66,+0.90]  +1.02 [-0.05,+2.12]
+
+== out-of-sample, ridge: 97 test dates, 145,762 orders, target mo_300 ==
+weighted correlation of forecast with realized: +0.060
+forecast decile    orders  forecast        realized mo_300              mo_settle
+ 1 (most toxic)    14,577     -0.63  -0.46 [-0.70,-0.23]  +1.49 [-0.58,+3.61]
+ 2                 14,576     -0.30  -0.01 [-0.15,+0.15]  +1.65 [+0.07,+3.16]
+ 3                 14,576     -0.12  +0.13 [-0.02,+0.27]  +2.03 [+0.39,+3.57]
+ 4                 14,576     +0.02  +0.12 [-0.00,+0.24]  +1.02 [-0.49,+2.52]
+ 5                 14,576     +0.14  +0.24 [+0.13,+0.35]  +1.31 [+0.18,+2.49]
+ 6                 14,576     +0.25  +0.32 [+0.21,+0.41]  +1.72 [+0.42,+3.05]
+ 7                 14,576     +0.37  +0.26 [+0.16,+0.38]  +1.03 [+0.02,+2.07]
+ 8                 14,576     +0.49  +0.28 [+0.15,+0.39]  +0.27 [-0.61,+1.12]
+ 9                 14,576     +0.65  +0.46 [+0.36,+0.56]  -0.05 [-0.88,+0.79]
+10 (least toxic)   14,577     +1.08  +0.72 [+0.42,+1.07]  -0.26 [-1.47,+0.86]
+no-quote filter      kept                  realized mo_300              mo_settle
+drop worst   0%      100%            +0.22 [+0.14,+0.31]  +0.99 [+0.25,+1.72]
+drop worst  10%       90%            +0.29 [+0.21,+0.37]  +0.94 [+0.22,+1.61]
+drop worst  20%       80%            +0.32 [+0.24,+0.41]  +0.86 [+0.17,+1.48]
+drop worst  30%       70%            +0.35 [+0.26,+0.44]  +0.70 [+0.08,+1.30]
+drop worst  50%       50%            +0.41 [+0.32,+0.51]  +0.53 [-0.07,+1.10]
+drop worst  70%       30%            +0.49 [+0.36,+0.62]  -0.01 [-0.65,+0.57]

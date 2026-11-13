@@ -1,11 +1,13 @@
 # Kalshi market data recorder configuration
 #
 # mode:
-#   rest - poll public REST endpoints (orderbook snapshots + trade tape).
-#          Works against prod TODAY with no API keys. Snapshot cadence =
-#          one full polling cycle (~2 requests per market), good enough for
-#          illiquid markets; the trade tape misses nothing regardless of
-#          cadence (incremental min_ts polling).
+#   rest - poll public REST endpoints. Works against prod with no API keys.
+#          Every poll_interval one bulk request per 100 markets reads each
+#          market's touch (bid/ask + sizes) and volume; a changed touch is
+#          stored (table `tickers`) and triggers a full-depth book snapshot,
+#          a changed volume triggers a tape poll. All markets are also swept
+#          once per full_sweep_interval. The trade tape misses nothing
+#          regardless of cadence (incremental, paged).
 #   ws   - full L2 event stream via WebSocket (orderbook_delta/trade/ticker).
 #          Requires API keys for the environment (PROD_KEYID/PROD_KEYFILE or
 #          DEMO_KEYID/DEMO_KEYFILE in .env). Switch to this once you have
@@ -14,18 +16,30 @@ mode: rest
 environment: prod            # record real flow; demo has no organic activity
 database: data/kalshi_recorder.db
 
-poll_interval: 5.0           # rest mode: minimum seconds per full polling cycle
+poll_interval: 3.0           # rest mode: seconds between touch polls
+full_sweep_interval: 300     # rest mode: every market's depth + tape at least this often
+max_rps: 5.0                 # rest mode: request budget; the keyless API answers 429
+                             # well below 10 req/s, and a slow cycle beats a dropped one
+refresh_interval: 600        # rest mode: re-expand series (new daily markets open,
+                             # closed ones retire) and store settlement outcomes
+quote_poll: true             # false = poll every book and tape each cycle (old behaviour)
 snapshot_interval: 60        # ws mode: seconds between periodic full-book rows
 
 markets:
   tickers: []
-  # Series expanded to all open markets at startup (listed in priority order;
-  # max_markets caps the total).
+  # Series expanded to all open markets at startup and again every
+  # refresh_interval (listed in priority order; max_markets caps the total).
   #
-  # Weather: fee_type=quadratic (NO maker fees) -> primary MM candidates.
-  # KXFED / KXCPIYOY: quadratic_with_maker_fees -> recorded only as a
-  # comparison baseline for adverse-selection research around data releases.
+  # All daily temperature series: fee_type=quadratic (NO maker fees).
+  # Ranked Nov 12 2026 by 24h volume and touch spread (12 open markets each):
+  #   - the original highs are liquid now (KXHIGHNY ~290k contracts/day at
+  #     1-2c spreads);
+  #   - the daily lows and the smaller cities are the thin books (5-19c
+  #     spreads, 2k-60k contracts/day) the maker-edge thesis is about.
+  # KXFED / KXCPIYOY (maker-fee'd, ~230 open markets) were dropped from the
+  # default list: they used more than half of the keyless request budget.
   series_tickers:
+    # liquid highs (recorded since July; continuity for the replay study)
     - KXHIGHNY
     - KXHIGHCHI
     - KXHIGHAUS
@@ -33,6 +47,20 @@ markets:
     - KXHIGHMIA
     - KXHIGHLAX
     - KXHIGHPHIL
-    - KXFED
-    - KXCPIYOY
-  max_markets: 80
+    # thin books with flow
+    - KXLOWTAUS
+    - KXLOWTNYC
+    - KXLOWTLAX
+    - KXLOWTDC
+    - KXLOWTDEN
+    - KXLOWTCHI
+    - KXLOWTDAL
+    - KXLOWTMIA
+    - KXLOWTPHIL
+    - KXHIGHTSEA
+    - KXHIGHTTTN
+    - KXHIGHTEWR
+    # newer liquid highs
+    - KXHIGHTATL
+    - KXHIGHTSFO
+  max_markets: 400

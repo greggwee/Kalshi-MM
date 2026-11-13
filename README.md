@@ -232,6 +232,34 @@ python demo.py --config pmm_config.yaml run --dry-run --duration 600
 - *Calibration.* The paper's table 1 is illustrative and it does not address calibration. The fits and the online estimators here are this repository's own choices, including `A` from `contract flow / (queue + size)` and `k` from how far orders reach past the touch.
 - *Risk aversion.* `gamma` and `gamma_T` are preferences, not estimates. Use `surface` to see what a value does before changing it.
 
+## Data Collection and Adverse-Selection Research
+
+Read-only tools on Kalshi's public market data (no API keys needed):
+
+```bash
+python record.py                      # live recorder -> data/kalshi_recorder.db
+python backfill.py --since 2026-07-01 # tape + outcomes -> data/kalshi_backfill.db
+python toxicity.py build              # per-order maker markouts + features
+python toxicity.py curves             # edge and markouts per series
+python toxicity.py buckets --series KXHIGHNY --split 26AUG01
+python toxicity.py model --series KXHIGHNY   # walk-forward toxicity forecast
+```
+
+- **`record.py`** (`recorder_config.yaml`): every `poll_interval` it reads the
+  touch and volume of all markets in one bulk request per 100 markets, stores
+  changed touches, and fetches depth and tape only for markets that changed.
+  The series list is re-expanded every `refresh_interval`, so daily markets
+  that open later are picked up, and settlement outcomes are stored as they
+  appear. Requests are capped at `max_rps`.
+- **`backfill.py`**: full trade tape and outcomes per series from the live API
+  and the `/historical` archive (trades older than about two months).
+- **`toxicity.py`** (`src/markouts.py`): what a small maker at the touch
+  earned on each aggressive order, at 10s to 30min and to settlement, with
+  confidence intervals resampled by event date, and a toxicity forecast
+  tested walk-forward.
+
+Latest findings: [runs/20261112_toxicity/analysis.md](runs/20261112_toxicity/analysis.md).
+
 ## Demo Trading Harness
 
 `demo.py` runs the strategy live on the Kalshi **demo** exchange across several
