@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 
 from src.markouts import (FEATURES, TapeMid, aggregate_orders, build_dataset,
-                          date_bootstrap, date_order, event_date, market_rows)
+                          date_bootstrap, date_diff, date_order, event_date, market_rows)
 from src.storage import SCHEMA
 
 CLOSE = 100_000.0
@@ -27,6 +27,7 @@ class TestAggregation(unittest.TestCase):
         self.assertAlmostEqual(o["sweep"][0], 0.02)
         self.assertAlmostEqual(o["touch"][0], 0.50)     # a buy's best level is its lowest
         self.assertAlmostEqual(o["touch"][1], 0.40)
+        self.assertEqual(list(o["touch_size"]), [10.0, 5.0])   # only the first level's prints
         self.assertEqual(list(o["n_prints"]), [3.0, 1.0])
 
     def test_same_ms_opposite_sides_stay_separate(self):
@@ -168,6 +169,24 @@ class TestDateBootstrap(unittest.TestCase):
         r = date_bootstrap(v, np.array([1.0, 3.0, 9.0]), np.array(["a", "a", "b"]), n_boot=50)
         self.assertAlmostEqual(r["mean"], 2.5)
         self.assertEqual(r["n_dates"], 1)
+
+
+class TestDateDiff(unittest.TestCase):
+    def test_difference_and_clustered_interval(self):
+        rng = np.random.default_rng(1)
+        dates = np.repeat([f"d{i}" for i in range(30)], 200)
+        a = np.tile(np.arange(200) < 40, 30)
+        day_shift = np.repeat(rng.normal(0, 5.0, 30), 200)       # big date effects, shared
+        v = np.where(a, -1.0, 0.5) + day_shift + rng.normal(0, 0.2, len(a))
+        r = date_diff(v, np.ones(len(v)), dates, a, ~a, n_boot=400)
+        self.assertAlmostEqual(r["diff"], -1.5, delta=0.05)
+        self.assertLess(r["hi"], -1.3)        # shared date effects cancel in the difference
+        self.assertEqual((r["n_dates"], r["n_a"], r["n_b"]), (30, 1200, 4800))
+
+    def test_empty_group_is_nan(self):
+        v = np.ones(4)
+        r = date_diff(v, v, np.array(["a", "a", "b", "b"]), np.zeros(4, bool), np.ones(4, bool))
+        self.assertTrue(np.isnan(r["diff"]))
 
 
 if __name__ == "__main__":

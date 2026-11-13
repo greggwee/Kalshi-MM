@@ -77,7 +77,7 @@ def aggregate_orders(ts_ms: np.ndarray, price: np.ndarray, count: np.ndarray,
     if n == 0:
         z = np.zeros(0)
         return {"ts": z, "side": z, "size": z, "price": z, "touch": z,
-                "n_prints": z, "sweep": z}
+                "touch_size": z, "n_prints": z, "sweep": z}
     new = np.ones(n, dtype=bool)
     new[1:] = (ts_ms[1:] != ts_ms[:-1]) | (side[1:] != side[:-1])
     starts = np.flatnonzero(new)
@@ -87,6 +87,9 @@ def aggregate_orders(ts_ms: np.ndarray, price: np.ndarray, count: np.ndarray,
     lo = np.minimum.reduceat(price, starts)
     with np.errstate(invalid="ignore", divide="ignore"):
         vwap = np.where(size > 0, notional / size, price[starts])
+    touch = np.where(side[starts] > 0, lo, hi)
+    order_of_print = np.cumsum(new) - 1
+    at_touch = np.abs(price - touch[order_of_print]) < 1e-9
     return {
         "ts": ts_ms[starts] / 1000.0,
         "side": side[starts].astype(float),
@@ -94,7 +97,10 @@ def aggregate_orders(ts_ms: np.ndarray, price: np.ndarray, count: np.ndarray,
         "price": vwap,
         # the best level the order consumed: what a maker resting at the touch
         # was filled at (a sweep's deeper prints paid deeper makers more)
-        "touch": np.where(side[starts] > 0, lo, hi),
+        "touch": touch,
+        # contracts the order took at that best level: a maker with q contracts
+        # ahead of them at the touch was reached only if this exceeds q
+        "touch_size": np.add.reduceat(count * at_touch, starts),
         "n_prints": np.diff(np.append(starts, n)).astype(float),
         "sweep": hi - lo,
     }
@@ -163,9 +169,11 @@ def market_rows(ts_ms: Sequence[float], yes_price: Sequence[float], count: Seque
     t, s, size, p = o["ts"], o["side"], o["size"], o["touch"]
     n = len(t)
     out: Dict[str, np.ndarray] = {"ts": t, "side": s, "size": size, "price": o["price"],
-                                  "touch": p}
+                                  "touch": p, "touch_size": o["touch_size"]}
     if n == 0:
         for name in FEATURES + ("two_sided", "mo_settle") + tuple(f"mo_{h}" for h in horizons):
+            out[name] = np.zeros(0)
+        for name in ("touch", "touch_size"):
             out[name] = np.zeros(0)
         return out
 
@@ -286,6 +294,36 @@ def date_bootstrap(values: np.ndarray, weights: np.ndarray, dates: np.ndarray,
             "lo": float(np.percentile(means, 2.5)),
             "hi": float(np.percentile(means, 97.5)),
             "n_dates": int(k), "weight": float(den.sum())}
+
+
+def date_diff(values: np.ndarray, weights: np.ndarray, dates: np.ndarray,
+              group_a: np.ndarray, group_b: np.ndarray,
+              n_boot: int = 2000, seed: int = 0) -> dict:
+    """Weighted mean of `values` in group A minus group B, with an interval
+    from resampling whole event dates (both groups resampled together, so
+    what the two share on a date cancels)."""
+    ok = np.isfinite(values) & np.isfinite(weights) & (group_a | group_b)
+    v, w, d = values[ok], weights[ok], dates[ok]
+    a, b = group_a[ok], group_b[ok]
+    uniq, inv = np.unique(d, return_inverse=True)
+    k = len(uniq)
+    out = {"a": float("nan"), "b": float("nan"), "diff": float("nan"),
+           "lo": float("nan"), "hi": float("nan"), "n_dates": int(k),
+           "n_a": int(a.sum()), "n_b": int(b.sum())}
+    if k == 0 or not a.any() or not b.any():
+        return out
+    num_a = np.bincount(inv[a], weights=(v * w)[a], minlength=k)
+    den_a = np.bincount(inv[a], weights=w[a], minlength=k)
+    num_b = np.bincount(inv[b], weights=(v * w)[b], minlength=k)
+    den_b = np.bincount(inv[b], weights=w[b], minlength=k)
+    rng = np.random.default_rng(seed)
+    pick = rng.integers(0, k, size=(n_boot, k))
+    boot = (num_a[pick].sum(1) / np.maximum(den_a[pick].sum(1), 1e-12)
+            - num_b[pick].sum(1) / np.maximum(den_b[pick].sum(1), 1e-12))
+    out.update(a=float(num_a.sum() / den_a.sum()), b=float(num_b.sum() / den_b.sum()),
+               lo=float(np.percentile(boot, 2.5)), hi=float(np.percentile(boot, 97.5)))
+    out["diff"] = out["a"] - out["b"]
+    return out
 
 
 def date_order(dates: Iterable[str]) -> List[str]:
