@@ -1,0 +1,72 @@
+
+A. maker settlement P&L (cents/contract) by price of the contract the taker bought
+  ALL
+    taker pays 0.00-0.03: orders= 245,276 maker  +0.97 [+0.80,+1.11] n_dates=200  maker return on stake +0.98%
+    taker pays 0.03-0.06: orders=  88,886 maker  +1.36 [+0.34,+2.19] n_dates=200  maker return on stake +1.42%
+    taker pays 0.06-0.10: orders=  86,853 maker  +1.70 [+0.29,+3.01] n_dates=199  maker return on stake +1.85%
+    taker pays 0.10-0.20: orders= 142,913 maker  +2.04 [+0.08,+3.90] n_dates=199  maker return on stake +2.40%
+    taker pays 0.20-0.35: orders= 197,984 maker  +0.79 [-1.26,+2.68] n_dates=199  maker return on stake +1.09%
+    taker pays 0.35-0.50: orders= 231,807 maker  +0.95 [-0.53,+2.29] n_dates=199  maker return on stake +1.67%
+    taker pays 0.50-0.65: orders= 233,078 maker  -2.04 [-3.71,-0.26] n_dates=199  maker return on stake -4.85%
+    taker pays 0.65-0.80: orders= 210,302 maker  -1.37 [-3.22,+0.69] n_dates=199  maker return on stake -5.06%
+    taker pays 0.80-0.90: orders= 157,865 maker  -0.85 [-2.69,+1.09] n_dates=199  maker return on stake -6.06%
+    taker pays 0.90-0.94: orders=  87,173 maker  -1.01 [-2.27,+0.44] n_dates=199  maker return on stake -13.75%
+    taker pays 0.94-0.97: orders= 104,878 maker  -0.32 [-1.29,+0.99] n_dates=200  maker return on stake -8.19%
+    taker pays 0.97-1.00: orders= 110,914 maker  -0.57 [-0.86,-0.24] n_dates=200  maker return on stake -37.93%
+  KXHIGHNY
+    taker pays 0.00-0.03: orders=  67,905 maker  +0.97 [+0.61,+1.25] n_dates=162  maker return on stake +0.98%
+    taker pays 0.03-0.06: orders=  26,363 maker  +0.13 [-2.61,+2.41] n_dates=161  maker return on stake +0.13%
+    taker pays 0.06-0.10: orders=  26,958 maker  +0.82 [-2.40,+3.64] n_dates=161  maker return on stake +0.89%
+    taker pays 0.10-0.20: orders=  47,874 maker  +3.14 [-0.51,+6.35] n_dates=161  maker return on stake +3.71%
+    taker pays 0.20-0.35: orders=  64,701 maker  +0.71 [-3.37,+4.61] n_dates=161  maker return on stake +0.99%
+    taker pays 0.35-0.50: orders=  87,583 maker  +2.49 [-0.27,+4.93] n_dates=159  maker return on stake +4.40%
+    taker pays 0.50-0.65: orders=  88,796 maker  -1.89 [-5.18,+1.55] n_dates=159  maker return on stake -4.48%
+    taker pays 0.65-0.80: orders=  69,438 maker  -0.05 [-4.26,+4.37] n_dates=161  maker return on stake -0.19%
+    taker pays 0.80-0.90: orders=  47,783 maker  -1.30 [-4.94,+2.80] n_dates=161  maker return on stake -9.16%
+    taker pays 0.90-0.94: orders=  25,775 maker  +0.53 [-2.53,+3.85] n_dates=161  maker return on stake +7.16%
+    taker pays 0.94-0.97: orders=  30,811 maker  +1.59 [-1.40,+5.41] n_dates=161  maker return on stake +40.85%
+    taker pays 0.97-1.00: orders=  32,831 maker  -0.65 [-1.16,-0.03] n_dates=161  maker return on stake -44.51%
+
+B. maker settlement P&L before/after the Aug 12 2026 settlement-source change (0.10-0.90)
+  KXHIGHNY    before  +0.63 [-0.15,+1.46] n_dates=69   after  +0.43 [-0.32,+1.22] n_dates=92
+  KXLOWTAUS   before  -2.39 [-3.87,-0.90] n_dates=104   after  -0.41 [-2.26,+1.42] n_dates=92
+  KXLOWTLAX   before  -1.69 [-3.02,-0.33] n_dates=81   after  -1.01 [-2.41,+0.45] n_dates=92
+  KXLOWTNYC   before  -0.22 [-1.52,+0.94] n_dates=104   after  +0.80 [-0.38,+1.84] n_dates=92
+
+C. ladder coherence on a 60s grid (events with all strikes recorded)
+  20 events, 31,543 minute-snapshots
+  sum of asks: median 1.050, p1 1.000; below 1.00 in 0.85% of minutes, below 0.98 in 0.23%
+  sum of bids: median 0.990, p99 1.040; above 1.00 in 20.82% of minutes, above 1.02 in 7.45%
+  sum of mids: mean 1.0240, sd 0.0244; |sum-1| > 0.02 in 82.3% of minutes
+
+D. first-order autocorrelation of 1-minute book-mid changes (mid in 0.10-0.90)
+  +0.009 on 47,520 pairs (negative = moves partly reverse, good for a maker; positive = they continue)
+
+E. KXHIGHNY, 14-22 UTC on the outcome day: maker 5-minute markout by minute of the hour
+   (hourly airport observations are taken around :51 and published a few minutes later)
+   :00-:04 orders= 16,890 edge +1.26  mo_300 +0.24 [+0.08,+0.38] n_dates=154
+   :05-:09 orders= 14,513 edge +1.25  mo_300 +0.33 [+0.20,+0.44] n_dates=156
+   :10-:14 orders= 12,576 edge +1.31  mo_300 +0.37 [+0.13,+0.61] n_dates=155
+   :15-:19 orders= 13,051 edge +1.46  mo_300 +0.10 [-0.18,+0.36] n_dates=154
+   :20-:24 orders= 12,127 edge +1.38  mo_300 +0.47 [+0.32,+0.62] n_dates=154
+   :25-:29 orders= 11,151 edge +1.33  mo_300 +0.45 [+0.30,+0.61] n_dates=154
+   :30-:34 orders= 11,866 edge +1.30  mo_300 +0.42 [+0.29,+0.54] n_dates=154
+   :35-:39 orders= 11,257 edge +1.26  mo_300 +0.45 [+0.31,+0.59] n_dates=156
+   :40-:44 orders= 11,089 edge +1.32  mo_300 +0.35 [+0.18,+0.51] n_dates=155
+   :45-:49 orders= 11,873 edge +1.31  mo_300 +0.35 [+0.11,+0.59] n_dates=156
+   :50-:54 orders= 20,542 edge +1.93  mo_300 -0.99 [-1.40,-0.57] n_dates=153
+   :55-:59 orders= 15,100 edge +1.45  mo_300 +0.19 [-0.06,+0.42] n_dates=153
+
+F. the :50-:54 effect, maker 5-minute markout, by slice
+   KXHIGHNY outcome window, before Aug 12 :50-:54 -0.97 [-1.62,-0.36]  rest +0.34 [+0.26,+0.42]  n_dates=63  share of orders 13%
+   KXHIGHNY outcome window, after Aug 12  :50-:54 -0.87 [-1.27,-0.43]  rest +0.31 [+0.23,+0.40]  n_dates=92  share of orders 12%
+   KXHIGHNY outside the window            :50-:54 +0.03 [-0.34,+0.34]  rest +0.40 [+0.35,+0.46]  n_dates=160  share of orders 8%
+   KXHIGHCHI outcome window               :50-:54 +0.11 [-0.40,+0.60]  rest -0.02 [-0.19,+0.13]  n_dates=65  share of orders 7%
+   KXHIGHMIA outcome window               :50-:54 +0.27 [-0.07,+0.62]  rest -0.11 [-0.37,+0.11]  n_dates=66  share of orders 7%
+   KXHIGHLAX outcome window               :50-:54 +0.27 [-0.04,+0.52]  rest -0.08 [-0.21,+0.06]  n_dates=65  share of orders 7%
+   KXHIGHAUS outcome window               :50-:54 -0.40 [-1.64,+0.50]  rest +0.02 [-0.27,+0.27]  n_dates=64  share of orders 7%
+   KXHIGHDEN outcome window               :50-:54 +0.87 [+0.02,+1.63]  rest +0.07 [-0.32,+0.43]  n_dates=60  share of orders 7%
+   KXHIGHPHIL outcome window              :50-:54 +0.97 [+0.29,+1.71]  rest +1.01 [+0.28,+1.96]  n_dates=62  share of orders 8%
+   KXLOWTNYC 16-24h before close          :50-:54 +6.75 [+3.50,+9.91]  rest +2.47 [+1.61,+3.57]  n_dates=50  share of orders 13%
+   KXLOWTAUS 16-24h before close          :50-:54 -0.64 [-5.82,+3.90]  rest +2.08 [+0.56,+3.15]  n_dates=30  share of orders 6%
+   KXLOWTLAX 16-24h before close          :50-:54 +2.59 [-0.79,+7.40]  rest +2.02 [+0.86,+3.09]  n_dates=15  share of orders 8%
