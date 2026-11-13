@@ -1,0 +1,21 @@
+== KXHIGHNY --max-window 120
+series      hours to close          window test dates fills in                 inside                outside  pnl/date                  gain/date  placebo              settle in             settle out
+KXHIGHNY             8-16h   :52:00-:54:00         95     6.3%  -1.49 [-2.00,-0.84]  +0.27 [+0.18,+0.36]   +1008.4     +720.6 [+394.0,+992.7]   1/120   -1.64 [-3.63,+0.57]  +0.79 [-0.05,+1.55]
+== KXHIGHNY --train-share 0.3
+series      hours to close          window test dates fills in                 inside                outside  pnl/date                  gain/date  placebo              settle in             settle out
+KXHIGHNY             8-16h   :52:00-:56:30        133    12.7%  -1.01 [-1.38,-0.60]  +0.24 [+0.17,+0.31]    +558.1    +971.0 [+590.6,+1394.8]   4/120   -0.27 [-1.48,+0.96]  +0.59 [-0.18,+1.37]
+== KXHIGHNY --train-share 0.7
+series      hours to close          window test dates fills in                 inside                outside  pnl/date                  gain/date  placebo              settle in             settle out
+KXHIGHNY             8-16h   :51:30-:54:30         57     7.4%  -1.26 [-1.77,-0.78]  +0.28 [+0.17,+0.39]   +1050.0    +682.4 [+393.8,+1001.6]   1/120   -0.56 [-2.84,+1.92]  +0.92 [-0.07,+1.88]
+== KXHIGHNY --horizon 1800
+series      hours to close          window test dates fills in                 inside                outside  pnl/date                  gain/date  placebo              settle in             settle out
+KXHIGHNY             8-16h   :52:00-:54:30         95     7.8%  -1.76 [-2.58,-0.86]  +0.15 [-0.10,+0.41]     -93.6   +1031.9 [+507.3,+1531.6]   1/120   -1.11 [-2.79,+0.70]  +0.78 [-0.08,+1.54]
+== KXHIGHNY --horizon 60
+series      hours to close          window test dates fills in                 inside                outside  pnl/date                  gain/date  placebo              settle in             settle out
+KXHIGHNY             8-16h   :52:00-:54:00         95     6.3%  -0.45 [-0.88,+0.02]  +0.68 [+0.62,+0.73]   +4068.3     +215.7 [  -8.0,+435.1]   1/120   -1.64 [-3.63,+0.57]  +0.79 [-0.05,+1.55]
+== KXHIGHNY --htc 0 8
+series      hours to close          window test dates fills in                 inside                outside  pnl/date                  gain/date  placebo              settle in             settle out
+KXHIGHNY              0-8h   :14:00-:19:00         27    12.1%  -0.22 [-2.75,+1.81]  +0.89 [+0.56,+1.10]    +868.7      +31.3 [-286.6,+310.5]  12/120   +2.42 [-4.01,+6.53]  +1.84 [-1.18,+5.07]
+== KXHIGHNY --htc 16 48
+series      hours to close          window test dates fills in                 inside                outside  pnl/date                  gain/date  placebo              settle in             settle out
+KXHIGHNY            16-48h   :04:30-:05:00         99     0.9%  +0.23 [-0.07,+0.48]  +0.31 [+0.27,+0.35]    +609.1       -4.3 [  -9.9,  +1.4]  38/120   +0.34 [-3.33,+3.73]  +0.24 [-0.84,+1.36]

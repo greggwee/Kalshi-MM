@@ -3,6 +3,7 @@
     python toxicity.py build --db data/kalshi_backfill.db --out data/markouts.npz
     python toxicity.py curves  --data data/markouts.npz
     python toxicity.py buckets --data data/markouts.npz --series KXHIGHNY
+    python toxicity.py clock   --data data/markouts.npz
     python toxicity.py model   --data data/markouts.npz --series KXHIGHNY
 
 build    one row per aggressive order: maker markouts + pre-trade features
@@ -11,6 +12,9 @@ curves   maker edge at the fill and markout at 10s..30min and to settlement,
          per series.
 buckets  markouts by hours-to-close and hour of day, split into periods, so a
          rule chosen on one period can be judged on another.
+clock    the observation clock: per series, find the part of each hour whose
+         fills lose money on the first half of the event dates, and judge a
+         no-quote rule for it on the second half (src/clock.py).
 model    walk-forward toxicity forecast: fit on earlier event dates, score
          later ones, report realized markout by predicted decile and the
          value of a no-quote filter. By default it uses only features known
@@ -218,6 +222,51 @@ def cmd_model(args):
                   f"{fmt(stat(b, target, args.cap))} {fmt(stat(b, 'mo_settle', args.cap))}")
 
 
+def cmd_clock(args):
+    from src import clock
+
+    d = load(args.data, args.series.split(",") if args.series else None, args.atm)
+    target = f"mo_{args.horizon}"
+    max_bins = max(1, int(args.max_window // clock.BIN_S))
+    print(f"observation clock: window fitted on the first {args.train_share:.0%} of event dates, "
+          f"judged on the rest; target {target}, weight=min(size,{args.cap:g}), "
+          f"window <= {args.max_window:g}s")
+    print(f"{'series':11s} {'hours to close':>14s} {'window':>15s} {'test dates':>10s} "
+          f"{'fills in':>8s} {'inside':>22s} {'outside':>22s} {'pnl/date':>9s} {'gain/date':>26s} "
+          f"{'placebo':>8s} {'settle in':>22s} {'settle out':>22s}")
+    for s in sorted(set(d["series"])):
+        lo, hi = args.htc if args.htc else ((16.0, 24.0) if s.startswith("KXLOW") else (8.0, 16.0))
+        m = (d["series"] == s) & (d["htc_h"] >= lo) & (d["htc_h"] < hi) & (d["two_sided"] > 0)
+        ds = subset(d, m)
+        if len(set(ds["date"])) < args.min_dates:
+            continue
+        w = weights(ds, args.cap)
+        train, test = clock.split_dates(ds["date"], args.train_share)
+        window = clock.find_window(clock.bin_pnl(ds["ts"][train], (ds[target] * w)[train]), max_bins)
+        if window is None:
+            print(f"{s:11s} {f'{lo:g}-{hi:g}h':>14s} {'none loses':>15s}")
+            continue
+        r = clock.evaluate(ds["ts"][test], ds[target][test], w[test], ds["date"][test], window)
+        inside = clock.in_window(ds["ts"], window)
+        # settlement P&L uses every fill in the window, not only two-sided ones
+        allrows = subset(d, (d["series"] == s) & (d["htc_h"] >= lo) & (d["htc_h"] < hi))
+        _, te_all = clock.split_dates(allrows["date"], args.train_share)
+        ins_all = clock.in_window(allrows["ts"], window)
+        wa = weights(allrows, args.cap)
+        st_in = date_bootstrap(allrows["mo_settle"][te_all & ins_all], wa[te_all & ins_all],
+                               allrows["date"][te_all & ins_all])
+        st_out = date_bootstrap(allrows["mo_settle"][te_all & ~ins_all], wa[te_all & ~ins_all],
+                                allrows["date"][te_all & ~ins_all])
+        gain = f"{100 * r['gain_per_date']:+7.1f} [{100 * r['gain_lo']:+6.1f},{100 * r['gain_hi']:+6.1f}]"
+        print(f"{s:11s} {f'{lo:g}-{hi:g}h':>14s} {clock.window_label(window):>15s} "
+              f"{r['n_dates']:10d} {r['share_of_fills']:8.1%} {fmt(r['inside'])} {fmt(r['outside'])} "
+              f"{100 * r['pnl_per_date']:+9.1f} {gain:>26s} {r['placebo_rank']:3d}/{r['placebo_n']:<4d} {fmt(st_in)} {fmt(st_out)}")
+    print("pnl/date: pool P&L per event date in the window of hours, no rule; "
+          "gain/date: cents added per event date by not being filled inside the window, both per "
+          "min(size, cap) contracts; placebo: rank of the fitted window among all same-length "
+          "windows of the hour on the test dates (1 = the worst one)")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -238,10 +287,19 @@ def main():
     b.add_argument("--out", default="data/markouts.npz")
     b.add_argument("--series", default=None)
     b.set_defaults(fn=cmd_build)
-    for name, fn in (("curves", cmd_curves), ("buckets", cmd_buckets), ("model", cmd_model)):
+    for name, fn in (("curves", cmd_curves), ("buckets", cmd_buckets), ("model", cmd_model),
+                     ("clock", cmd_clock)):
         p = sub.add_parser(name)
         common(p)
         p.set_defaults(fn=fn)
+        if name == "clock":
+            p.add_argument("--horizon", type=int, default=300, choices=HORIZONS_S)
+            p.add_argument("--max-window", type=float, default=300.0,
+                           help="longest window of the hour to stand down for, seconds")
+            p.add_argument("--train-share", type=float, default=0.5)
+            p.add_argument("--min-dates", type=int, default=30)
+            p.add_argument("--htc", type=float, nargs=2, default=None, metavar=("LO", "HI"),
+                           help="hours-to-close window (default: 8-16 highs, 16-24 lows)")
         if name == "model":
             p.add_argument("--horizon", type=int, default=300, choices=HORIZONS_S)
             p.add_argument("--folds", type=int, default=4)

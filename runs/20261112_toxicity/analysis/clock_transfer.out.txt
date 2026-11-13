@@ -1,0 +1,65 @@
+window :52:00-:57:00; cents/contract; diff = inside - outside [95% CI by event date]
+group                                measure    dates fills in  inside  outside  diff CI
+KXHIGHNY (fitted here; reference)    5 min        190   30,679   -1.08    +0.30   -1.39 [ -1.70, -1.07]  *
+KXHIGHNY (fitted here; reference)    30 min       190   30,679   -1.01    +0.26   -1.27 [ -1.85, -0.69]  *
+KXHIGHNY (fitted here; reference)    settlement   191   41,783   -0.17    +0.57   -0.75 [ -2.04, +0.56]
+other highs pooled, 8-16h            5 min        198   21,796   -0.24    +0.06   -0.30 [ -0.59, +0.01]
+other highs pooled, 8-16h            30 min       198   21,796   -0.81    -0.27   -0.54 [ -1.18, +0.06]
+other highs pooled, 8-16h            settlement   199   38,304   -1.18    -0.31   -0.87 [ -1.69, -0.03]  *
+lows pooled, 16-24h                  5 min        189    1,061   +1.45    +2.60   -1.15 [ -3.08, +0.82]
+lows pooled, 16-24h                  30 min       189    1,061   -4.54    -1.17   -3.37 [ -6.05, -0.36]  *
+lows pooled, 16-24h                  settlement   196   14,142   -6.98    -3.44   -3.54 [ -4.65, -2.39]  *
+  KXHIGHAUS                          5 min         65    1,784   -0.21    +0.00   -0.21 [ -1.04, +0.54]
+  KXHIGHAUS                          30 min        65    1,784   -0.20    -0.72   +0.53 [ -1.37, +2.79]
+  KXHIGHAUS                          settlement    65    3,253   -1.40    -1.42   +0.03 [ -2.23, +2.50]
+  KXHIGHCHI                          5 min         77    3,750   -0.59    +0.04   -0.63 [ -1.14, -0.15]  *
+  KXHIGHCHI                          30 min        77    3,750   -1.25    -0.32   -0.93 [ -1.94, +0.09]
+  KXHIGHCHI                          settlement    77    6,032   -1.02    -0.30   -0.73 [ -2.35, +0.91]
+  KXHIGHDEN                          5 min         64    1,246   -0.06    +0.14   -0.20 [ -1.04, +0.55]
+  KXHIGHDEN                          30 min        64    1,246   -0.51    -0.19   -0.33 [ -2.50, +2.10]
+  KXHIGHDEN                          settlement    64    2,507   -2.01    +0.00   -2.01 [ -5.00, +1.49]
+  KXHIGHLAX                          5 min         66    4,872   +0.07    -0.06   +0.13 [ -0.20, +0.45]
+  KXHIGHLAX                          30 min        66    4,872   +0.26    -0.09   +0.36 [ -0.43, +1.22]
+  KXHIGHLAX                          settlement    66    7,060   +0.76    -0.11   +0.87 [ -0.65, +2.51]
+  KXHIGHMIA                          5 min         66    3,379   -0.83    -0.01   -0.81 [ -1.60, -0.14]  *
+  KXHIGHMIA                          30 min        66    3,379   -0.91    -0.20   -0.71 [ -2.28, +0.68]
+  KXHIGHMIA                          settlement    66    5,519   -2.41    -0.20   -2.21 [ -4.39, -0.05]  *
+  KXHIGHPHIL                         5 min         65      948   +0.81    +1.02   -0.21 [ -1.24, +0.76]
+  KXHIGHPHIL                         30 min        65      948   -0.47    +0.52   -0.99 [ -3.86, +1.66]
+  KXHIGHPHIL                         settlement    65    2,303   +1.14    +0.30   +0.84 [ -2.22, +4.01]
+  KXHIGHTEWR                         5 min         19        3   +5.02    +6.91   -1.89 [ -8.92, +4.46]
+  KXHIGHTEWR                         30 min        19        3  +12.48    +5.42   +7.06 [-27.18,+50.56]
+  KXHIGHTEWR                         settlement    74      353   +0.57    -6.92   +7.49 [ -0.74,+15.78]
+  KXHIGHTSEA                         5 min        193    5,813   -0.17    +0.08   -0.25 [ -1.11, +0.73]
+  KXHIGHTSEA                         30 min       193    5,813   -1.78    -0.44   -1.34 [ -2.86, +0.14]
+  KXHIGHTSEA                         settlement   194   11,095   -2.06    -0.12   -1.94 [ -3.71, -0.12]  *
+  KXHIGHTTTN                         5 min         11        1   +0.50   -19.24  +19.74 [-18.23,+26.78]
+  KXHIGHTTTN                         30 min        11        1   +1.00   -18.11  +19.11 [ +0.46,+20.93]  *
+  KXHIGHTTTN                         settlement    68      182  -15.46    -6.98   -8.48 [-19.97, +4.03]
+  KXLOWTAUS                          5 min        124      171   -4.11    +2.44   -6.55 [-14.74, +0.58]
+  KXLOWTAUS                          30 min       124      171   -8.16    -2.29   -5.87 [-13.48, +3.96]
+  KXLOWTAUS                          settlement   195    1,814   -6.65    -2.77   -3.88 [ -7.16, -0.55]  *
+  KXLOWTCHI                          5 min         98      100   +0.47    +1.90   -1.43 [ -8.07, +4.46]
+  KXLOWTCHI                          30 min        98      100   -3.96    +0.61   -4.57 [-13.70, +4.63]
+  KXLOWTCHI                          settlement   196    1,549   -9.70    -2.97   -6.73 [-11.00, -2.29]  *
+  KXLOWTDAL                          5 min         86       75   +2.02    +1.81   +0.20 [ -6.99, +5.52]
+  KXLOWTDAL                          30 min        86       75   -2.74    -2.46   -0.28 [-14.58,+12.10]
+  KXLOWTDAL                          settlement   196    1,392   -6.05    -5.09   -0.96 [ -4.56, +2.71]
+  KXLOWTDC                           5 min         62       43   +1.77    +4.90   -3.13 [ -6.70, +6.66]
+  KXLOWTDC                           30 min        62       43   -8.01    +0.22   -8.23 [-15.14, +6.69]
+  KXLOWTDC                           settlement   195    1,161   -8.56    -5.43   -3.12 [ -7.49, +1.37]
+  KXLOWTDEN                          5 min        105      113   +1.85    +1.72   +0.13 [ -3.60, +3.39]
+  KXLOWTDEN                          30 min       105      113   -8.24    -2.53   -5.71 [-11.26, -0.25]  *
+  KXLOWTDEN                          settlement   196    1,854   -8.46    -4.43   -4.04 [ -7.02, -1.14]  *
+  KXLOWTLAX                          5 min        103      107   +1.46    +2.07   -0.60 [ -2.38, +1.96]
+  KXLOWTLAX                          30 min       103      107   -0.63    +0.43   -1.07 [ -6.22, +2.95]
+  KXLOWTLAX                          settlement   195    1,228   -4.96    -3.16   -1.80 [ -5.30, +2.02]
+  KXLOWTMIA                          5 min         99      180   +2.15    +3.93   -1.78 [ -7.38, +5.03]
+  KXLOWTMIA                          30 min        99      180   +0.28    -2.76   +3.04 [ -2.82,+10.25]
+  KXLOWTMIA                          settlement   194    1,493   -3.69    -4.32   +0.63 [ -3.26, +4.61]
+  KXLOWTNYC                          5 min        120      216   +5.56    +2.53   +3.03 [ +0.50, +5.58]  *
+  KXLOWTNYC                          30 min       120      216   -3.99    +0.30   -4.29 [ -9.28, +0.84]
+  KXLOWTNYC                          settlement   196    2,707   -6.63    +0.21   -6.84 [ -9.73, -3.59]  *
+  KXLOWTPHIL                         5 min         68       56   -1.97    +4.60   -6.57 [-12.03, -1.22]  *
+  KXLOWTPHIL                         30 min        68       56  -11.11    -0.23  -10.88 [-17.71, -3.67]  *
+  KXLOWTPHIL                         settlement   192      944   -8.44    -4.97   -3.47 [ -8.07, +1.86]

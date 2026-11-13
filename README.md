@@ -243,6 +243,7 @@ python toxicity.py build              # per-order maker markouts + features
 python toxicity.py curves             # edge and markouts per series
 python toxicity.py buckets --series KXHIGHNY --split 26AUG01
 python toxicity.py model --series KXHIGHNY   # walk-forward toxicity forecast
+python toxicity.py clock                    # toxic minutes of the hour, train/test by date
 ```
 
 - **`record.py`** (`recorder_config.yaml`): every `poll_interval` it reads the
@@ -258,7 +259,9 @@ python toxicity.py model --series KXHIGHNY   # walk-forward toxicity forecast
   confidence intervals resampled by event date, and a toxicity forecast
   tested walk-forward.
 
-Latest findings: [runs/20261112_toxicity/analysis.md](runs/20261112_toxicity/analysis.md).
+Latest findings: [runs/20261112_toxicity/analysis.md](runs/20261112_toxicity/analysis.md),
+[observation_clock.md](runs/20261112_toxicity/observation_clock.md) and the project
+shortlist in [project_ideas.md](runs/20261112_toxicity/project_ideas.md).
 
 ## Demo Trading Harness
 
